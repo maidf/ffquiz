@@ -1,7 +1,6 @@
 package com.ff.common.entity.po;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import org.springframework.stereotype.Component;
 
