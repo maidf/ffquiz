@@ -1,0 +1,27 @@
+@baseUrl = http://127.0.0.1:9901
+
+GET {{baseUrl}}/captcha HTTP/1.1
+
+
+###
+
+POST {{baseUrl}}/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "phone": "90856943148",
+  "password": "hbdgdvghtlhh",
+  "captcha": "whugg"
+}
+
+###
+
+# 失败案例
+POST {{baseUrl}}/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "phone": "90856943148",
+  "password": "hbdgdvghtlhh",
+  "captcha": "whu"
+}
