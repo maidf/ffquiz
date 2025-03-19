@@ -32,7 +32,7 @@
     initialDatabases = [
       {
         name = "quiz";
-        schema = ./db/init.sql;
+        schema = ./db/quiz.sql;
       }
     ];
   };

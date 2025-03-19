@@ -74,8 +74,8 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1742116713,
-        "narHash": "sha256-LsxB6Y11BzZU6By3e1zgw3cj1qUQqeGHQNeqU26r2SE=",
+        "lastModified": 1742354065,
+        "narHash": "sha256-atSYwY6obz6BLJsfcaLJZCj8vqgKMv9Wyt4cl6OGOVE=",
         "type": "tarball",
         "url": "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-unstable/nixexprs.tar.xz"
       },

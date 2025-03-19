@@ -17,13 +17,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@TableName("question_bank")
-public class Bank {
+@TableName(value = "exam")
+/**
+ * 考试记录
+ */
+public class Exam {
     @TableId(type = IdType.AUTO)
-    private Integer bankId;
-    private String name;
-    private String subject;
-    private Integer creatorId;
+    private Integer id;
+    private Integer userId;
+    private Integer paperId;
+    private Integer score;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Timestamp createTime;
+    private Timestamp startTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Timestamp endTime;
 }
