@@ -14,10 +14,10 @@ import lombok.Data;
         property = "type" // 类型字段名称
 )
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = FillBlankAnswer.class, name = "fillBlank"),
-        @JsonSubTypes.Type(value = MultipleChoiceAnswer.class, name = "multipleChoice"),
-        @JsonSubTypes.Type(value = SingleChoiceAnswer.class, name = "singleChoice"),
-        @JsonSubTypes.Type(value = TrueFalseAnswer.class, name = "trueFalse")
+        @JsonSubTypes.Type(value = FillBlankAnswer.class, name = "FILL_BLANK"),
+        @JsonSubTypes.Type(value = MultipleChoiceAnswer.class, name = "MULTIPLE_CHOICE"),
+        @JsonSubTypes.Type(value = SingleChoiceAnswer.class, name = "SINGLE_CHOICE"),
+        @JsonSubTypes.Type(value = TrueFalseAnswer.class, name = "TRUE_FALSE")
 })
 public abstract class BaseAnswer {
     private String correctAnswer;
