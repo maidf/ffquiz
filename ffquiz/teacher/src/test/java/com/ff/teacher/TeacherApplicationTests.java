@@ -33,7 +33,8 @@ class TeacherApplicationTests {
     @Test
     void userTest() {
         Random random = new Random();
-        User user = new User(null, "alice" + random.nextInt(), "alice123", "alice@example.com", UserRoleEnum.STUDENT,
+        User user = new User(null, "alice" + random.nextInt(), "alice", "alice123", "alice@example.com",
+                UserRoleEnum.TEACHER,
                 null);
         userMapper.insert(user);
         userMapper.selectList(null).forEach(System.out::println);

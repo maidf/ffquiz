@@ -1,8 +1,9 @@
 -- 用户表
 CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(32) NOT NULL UNIQUE COMMENT '用户名',
-    password VARCHAR(32) NOT NULL COMMENT '密码',
+    account VARCHAR(32) UNIQUE COMMENT '账号',
+    name VARCHAR(32) NOT NULL COMMENT '用户名',
+    password VARCHAR(255) NOT NULL COMMENT '密码',
     email VARCHAR(32) COMMENT '邮箱',
     role ENUM('STUDENT', 'TEACHER') NOT NULL COMMENT '角色',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '用户注册时间'
@@ -13,7 +14,7 @@ CREATE TABLE question_bank (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL COMMENT '题库名',
     subject VARCHAR(100) NOT NULL COMMENT '学科分类（如数学、编程）',
-    creator_id INT NOT NULL COMMENT '创建者ID',
+    creator_id INT COMMENT '创建者ID',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '题库创建时间',
     FOREIGN KEY (creator_id) REFERENCES user (id)
 ) COMMENT = '题库表';
@@ -32,7 +33,7 @@ CREATE TABLE question (
     answer JSON NOT NULL COMMENT '题目选项和答案 {options,answer}/{answer}',
     explanation TEXT COMMENT '题目解析',
     difficulty ENUM('EASY', 'MEDIUM', 'HARD') NOT NULL COMMENT '题目难度',
-    creator_id INT NOT NULL COMMENT '创建者ID',
+    creator_id INT COMMENT '创建者ID',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '题目创建时间',
     FOREIGN KEY (bank_id) REFERENCES question_bank (id),
     FOREIGN KEY (creator_id) REFERENCES user (id)
@@ -44,7 +45,7 @@ CREATE TABLE paper (
     name VARCHAR(100) NOT NULL COMMENT '试卷名称',
     time_limit INT COMMENT '考试时间限制(分钟,0表示不限时)',
     difficulty ENUM('EASY', 'MEDIUM', 'HARD') NOT NULL COMMENT '试卷难度',
-    creator_id INT NOT NULL COMMENT '创建者ID',
+    creator_id INT COMMENT '创建者ID',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '试卷创建时间',
     FOREIGN KEY (creator_id) REFERENCES user (id)
 ) COMMENT = '试卷表';

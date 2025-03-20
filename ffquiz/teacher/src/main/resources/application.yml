@@ -15,3 +15,18 @@ spring:
       port: 6379
 server:
   port: 9901
+
+
+# 密码加密
+encry:
+  salt: quiz-hash-salt
+  algorithm: SHA-256
+  sym-algorithm: AES
+  key: quiz-aes-key
+
+# 邮箱验证
+email:
+  host: "smtp.larksuite.com"
+  from: "maid@fufu.moe"
+  username: "maid@fufu.moe"
+  password: "ONms0iTCdffRJ7no"

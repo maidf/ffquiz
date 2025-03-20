@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 public class User {
     @TableId(type = IdType.AUTO)
     private Integer id;
+    private String account;
     private String name;
     @JsonIgnore
     private String password;
