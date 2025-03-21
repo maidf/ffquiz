@@ -73,7 +73,7 @@ CREATE TABLE exam (
 ) COMMENT = '考试记录表';
 
 -- 答题记录表
-CREATE TABLE answer_question (
+CREATE TABLE answer_record (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL COMMENT '用户ID',
     question_id INT NOT NULL COMMENT '题目ID',

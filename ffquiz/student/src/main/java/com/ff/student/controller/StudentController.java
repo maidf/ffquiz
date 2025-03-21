@@ -14,6 +14,7 @@ import com.ff.common.entity.constant.Constant;
 import com.ff.common.entity.dto.RegisterOrLoginDto;
 import com.ff.common.entity.dto.SessionUserDto;
 import com.ff.common.service.impl.UserServiceImpl;
+import com.ff.common.util.JwtUtil;
 import com.ff.common.util.Result;
 
 import jakarta.servlet.http.HttpSession;
@@ -23,6 +24,9 @@ import jakarta.servlet.http.HttpSession;
 public class StudentController {
     @Autowired
     private UserServiceImpl userService;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @PostMapping("register")
     public ResponseEntity<String> register(HttpSession session, @RequestBody String entity)
@@ -72,14 +76,15 @@ public class StudentController {
             return Result.error("验证码错误");
         }
 
+        String token = null;
         try {
             SessionUserDto sessionUser = userService.login(user.getAccount(), user.getPassword());
-            session.setAttribute(Constant.SESSION_KEY, sessionUser);
+            token = jwtUtil.generateToken(sessionUser);
         } catch (Exception e) {
             return Result.error(e.getMessage());
         } finally {
             session.removeAttribute(Constant.CAPTCHA_KEY);
         }
-        return Result.success();
+        return Result.success(token);
     }
 }

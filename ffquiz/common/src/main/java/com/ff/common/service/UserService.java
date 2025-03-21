@@ -17,5 +17,7 @@ public interface UserService extends IService<User> {
 
     void updatePassword(UpdatePasswordDto updatePasswordDto, User user) throws Exception;
 
-    void logoff(Integer userId, String code) throws Exception;
+    void logoff(String token, String code) throws Exception;
+
+    void logout(String token) throws Exception;
 }

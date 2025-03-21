@@ -12,50 +12,56 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ff.common.entity.constant.Constant;
-import com.ff.common.entity.dto.SessionUserDto;
+import com.ff.common.annotation.LoginValidate;
 import com.ff.common.entity.dto.UpdateInfoDto;
 import com.ff.common.entity.dto.UpdatePasswordDto;
 import com.ff.common.entity.po.User;
 import com.ff.common.service.impl.UserServiceImpl;
+import com.ff.common.util.JwtUtil;
 import com.ff.common.util.Result;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
+@LoginValidate
 @RestController
 public class CommonUserController {
 
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @GetMapping("logout")
-    public ResponseEntity<String> logout(HttpSession session) {
+    public ResponseEntity<String> logout(HttpServletRequest req, HttpSession session) {
+        String token = req.getHeader("Authorization");
+        try {
+            userService.logout(token);
+        } catch (Exception e) {
+            return Result.error("验证身份失败");
+        }
+        ;
         session.invalidate();
         return Result.success();
     }
 
     @GetMapping("info")
-    public ResponseEntity<String> info(HttpSession session) {
-        SessionUserDto sessionUser = (SessionUserDto) session.getAttribute(Constant.SESSION_KEY);
-        if (sessionUser == null) {
-            return Result.error("未登录");
-        }
-
-        Integer userId = sessionUser.getId();
+    public ResponseEntity<String> info(HttpServletRequest req) {
+        String token = req.getHeader("Authorization");
+        Integer userId = jwtUtil.getLoginUserId(token);
         User user = userService.getById(userId);
         return Result.success(user);
     }
 
     @PutMapping("info")
-    public ResponseEntity<String> updateInfo(HttpSession session, @RequestBody String entity)
+    public ResponseEntity<String> updateInfo(HttpServletRequest req, @RequestBody String entity)
             throws JsonMappingException, JsonProcessingException {
-        SessionUserDto sessionUser = (SessionUserDto) session.getAttribute(Constant.SESSION_KEY);
-        if (sessionUser == null) {
-            return Result.error("未登录");
-        }
+        String token = req.getHeader("Authorization");
+        Integer userId = jwtUtil.getLoginUserId(token);
 
         // 获取用户信息
-        User user = userService.getById(sessionUser.getId());
+        User user = userService.getById(userId);
 
         // 读取更新信息
         ObjectMapper mapper = new ObjectMapper();
@@ -74,15 +80,13 @@ public class CommonUserController {
     }
 
     @PutMapping("password")
-    public ResponseEntity<String> updatePassword(HttpSession session, @RequestBody String entity)
+    public ResponseEntity<String> updatePassword(HttpServletRequest req, @RequestBody String entity)
             throws JsonMappingException, JsonProcessingException {
-        SessionUserDto sessionUser = (SessionUserDto) session.getAttribute(Constant.SESSION_KEY);
-        if (sessionUser == null) {
-            return Result.error("未登录");
-        }
+        String token = req.getHeader("Authorization");
+        Integer userId = jwtUtil.getLoginUserId(token);
 
         // 获取用户信息
-        User user = userService.getById(sessionUser.getId());
+        User user = userService.getById(userId);
         String email = user.getEmail();
         if (email == null || email.isBlank()) {
             return Result.error("未绑定邮箱");
@@ -106,13 +110,14 @@ public class CommonUserController {
     }
 
     @DeleteMapping("logoff/{code}")
-    public ResponseEntity<String> logoff(HttpSession session, @PathVariable String code) {
-        SessionUserDto sessionUser = (SessionUserDto) session.getAttribute(Constant.SESSION_KEY);
-        if (sessionUser == null) {
+    public ResponseEntity<String> logoff(HttpServletRequest req, @PathVariable String code) {
+        HttpSession session = req.getSession();
+        String token = req.getHeader("Authorization");
+        if (token == null) {
             return Result.error("未登录");
         }
         try {
-            userService.logoff(sessionUser.getId(), code);
+            userService.logoff(token, code);
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }

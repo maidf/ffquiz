@@ -3,10 +3,10 @@
     "devenv": {
       "locked": {
         "dir": "src/modules",
-        "lastModified": 1742320965,
+        "lastModified": 1742558958,
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "6bde92766ddd3ee1630029a03d36baddd51934e2",
+        "rev": "7b073d15e76a543be50426cfdcb2b0c575720560",
         "type": "github"
       },
       "original": {
@@ -74,8 +74,8 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1742354065,
-        "narHash": "sha256-atSYwY6obz6BLJsfcaLJZCj8vqgKMv9Wyt4cl6OGOVE=",
+        "lastModified": 1742517311,
+        "narHash": "sha256-OUIsDDd3YFPWU3p9XaE/yzqwZkq20QS2Ul/3YPVm1to=",
         "type": "tarball",
         "url": "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixos-unstable/nixexprs.tar.xz"
       },

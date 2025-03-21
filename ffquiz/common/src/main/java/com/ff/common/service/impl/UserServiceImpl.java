@@ -1,5 +1,6 @@
 package com.ff.common.service.impl;
 
+import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +21,7 @@ import com.ff.common.mapper.UserMapper;
 import com.ff.common.service.UserService;
 import com.ff.common.util.EmailSender;
 import com.ff.common.util.EncryUtil;
+import com.ff.common.util.JwtUtil;
 
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
@@ -34,6 +36,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private RedisTemplate<String, String> redis;
+
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @Override
     public void register(String account, String password, Boolean isTeacher) throws Exception {
@@ -117,9 +122,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void logoff(Integer userId, String code) throws Exception {
+    public void logoff(String token, String code) throws Exception {
+        Integer userId = jwtUtil.getLoginUserId(token);
 
         try {
+            logout(token);
             verifyCode(userId.toString() + EmailMsgEnum.LOGOFF.type(), code);
         } catch (Exception e) {
             throw e;
@@ -131,5 +138,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set("email", null)
                 .set("name", "用户已注销");
         userMapper.update(null, updateWrapper); // 强制更新
+    }
+
+    @Override
+    public void logout(String token) throws Exception {
+        Integer id = jwtUtil.getLoginUserId(token);
+        // 解析 JWT 获取有效期
+        Date expirationDate = jwtUtil.getExpireDate(token);
+
+        // 计算过期时间，单位是秒
+        long expirationTime = expirationDate.getTime() - System.currentTimeMillis();
+        long expirationInSeconds = expirationTime / 1000; // 转换为秒
+
+        // 设置 Redis 键值对并设置过期时间
+        redis.opsForSet().add("logout" + id, token);
+        redis.expire("logout" + id, expirationInSeconds, TimeUnit.SECONDS);
     }
 }

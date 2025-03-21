@@ -6,15 +6,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ff.common.entity.constant.Constant;
-import com.ff.common.entity.dto.SessionUserDto;
+import com.ff.common.annotation.LoginValidate;
 import com.ff.common.entity.enums.EmailMsgEnum;
 import com.ff.common.entity.po.User;
 import com.ff.common.service.UserService;
 import com.ff.common.util.Result;
 
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
 
+@LoginValidate
 @RestController
 @RequestMapping("email")
 public class EmailController {
@@ -22,12 +22,10 @@ public class EmailController {
     private UserService userService;
 
     @GetMapping("resetPassword")
-    public ResponseEntity<String> resetPassword(HttpSession session) {
-        SessionUserDto sessionUser = (SessionUserDto) session.getAttribute(Constant.SESSION_KEY);
-        if (sessionUser == null) {
-            return Result.error("未登录");
-        }
-        User user = userService.getById(sessionUser.getId());
+    public ResponseEntity<String> resetPassword(HttpServletRequest req) {
+        String token = req.getHeader("Authorization");
+        Integer userId = Integer.parseInt(token);
+        User user = userService.getById(userId);
         String email = user.getEmail();
         if (email == null || email.isBlank()) {
             return Result.error("未绑定邮箱");
@@ -42,12 +40,11 @@ public class EmailController {
     }
 
     @GetMapping("logoff")
-    public ResponseEntity<String> logoff(HttpSession session) {
-        SessionUserDto sessionUser = (SessionUserDto) session.getAttribute(Constant.SESSION_KEY);
-        if (sessionUser == null) {
-            return Result.error("未登录");
-        }
-        User user = userService.getById(sessionUser.getId());
+    public ResponseEntity<String> logoff(HttpServletRequest req) {
+        String token = req.getHeader("Authorization");
+        Integer userId = Integer.parseInt(token);
+
+        User user = userService.getById(userId);
         String email = user.getEmail();
         if (email == null || email.isBlank()) {
             return Result.error("未绑定邮箱");
