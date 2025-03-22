@@ -1,4 +1,4 @@
-package com.ff.common.Aspect;
+package com.ff.common.aspect;
 
 import java.lang.reflect.Method;
 
