@@ -22,7 +22,7 @@ public class QuestionBank {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private String name;
-    private String subject;
+    private String subject; // 科目
     private Integer creatorId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createTime;

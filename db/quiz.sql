@@ -22,7 +22,7 @@ CREATE TABLE question_bank (
 -- 题目表
 CREATE TABLE question (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    bank_id INT NOT NULL COMMENT '所属题库ID',
+    bank_id INT COMMENT '所属题库ID',
     type ENUM(
         'SINGLE_CHOICE',
         'MULTIPLE_CHOICE',

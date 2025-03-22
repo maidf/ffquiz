@@ -1,0 +1,47 @@
+@baseUrl = http://127.0.0.1:9901
+
+@teaUrl = {{baseUrl}}/teacher
+@stuUrl = http://127.0.0.1:9902/student
+@emailUrl = {{baseUrl}}/email
+@questionUrl = {{baseUrl}}/question
+
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlOTk5IiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyNjg0NTQ1fQ.hR2aVlAsRUAzwOzWwgtQOZUTz5uo89KHBS7z8N61RdW9BN_qRU7X3q9nC9F5pAsEc3644oQ52at5SMk3ajMpYw
+
+
+###
+
+# 创建题库
+POST {{questionUrl}}/bank HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "name" : "JAVA题库",
+    "subject" : "JAVA"
+}
+
+###
+
+# 修改题库
+PUT {{questionUrl}}/bank/1 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "name" : "JAVA题库",
+    "subject" : "JAVA"
+}
+
+###
+
+# 查看题库
+GET {{questionUrl}}/bank HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+# 删除题库
+DELETE {{questionUrl}}/bank/3 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}

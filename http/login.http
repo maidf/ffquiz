@@ -4,7 +4,7 @@
 @stuUrl = http://127.0.0.1:9902/student
 @emailUrl = {{baseUrl}}/email
 
-@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMCIsIm5hbWUiOiJhbGljZSIsInRlYWNoZXIiOmZhbHNlLCJleHAiOjE3NDI2NDYxNzN9.cNt3hjeTgW-LmeiJBnoPFKj413DvfbBdqE3slXXvSI2DAVPIUcIeSgV5NlyLvq2D6wlc8PsUO1ioLDZvMdVUOw
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6ImFsaWNlODg4IiwidGVhY2hlciI6ZmFsc2UsImV4cCI6MTc0MjY2OTU0NH0.lJkD7_W6uvpMKzs9mA48TpkSZ3hRApGhXxZFFuQj40AVSBX26THybPsUjEEGST1qxa-q7LsnZe2uvOclGmIQXQ
 
 #
 GET {{baseUrl}}/captcha HTTP/1.1
@@ -18,7 +18,7 @@ Content-Type: application/json
 {
   "account": "alice888",
   "password": "alice123",
-  "captcha": "xnuhz"
+  "captcha": "egs6z"
 }
 
 ###
@@ -30,7 +30,7 @@ Content-Type: application/json
 {
   "account": "alice888",
   "password": "alice123",
-  "captcha": "afkhn"
+  "captcha": "gabcu"
 }
 
 ###
@@ -42,7 +42,7 @@ Content-Type: application/json
 {
   "account": "alice999",
   "password": "alice123",
-  "captcha": "uxfj8"
+  "captcha": "efr3h"
 }
 
 ###
@@ -66,7 +66,7 @@ Content-Type: application/json
 {
   "account": "alice999",
   "password": "alice123",
-  "captcha": "jowzu"
+  "captcha": "c5z4f"
 }
 
 ###

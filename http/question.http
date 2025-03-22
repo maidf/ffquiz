@@ -1,0 +1,74 @@
+@baseUrl = http://127.0.0.1:9901
+
+@teaUrl = {{baseUrl}}/teacher
+@stuUrl = http://127.0.0.1:9902/student
+@emailUrl = {{baseUrl}}/email
+@questionUrl = {{baseUrl}}/question
+
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlOTk5IiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyNjg0NTQ1fQ.hR2aVlAsRUAzwOzWwgtQOZUTz5uo89KHBS7z8N61RdW9BN_qRU7X3q9nC9F5pAsEc3644oQ52at5SMk3ajMpYw
+
+
+###
+
+# 创建题目
+POST {{questionUrl}} HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "bankId" : 2,
+    "type" : "single",
+    "content" : "1+1=?",
+    "options" : {
+        "A" : "0",
+        "B" : "1",
+        "C" : "2",
+        "D" : "3"
+    },
+    "answer" : "C",
+    "explanation" : "1+1=2",
+    "difficulty" : "easy"
+}
+
+###
+
+# 修改题目
+PUT {{questionUrl}}/4 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+{
+    "bankId" : 2,
+    "type" : "single",
+    "content" : "1+1=?",
+    "options" : {
+        "A" : "2",
+        "B" : "3",
+        "C" : "0",
+        "D" : "4"
+    },
+    "answer" : "A",
+    "explanation" : "1+1=2",
+    "difficulty" : "easy"
+}
+
+###
+
+# 查看某个题库的题目
+GET {{questionUrl}}/bank/2/question HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+# 查看题目
+GET {{questionUrl}}/4 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+# 删除题目
+DELETE {{questionUrl}}/4 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}

@@ -18,9 +18,11 @@ import com.ff.common.util.JwtUtil;
 import com.ff.common.util.Result;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 @Aspect
 @Component
+@Slf4j
 public class LoginValiAspect {
 
     @Autowired
@@ -32,9 +34,9 @@ public class LoginValiAspect {
 
     @Order(1)
     @Around("loginValidate()")
-    public Object login_validate(ProceedingJoinPoint join_point) throws Throwable {
+    public Object loginValidate(ProceedingJoinPoint joinPoint) throws Throwable {
         // 检查是否需要验证
-        Method method = ((MethodSignature) join_point.getSignature()).getMethod();
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         LoginValidate validate = method.getAnnotation(LoginValidate.class);
 
         // 如果方法上没有注解，再尝试获取类上的 @LoginValidate 注解
@@ -44,24 +46,25 @@ public class LoginValiAspect {
         }
 
         if (validate != null && !validate.login()) {
-            return join_point.proceed(join_point.getArgs());
+            return joinPoint.proceed(joinPoint.getArgs());
         }
 
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String token = req.getHeader("Authorization");
         if (jwtUtil.validateToken(token)) {
-            return join_point.proceed(join_point.getArgs());
+            return joinPoint.proceed(joinPoint.getArgs());
         } else {
+            log.error("没有登录");
             return Result.error("没有登录");
         }
     }
 
     @Order(2)
     @Around("loginValidate()")
-    public Object admin_validate(ProceedingJoinPoint join_point) throws Throwable {
+    public Object adminValidate(ProceedingJoinPoint joinPoint) throws Throwable {
         // 检查是否需要验证
-        Method method = ((MethodSignature) join_point.getSignature()).getMethod();
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         LoginValidate validate = method.getAnnotation(LoginValidate.class);
 
         // 如果方法上没有注解，再尝试获取类上的 @LoginValidate 注解
@@ -71,15 +74,16 @@ public class LoginValiAspect {
         }
 
         if (validate != null && !validate.teacher()) {
-            return join_point.proceed(join_point.getArgs());
+            return joinPoint.proceed(joinPoint.getArgs());
         }
 
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String token = req.getHeader("Authorization");
         if (jwtUtil.verifyIdentity(token)) {
-            return join_point.proceed(join_point.getArgs());
+            return joinPoint.proceed(joinPoint.getArgs());
         } else {
+            log.error("没有权限");
             return Result.error("没有权限");
         }
 
