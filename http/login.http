@@ -4,7 +4,7 @@
 @stuUrl = http://127.0.0.1:9902/student
 @emailUrl = {{baseUrl}}/email
 
-@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMCIsIm5hbWUiOiJhbGljZTg4OCIsInRlYWNoZXIiOmZhbHNlLCJleHAiOjE3NDI2MDI0NjF9.mfVecWa5zLliIIG6kbXM-NNEMaso4ruBLy1VoucmcHz8N-2crwN81w3V-wjU3lLwtwuUwkyU0J315pw9lz8Skg
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMCIsIm5hbWUiOiJhbGljZSIsInRlYWNoZXIiOmZhbHNlLCJleHAiOjE3NDI2NDYxNzN9.cNt3hjeTgW-LmeiJBnoPFKj413DvfbBdqE3slXXvSI2DAVPIUcIeSgV5NlyLvq2D6wlc8PsUO1ioLDZvMdVUOw
 
 #
 GET {{baseUrl}}/captcha HTTP/1.1
@@ -30,7 +30,7 @@ Content-Type: application/json
 {
   "account": "alice888",
   "password": "alice123",
-  "captcha": "9pbme"
+  "captcha": "afkhn"
 }
 
 ###
@@ -87,12 +87,7 @@ Content-Type: application/json
 GET {{baseUrl}}/info HTTP/1.1
 Content-Type: application/json
 Authorization: {{token}}
-###
 
-# 注销账号
-DELETE {{teaUrl}}/logoff/362983 HTTP/1.1
-Content-Type: application/json
-Authorization: {{token}}
 
 ###
 
@@ -105,6 +100,13 @@ Authorization: {{token}}
   "name": "alice",
   "email": "ml@fufu.moe"
 }
+
+###
+
+# 注销账号
+DELETE {{baseUrl}}/logoff/ HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
 
 ###
 
@@ -132,3 +134,12 @@ Authorization: {{token}}
   "newPassword": "alice1234",
   "code": "405322"
 }
+
+###
+
+# 退出登录
+GET {{baseUrl}}/logout HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+

@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-@TableName(value = "answer_record")
+@TableName("ans_record")
 /**
  * 答题记录
  */
-public class AnswerRecord {
+public class AnsRecord {
     @TableId(type = IdType.AUTO)
     private Integer id;
     private Integer userId;

@@ -52,10 +52,10 @@ CREATE TABLE paper (
 
 -- 试卷题目关联表
 CREATE TABLE paper_question (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     paper_id INT COMMENT '试卷ID',
     question_id INT COMMENT '题目ID',
     score INT COMMENT '题目分数',
-    PRIMARY KEY (paper_id, question_id),
     FOREIGN KEY (paper_id) REFERENCES paper (id),
     FOREIGN KEY (question_id) REFERENCES question (id)
 ) COMMENT = '试卷与题目关联表';
@@ -73,7 +73,7 @@ CREATE TABLE exam (
 ) COMMENT = '考试记录表';
 
 -- 答题记录表
-CREATE TABLE answer_record (
+CREATE TABLE ans_record (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL COMMENT '用户ID',
     question_id INT NOT NULL COMMENT '题目ID',
