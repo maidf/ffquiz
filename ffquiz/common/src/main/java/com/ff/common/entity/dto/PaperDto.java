@@ -15,7 +15,7 @@ public class PaperDto {
     private String difficulty;
 
     public Paper toPaper(Integer userId) {
-        Paper paper = new Paper(null, name, timeLimit, null, userId, null);
+        Paper paper = new Paper(null, name, timeLimit, null, null, userId, null);
 
         switch (difficulty) {
             case "medium":

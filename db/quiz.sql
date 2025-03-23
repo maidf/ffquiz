@@ -45,6 +45,7 @@ CREATE TABLE paper (
     name VARCHAR(100) NOT NULL COMMENT '试卷名称',
     time_limit INT COMMENT '考试时间限制(分钟,0表示不限时)',
     difficulty ENUM('EASY', 'MEDIUM', 'HARD') NOT NULL COMMENT '试卷难度',
+    total_score INT NOT NULL DEFAULT 0 COMMENT '试卷总分',
     creator_id INT COMMENT '创建者ID',
     create_time DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '试卷创建时间',
     FOREIGN KEY (creator_id) REFERENCES user (id)
@@ -57,7 +58,8 @@ CREATE TABLE paper_question (
     question_id INT COMMENT '题目ID',
     score INT COMMENT '题目分数',
     FOREIGN KEY (paper_id) REFERENCES paper (id),
-    FOREIGN KEY (question_id) REFERENCES question (id)
+    FOREIGN KEY (question_id) REFERENCES question (id),
+    UNIQUE (paper_id, question_id)
 ) COMMENT = '试卷与题目关联表';
 
 -- 考试记录表
