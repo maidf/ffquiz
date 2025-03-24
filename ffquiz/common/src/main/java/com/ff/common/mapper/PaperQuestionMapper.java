@@ -30,5 +30,5 @@ public interface PaperQuestionMapper extends BaseMapper<PaperQuestion> {
             "    user u ON q.creator_id = u.id\r\n" + //
             "WHERE\r\n" + //
             "    pq.paper_id = #{paperId};")
-    List<PaperQuestionDto> getQuestionsByPaperId(Integer paperId);
+    List<PaperQuestionDto> getQuestionsByPaperId(Long paperId);
 }

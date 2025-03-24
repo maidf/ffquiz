@@ -49,7 +49,7 @@ public class CommonUserController {
     @GetMapping("info")
     public ResponseEntity<String> info(HttpServletRequest req) {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
         User user = userService.getById(userId);
         return Result.success(user);
     }
@@ -58,7 +58,7 @@ public class CommonUserController {
     public ResponseEntity<String> updateInfo(HttpServletRequest req, @RequestBody String entity)
             throws JsonMappingException, JsonProcessingException {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         // 获取用户信息
         User user = userService.getById(userId);
@@ -83,7 +83,7 @@ public class CommonUserController {
     public ResponseEntity<String> updatePassword(HttpServletRequest req, @RequestBody String entity)
             throws JsonMappingException, JsonProcessingException {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         // 获取用户信息
         User user = userService.getById(userId);

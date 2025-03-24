@@ -51,7 +51,7 @@ public class PaperController {
      */
     @LoginValidate(teacher = false)
     @GetMapping("{id}")
-    public ResponseEntity<String> getPaperById(@PathVariable Integer id) {
+    public ResponseEntity<String> getPaperById(@PathVariable Long id) {
         return Result.success(paperService.getById(id));
     }
 
@@ -74,7 +74,7 @@ public class PaperController {
      */
     @LoginValidate(teacher = false)
     @GetMapping("{id}/questions")
-    public ResponseEntity<String> getPaperQuestions(@PathVariable Integer paperId) {
+    public ResponseEntity<String> getPaperQuestions(@PathVariable Long paperId) {
 
         return Result.success(paperService.listQuestions(paperId));
     }
@@ -89,7 +89,7 @@ public class PaperController {
     @PostMapping
     public ResponseEntity<String> createPaper(@RequestBody PaperDto paperDto, HttpServletRequest req) {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         Paper paper = paperDto.toPaper(userId);
 
@@ -113,7 +113,7 @@ public class PaperController {
         paperQuestionService.saveBatch(paperQuestions);
 
         // 更新试卷总分
-        Integer paperId = paperQuestions.get(0).getPaperId();
+        Long paperId = paperQuestions.get(0).getPaperId();
         Integer addTotalScore = 0;
         for (PaperQuestion paperQuestion : paperQuestions) {
             addTotalScore += paperQuestion.getScore();
@@ -135,10 +135,10 @@ public class PaperController {
      */
     @CheckOwnerShip(type = EntityTypeEnum.PAPER)
     @PutMapping("{id}")
-    public ResponseEntity<String> updatePaper(@PathVariable Integer id, @RequestBody PaperDto paperDto,
+    public ResponseEntity<String> updatePaper(@PathVariable Long id, @RequestBody PaperDto paperDto,
             HttpServletRequest req) {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         Paper paper = paperDto.toPaper(userId);
         paper.setId(id);
@@ -155,7 +155,7 @@ public class PaperController {
      */
     @CheckOwnerShip(type = EntityTypeEnum.PAPER)
     @DeleteMapping("{id}")
-    public ResponseEntity<String> deletePaper(@PathVariable Integer id) {
+    public ResponseEntity<String> deletePaper(@PathVariable Long id) {
         try {
             paperService.rmById(id);
         } catch (Exception e) {
@@ -173,7 +173,7 @@ public class PaperController {
      */
     @CheckOwnerShip(type = EntityTypeEnum.PAPER)
     @DeleteMapping("{paperId}/question/{questionId}")
-    public ResponseEntity<String> rmPaperQuestion(@PathVariable Integer paperId, @PathVariable Integer questionId) {
+    public ResponseEntity<String> rmPaperQuestion(@PathVariable Long paperId, @PathVariable Long questionId) {
         QueryWrapper<PaperQuestion> wrapper = new QueryWrapper<PaperQuestion>();
         wrapper.eq("paper_id", paperId).eq("question_id", questionId);
 

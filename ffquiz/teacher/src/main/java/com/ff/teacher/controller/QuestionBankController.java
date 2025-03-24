@@ -41,7 +41,7 @@ public class QuestionBankController {
     public ResponseEntity<String> createBank(@RequestBody String entity, HttpServletRequest req)
             throws JsonMappingException, JsonProcessingException {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         ObjectMapper mapper = new ObjectMapper();
         QuestionBank bank = mapper.readValue(entity, BankDto.class).toBank(userId);
@@ -52,11 +52,11 @@ public class QuestionBankController {
 
     @CheckOwnerShip
     @PutMapping("bank/{id}")
-    public ResponseEntity<String> updateBank(@PathVariable Integer id, @RequestBody String entity,
+    public ResponseEntity<String> updateBank(@PathVariable Long id, @RequestBody String entity,
             HttpServletRequest req)
             throws JsonMappingException, JsonProcessingException {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         ObjectMapper mapper = new ObjectMapper();
         QuestionBank bank = mapper.readValue(entity, BankDto.class).toBank(userId);
@@ -68,7 +68,7 @@ public class QuestionBankController {
 
     @CheckOwnerShip
     @DeleteMapping("bank/{id}")
-    public ResponseEntity<String> deleteBank(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteBank(@PathVariable Long id) {
         try {
             bankService.rmById(id);
         } catch (Exception e) {
@@ -86,7 +86,7 @@ public class QuestionBankController {
 
     @LoginValidate(teacher = false)
     @GetMapping("bank/{id}")
-    public ResponseEntity<String> getBank(@PathVariable Integer id) {
+    public ResponseEntity<String> getBank(@PathVariable Long id) {
         QuestionBank bank = bankService.getById(id);
         return Result.success(bank);
     }

@@ -14,7 +14,7 @@ import lombok.Data;
 @Component
 @Data
 public class PaperQuestionDto {
-    private Integer id;
+    private Long id;
     private String bankName;
     private QuestionTypeEnum type;
     private String content;

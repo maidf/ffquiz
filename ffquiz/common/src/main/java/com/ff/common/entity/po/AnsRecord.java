@@ -23,10 +23,10 @@ import lombok.NoArgsConstructor;
  */
 public class AnsRecord {
     @TableId(type = IdType.AUTO)
-    private Integer id;
-    private Integer userId;
-    private Integer questionId;
-    private Integer examId;
+    private Long id;
+    private Long userId;
+    private Long questionId;
+    private Long examId;
     private String userAnswer;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp startTime;

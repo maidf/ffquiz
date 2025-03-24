@@ -123,7 +123,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void logoff(String token, String code) throws Exception {
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         try {
             logout(token);
@@ -142,7 +142,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public void logout(String token) throws Exception {
-        Integer id = jwtUtil.getLoginUserId(token);
+        Long id = jwtUtil.getLoginUserId(token);
         // 解析 JWT 获取有效期
         Date expirationDate = jwtUtil.getExpireDate(token);
 

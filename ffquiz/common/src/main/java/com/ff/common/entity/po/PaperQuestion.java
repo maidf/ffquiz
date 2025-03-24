@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @TableName("paper_question")
 public class PaperQuestion {
     @TableId(type = IdType.AUTO)
-    private Integer id;
-    private Integer paperId;
-    private Integer questionId;
+    private Long id;
+    private Long paperId;
+    private Long questionId;
     private Integer score;
 }

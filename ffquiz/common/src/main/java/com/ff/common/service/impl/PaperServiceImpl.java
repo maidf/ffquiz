@@ -27,7 +27,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     private PaperQuestionMapper paperQuestionMapper;
 
     @Override
-    public void rmById(Integer id) throws Exception {
+    public void rmById(Long id) throws Exception {
         QueryWrapper<Exam> wrapper = new QueryWrapper<>();
         wrapper.eq("paper_id", id);
         if (!examMapper.selectList(wrapper).isEmpty()) {
@@ -37,8 +37,8 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     }
 
     @Override
-    public List<PaperQuestionDto> listQuestions(Integer id) {
-        return paperQuestionMapper.getQuestionsByPaperId(id);
+    public List<PaperQuestionDto> listQuestions(Long paperId) {
+        return paperQuestionMapper.getQuestionsByPaperId(paperId);
     }
 
 }

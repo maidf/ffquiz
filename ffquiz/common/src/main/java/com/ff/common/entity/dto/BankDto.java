@@ -12,7 +12,7 @@ public class BankDto {
     private String name;
     private String subject; // 科目
 
-    public QuestionBank toBank(Integer creatorId) {
+    public QuestionBank toBank(Long creatorId) {
         return new QuestionBank(null, name, subject, creatorId, null);
     }
 }

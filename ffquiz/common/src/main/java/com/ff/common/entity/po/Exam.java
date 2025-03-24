@@ -23,9 +23,9 @@ import lombok.NoArgsConstructor;
  */
 public class Exam {
     @TableId(type = IdType.AUTO)
-    private Integer id;
-    private Integer userId;
-    private Integer paperId;
+    private Long id;
+    private Long userId;
+    private Long paperId;
     private Integer score;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp startTime;

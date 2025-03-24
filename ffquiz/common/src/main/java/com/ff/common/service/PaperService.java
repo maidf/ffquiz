@@ -7,7 +7,7 @@ import com.ff.common.entity.dto.PaperQuestionDto;
 import com.ff.common.entity.po.Paper;
 
 public interface PaperService extends IService<Paper> {
-    void rmById(Integer id) throws Exception;
+    void rmById(Long id) throws Exception;
 
-    List<PaperQuestionDto> listQuestions(Integer id);
+    List<PaperQuestionDto> listQuestions(Long paperId);
 }

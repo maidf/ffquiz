@@ -14,7 +14,7 @@ public class PaperDto {
     private Integer timeLimit;
     private String difficulty;
 
-    public Paper toPaper(Integer userId) {
+    public Paper toPaper(Long userId) {
         Paper paper = new Paper(null, name, timeLimit, null, null, userId, null);
 
         switch (difficulty) {

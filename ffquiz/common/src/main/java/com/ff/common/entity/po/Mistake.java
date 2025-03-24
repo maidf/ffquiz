@@ -17,8 +17,8 @@ import lombok.NoArgsConstructor;
 @TableName("mistake")
 public class Mistake {
     @TableId(type = IdType.AUTO)
-    private Integer id;
-    private Integer userId;
-    private Integer questionId;
+    private Long id;
+    private Long userId;
+    private Long questionId;
     private String userAnswer;
 }

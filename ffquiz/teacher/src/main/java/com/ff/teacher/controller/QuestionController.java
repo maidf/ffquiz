@@ -39,14 +39,14 @@ public class QuestionController {
 
     @LoginValidate(teacher = false)
     @GetMapping("bank/{bankId}/question")
-    public ResponseEntity<String> getBankQuestion(@PathVariable Integer bankId) {
-        List<Question> questions = questionService.getByBankId(bankId);
+    public ResponseEntity<String> getBankQuestion(@PathVariable Long bankId) {
+        List<Question> questions = questionService.listByBankId(bankId);
         return Result.success(questions);
     }
 
     @LoginValidate(teacher = false)
     @GetMapping("{questionId}")
-    public ResponseEntity<String> getQuestionById(@PathVariable Integer questionId) {
+    public ResponseEntity<String> getQuestionById(@PathVariable Long questionId) {
 
         return Result.success(questionService.getById(questionId));
     }
@@ -55,22 +55,23 @@ public class QuestionController {
     public ResponseEntity<String> createQuestion(@RequestBody String entity, HttpServletRequest req)
             throws JsonMappingException, JsonProcessingException {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         ObjectMapper mapper = new ObjectMapper();
         Question question = mapper.readValue(entity, QuestionDto.class).toQuestion(userId);
 
         questionService.save(question);
+        questionService.initQuestionIdsToRedis(question.getBankId());
         return Result.success();
     }
 
     @CheckOwnerShip(type = EntityTypeEnum.QUESTION)
     @PutMapping("{questionId}")
-    public ResponseEntity<String> updateQuestion(@PathVariable Integer questionId, @RequestBody String entity,
+    public ResponseEntity<String> updateQuestion(@PathVariable Long questionId, @RequestBody String entity,
             HttpServletRequest req)
             throws JsonMappingException, JsonProcessingException {
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         ObjectMapper mapper = new ObjectMapper();
         Question question = mapper.readValue(entity, QuestionDto.class).toQuestion(userId);
@@ -82,7 +83,7 @@ public class QuestionController {
 
     @CheckOwnerShip(type = EntityTypeEnum.QUESTION)
     @DeleteMapping("{questionId}")
-    public ResponseEntity<String> deleteBank(@PathVariable Integer questionId) {
+    public ResponseEntity<String> deleteBank(@PathVariable Long questionId) {
         questionService.rmById(questionId);
         return Result.success();
     }

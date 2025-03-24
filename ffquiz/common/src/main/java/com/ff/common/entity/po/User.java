@@ -22,7 +22,7 @@ import lombok.NoArgsConstructor;
 @TableName("user")
 public class User {
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     private String account;
     private String name;
     @JsonIgnore

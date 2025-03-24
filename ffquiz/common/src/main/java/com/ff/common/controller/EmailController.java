@@ -10,6 +10,7 @@ import com.ff.common.annotation.LoginValidate;
 import com.ff.common.entity.enums.EmailMsgEnum;
 import com.ff.common.entity.po.User;
 import com.ff.common.service.UserService;
+import com.ff.common.util.JwtUtil;
 import com.ff.common.util.Result;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,10 +22,13 @@ public class EmailController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @GetMapping("resetPassword")
     public ResponseEntity<String> resetPassword(HttpServletRequest req) {
         String token = req.getHeader("Authorization");
-        Integer userId = Integer.parseInt(token);
+        Long userId = jwtUtil.getLoginUserId(token);
         User user = userService.getById(userId);
         String email = user.getEmail();
         if (email == null || email.isBlank()) {
@@ -42,7 +46,7 @@ public class EmailController {
     @GetMapping("logoff")
     public ResponseEntity<String> logoff(HttpServletRequest req) {
         String token = req.getHeader("Authorization");
-        Integer userId = Integer.parseInt(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         User user = userService.getById(userId);
         String email = user.getEmail();

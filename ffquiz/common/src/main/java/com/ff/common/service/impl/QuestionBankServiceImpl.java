@@ -22,7 +22,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
     private QuestionMapper questionMapper;
 
     @Override
-    public void rmById(Integer id) throws Exception {
+    public void rmById(Long id) throws Exception {
         QueryWrapper<Question> wrapper = new QueryWrapper<>();
         wrapper.eq("bank_id", id);
         if (questionMapper.selectList(wrapper).isEmpty()) {

@@ -21,12 +21,12 @@ import lombok.NoArgsConstructor;
 @TableName("paper")
 public class Paper {
     @TableId(type = IdType.AUTO)
-    private Integer id;
+    private Long id;
     private String name;
     private Integer timeLimit;
     private DifficultyEnum difficulty;
     private Integer totalScore;
-    private Integer creatorId;
+    private Long creatorId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createTime;
 }

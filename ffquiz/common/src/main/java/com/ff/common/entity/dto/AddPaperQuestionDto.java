@@ -9,8 +9,8 @@ import lombok.Data;
 @Component
 @Data
 public class AddPaperQuestionDto {
-    private Integer paperId;
-    private Integer questionId;
+    private Long paperId;
+    private Long questionId;
     private Integer score;
 
     public PaperQuestion toPaperQuestion() {

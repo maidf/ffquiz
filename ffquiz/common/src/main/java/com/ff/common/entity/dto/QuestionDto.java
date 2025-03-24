@@ -18,7 +18,7 @@ import lombok.Data;
 @Component
 @Data
 public class QuestionDto {
-    private Integer bankId;
+    private Long bankId;
     private String type;
     private String content;
     private Map<String, String> options;
@@ -26,7 +26,7 @@ public class QuestionDto {
     private String explanation;
     private String difficulty;
 
-    public Question toQuestion(Integer creatorId) {
+    public Question toQuestion(Long creatorId) {
         Question question = new Question(null, bankId, null, content, null, explanation, null, creatorId, null);
         BaseAnswer ans = null;
         switch (type) {

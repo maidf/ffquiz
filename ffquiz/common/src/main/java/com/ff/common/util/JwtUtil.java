@@ -37,7 +37,7 @@ public class JwtUtil {
 
     private void checkBlackList(String token) throws Exception {
         // 检查黑名单
-        Integer id = getLoginUserId(token);
+        Long id = getLoginUserId(token);
         Set<String> tokens = redis.opsForSet().members("logout" + id);
         if (tokens != null) {
             for (String t : tokens) {
@@ -87,13 +87,13 @@ public class JwtUtil {
         }
     }
 
-    public Integer getLoginUserId(String token) {
+    public Long getLoginUserId(String token) {
         try {
             String id = JWT.require(Algorithm.HMAC512(secret))
                     .build()
                     .verify(token.replace(tokenPrefix, ""))
                     .getSubject();
-            return Integer.valueOf(id);
+            return Long.valueOf(id);
         } catch (Exception e) {
             return null;
         }

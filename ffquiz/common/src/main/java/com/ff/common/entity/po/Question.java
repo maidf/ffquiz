@@ -27,15 +27,15 @@ import lombok.experimental.Accessors;
 @TableName(value = "question", autoResultMap = true)
 public class Question {
     @TableId(type = IdType.AUTO)
-    private Integer id;
-    private Integer bankId;
+    private Long id;
+    private Long bankId;
     private QuestionTypeEnum type;
     private String content;
     @TableField(typeHandler = JacksonTypeHandler.class)
     private BaseAnswer answer;
     private String explanation;
     private DifficultyEnum difficulty;
-    private Integer creatorId;
+    private Long creatorId;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createTime;
 }

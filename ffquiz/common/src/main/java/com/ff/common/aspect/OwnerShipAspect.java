@@ -63,13 +63,13 @@ public class OwnerShipAspect {
 
         // 获取题目/题库/试卷ID
         Object[] args = joinPoint.getArgs();
-        Integer entityId = (Integer) args[0];
+        Long entityId = (Long) args[0];
 
         // 获取访问用户ID
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
         String token = req.getHeader("Authorization");
-        Integer userId = jwtUtil.getLoginUserId(token);
+        Long userId = jwtUtil.getLoginUserId(token);
 
         try {
             switch (entityType) {
@@ -91,7 +91,7 @@ public class OwnerShipAspect {
 
     }
 
-    private void checkPaperOwnerShip(Integer userId, Integer paperId) throws Exception {
+    private void checkPaperOwnerShip(Long userId, Long paperId) throws Exception {
         Paper paper = paperService.getById(paperId);
         if (paper == null) {
             throw new Exception("找不到试卷");
@@ -101,7 +101,7 @@ public class OwnerShipAspect {
         }
     }
 
-    private void checkQuestionOwnerShip(Integer userId, Integer questionId) throws Exception {
+    private void checkQuestionOwnerShip(Long userId, Long questionId) throws Exception {
         Question question = questionService.getById(questionId);
         if (question == null) {
             throw new Exception("找不到题目");
@@ -112,7 +112,7 @@ public class OwnerShipAspect {
         checkQuestionBankOwnerShip(userId, question.getBankId());
     }
 
-    private void checkQuestionBankOwnerShip(Integer userId, Integer questionBankId) throws Exception {
+    private void checkQuestionBankOwnerShip(Long userId, Long questionBankId) throws Exception {
         QuestionBank bank = questionBankService.getById(questionBankId);
         if (bank == null) {
             throw new Exception("找不到题库");

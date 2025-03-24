@@ -7,7 +7,7 @@ import lombok.Data;
 @Component
 @Data
 public class SessionUserDto {
-    private Integer id;
+    private Long id;
     private String name;
     private Boolean isTeacher;
 }
