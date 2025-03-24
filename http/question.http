@@ -335,7 +335,7 @@ Authorization: {{token}}
 ###
 
 # 删除题目
-DELETE {{questionUrl}}/33 HTTP/1.1
+DELETE {{questionUrl}}/6 HTTP/1.1
 Content-Type: application/json
 Authorization: {{token}}
 

@@ -60,7 +60,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         // 1. 检查是否被其他表引用
         if (isQuestionReferenced(id)) {
             bankId = rmBankId(id, bankId);
-            return; // 如果被引用，不执行删除
+            return;
         }
 
         // 2. 删除题目
@@ -72,21 +72,21 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         // 检查 ans_record 表
         QueryWrapper<AnsRecord> ansWrapper = new QueryWrapper<>();
         ansWrapper.eq("question_id", questionId);
-        if (!ansRecordMapper.exists(ansWrapper)) { // 使用 exists 优化性能
+        if (ansRecordMapper.exists(ansWrapper)) { // 使用 exists 优化性能
             return true;
         }
 
         // 检查 mistake 表
         QueryWrapper<Mistake> mistakeWrapper = new QueryWrapper<>();
         mistakeWrapper.eq("question_id", questionId);
-        if (!mistakeMapper.exists(mistakeWrapper)) {
+        if (mistakeMapper.exists(mistakeWrapper)) {
             return true;
         }
 
         // 检查 paper_question 表
         QueryWrapper<PaperQuestion> paperQuestionWrapper = new QueryWrapper<>();
         paperQuestionWrapper.eq("question_id", questionId);
-        if (!paperQuestionMapper.exists(paperQuestionWrapper)) {
+        if (paperQuestionMapper.exists(paperQuestionWrapper)) {
             return true;
         }
 
