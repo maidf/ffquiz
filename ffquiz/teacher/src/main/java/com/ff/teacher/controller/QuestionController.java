@@ -1,5 +1,6 @@
 package com.ff.teacher.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,25 @@ public class QuestionController {
         return Result.success();
     }
 
+    @PostMapping("batch")
+    public ResponseEntity<String> batchCreateQuestion(@RequestBody List<QuestionDto> questionDtos,
+            HttpServletRequest req)
+            throws JsonMappingException, JsonProcessingException {
+        String token = req.getHeader("Authorization");
+        Long userId = jwtUtil.getLoginUserId(token);
+
+        List<Question> questions = new ArrayList<>();
+        questionDtos.forEach((d) -> {
+            questions.add(d.toQuestion(userId));
+        });
+
+        questionService.saveBatch(questions);
+        questions.forEach((q) -> {
+            questionService.initQuestionIdsToRedis(q.getBankId());
+        });
+        return Result.success();
+    }
+
     @CheckOwnerShip(type = EntityTypeEnum.QUESTION)
     @PutMapping("{questionId}")
     public ResponseEntity<String> updateQuestion(@PathVariable Long questionId, @RequestBody String entity,
@@ -84,7 +104,9 @@ public class QuestionController {
     @CheckOwnerShip(type = EntityTypeEnum.QUESTION)
     @DeleteMapping("{questionId}")
     public ResponseEntity<String> deleteBank(@PathVariable Long questionId) {
+        Long bankId = questionService.getById(questionId).getBankId();
         questionService.rmById(questionId);
+        questionService.rmQuestionIdFromRedis(bankId, questionId);
         return Result.success();
     }
 }

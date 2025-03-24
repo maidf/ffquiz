@@ -1,11 +1,13 @@
 @baseUrl = http://127.0.0.1:9901
+@base2Url = http://127.0.0.1:9902
 
 @teaUrl = {{baseUrl}}/teacher
-@stuUrl = http://127.0.0.1:9902/student
+@stuUrl = {{base2Url}}/student
 @emailUrl = {{baseUrl}}/email
 @questionUrl = {{baseUrl}}/question
+@ansUrl = {{base2Url}}/ans
 
-@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlOTk5IiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyNjg0NTQ1fQ.hR2aVlAsRUAzwOzWwgtQOZUTz5uo89KHBS7z8N61RdW9BN_qRU7X3q9nC9F5pAsEc3644oQ52at5SMk3ajMpYw
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlOTk5IiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyODY0Njg1fQ.ydtbAchC_aAtwHwJr8HI5B5WkVtdXYm-tT6VjG2t92cnp-u858wHm4S4tZ72eFKlAs8YAR4TFlNZfn3g6kLznA
 
 
 ###
@@ -16,7 +18,7 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "bankId" : 2,
+    "bankId" : 4,
     "type" : "single",
     "content" : "1+1=?",
     "options" : {
@@ -29,6 +31,270 @@ Authorization: {{token}}
     "explanation" : "1+1=2",
     "difficulty" : "easy"
 }
+
+###
+
+# 批量创建题目
+POST {{questionUrl}}/batch HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+[
+  // ==================== JAVA题库 ====================
+  {
+    "bankId": 1,
+    "type": "single",
+    "content": "Java中哪个关键字用于定义常量？",
+    "options": {
+      "A": "const",
+      "B": "final",
+      "C": "static",
+      "D": "define"
+    },
+    "answer": "B",
+    "explanation": "final关键字用于声明不可变变量",
+    "difficulty": "easy"
+  },
+  {
+    "bankId": 1,
+    "type": "multiple",
+    "content": "下列哪些是Java的访问修饰符？",
+    "options": {
+      "A": "public",
+      "B": "private",
+      "C": "protected",
+      "D": "package"
+    },
+    "answer": "A,B,C",
+    "explanation": "Java有public/private/protected/default四种访问控制",
+    "difficulty": "medium"
+  },
+  {
+    "bankId": 1,
+    "type": "fill",
+    "content": "Java中所有类的根父类是______",
+    "options": {},
+    "answer": "Object",
+    "explanation": "Object类是Java类层次结构的根",
+    "difficulty": "easy"
+  },
+  {
+    "bankId": 1,
+    "type": "truefalse",
+    "content": "Java的接口可以包含方法实现",
+    "options": {
+      "true": "正确",
+      "false": "错误"
+    },
+    "answer": "false",
+    "explanation": "Java8之前接口不能有方法实现，之后可以用default方法",
+    "difficulty": "hard"
+  },
+
+  // ==================== Rust题库 ====================
+  {
+    "bankId": 2,
+    "type": "single",
+    "content": "Rust的所有权系统主要是为了解决什么问题？",
+    "options": {
+      "A": "内存泄漏",
+      "B": "数据竞争",
+      "C": "空指针异常",
+      "D": "类型转换错误"
+    },
+    "answer": "B",
+    "explanation": "所有权系统在编译时防止数据竞争",
+    "difficulty": "medium"
+  },
+  {
+    "bankId": 2,
+    "type": "multiple",
+    "content": "Rust中的智能指针包括哪些？",
+    "options": {
+      "A": "Box",
+      "B": "Rc",
+      "C": "Arc",
+      "D": "Ref"
+    },
+    "answer": "A,B,C",
+    "explanation": "Box/Rc/Arc都是Rust的智能指针",
+    "difficulty": "hard"
+  },
+  {
+    "bankId": 2,
+    "type": "fill",
+    "content": "Rust中用于错误处理的枚举是______",
+    "options": {},
+    "answer": "Result",
+    "explanation": "Result<T, E>用于处理可能失败的操作",
+    "difficulty": "easy"
+  },
+  {
+    "bankId": 2,
+    "type": "truefalse",
+    "content": "Rust允许在同一个作用域中同时存在可变和不可变引用",
+    "options": {
+      "true": "正确",
+      "false": "错误"
+    },
+    "answer": "false",
+    "explanation": "Rust的借用规则禁止这种情况",
+    "difficulty": "medium"
+  },
+
+  // ==================== Vue题库 ====================
+  {
+    "bankId": 3,
+    "type": "single",
+    "content": "Vue3的响应式API是什么？",
+    "options": {
+      "A": "ref/reactive",
+      "B": "data/computed",
+      "C": "props/methods",
+      "D": "watch/mixin"
+    },
+    "answer": "A",
+    "explanation": "Vue3使用ref和reactive创建响应式数据",
+    "difficulty": "easy"
+  },
+  {
+    "bankId": 3,
+    "type": "multiple",
+    "content": "下列哪些是Vue的生命周期钩子？",
+    "options": {
+      "A": "created",
+      "B": "mounted",
+      "C": "updated",
+      "D": "destroyed"
+    },
+    "answer": "A,B,C,D",
+    "explanation": "这些都是Vue的标准生命周期钩子",
+    "difficulty": "medium"
+  },
+  {
+    "bankId": 3,
+    "type": "fill",
+    "content": "Vue中父组件向子组件传递数据使用______属性",
+    "options": {},
+    "answer": "props",
+    "explanation": "props是Vue组件通信的基础方式",
+    "difficulty": "easy"
+  },
+  {
+    "bankId": 3,
+    "type": "truefalse",
+    "content": "Vue的v-if和v-show作用完全相同",
+    "options": {
+      "true": "正确",
+      "false": "错误"
+    },
+    "answer": "false",
+    "explanation": "v-if条件渲染，v-show只是CSS显示隐藏",
+    "difficulty": "hard"
+  },
+
+  // ==================== Spring题库 ====================
+  {
+    "bankId": 4,
+    "type": "single",
+    "content": "Spring中控制反转(IoC)的主要实现方式是？",
+    "options": {
+      "A": "依赖注入",
+      "B": "面向切面编程",
+      "C": "MVC模式",
+      "D": "事务管理"
+    },
+    "answer": "A",
+    "explanation": "Spring通过依赖注入实现IoC",
+    "difficulty": "easy"
+  },
+  {
+    "bankId": 4,
+    "type": "multiple",
+    "content": "Spring Boot的自动配置条件注解有哪些？",
+    "options": {
+      "A": "@ConditionalOnClass",
+      "B": "@ConditionalOnBean",
+      "C": "@ConditionalOnProperty",
+      "D": "@ConditionalOnWebApplication"
+    },
+    "answer": "A,B,C,D",
+    "explanation": "这些都是Spring Boot的条件注解",
+    "difficulty": "hard"
+  },
+  {
+    "bankId": 4,
+    "type": "fill",
+    "content": "Spring中声明事务的注解是______",
+    "options": {},
+    "answer": "@Transactional",
+    "explanation": "该注解用于声明式事务管理",
+    "difficulty": "medium"
+  },
+  {
+    "bankId": 4,
+    "type": "truefalse",
+    "content": "Spring的@Autowired可以用于构造方法注入",
+    "options": {
+      "true": "正确",
+      "false": "错误"
+    },
+    "answer": "true",
+    "explanation": "Spring4.3+支持构造方法自动注入",
+    "difficulty": "easy"
+  },
+
+  // ==================== SQL题库 ====================
+  {
+    "bankId": 5,
+    "type": "single",
+    "content": "SQL中用于分组的子句是？",
+    "options": {
+      "A": "ORDER BY",
+      "B": "GROUP BY",
+      "C": "WHERE",
+      "D": "HAVING"
+    },
+    "answer": "B",
+    "explanation": "GROUP BY对结果集进行分组",
+    "difficulty": "easy"
+  },
+  {
+    "bankId": 5,
+    "type": "multiple",
+    "content": "下列哪些是SQL事务特性？",
+    "options": {
+      "A": "原子性",
+      "B": "一致性",
+      "C": "隔离性",
+      "D": "持久性"
+    },
+    "answer": "A,B,C,D",
+    "explanation": "ACID是事务的四大特性",
+    "difficulty": "medium"
+  },
+  {
+    "bankId": 5,
+    "type": "fill",
+    "content": "SQL中用于模糊匹配的操作符是______",
+    "options": {},
+    "answer": "LIKE",
+    "explanation": "LIKE配合%和_实现模式匹配",
+    "difficulty": "easy"
+  },
+  {
+    "bankId": 5,
+    "type": "truefalse",
+    "content": "SQL的DELETE语句必须包含WHERE条件",
+    "options": {
+      "true": "正确",
+      "false": "错误"
+    },
+    "answer": "false",
+    "explanation": "没有WHERE会删除整表数据，但语法允许",
+    "difficulty": "hard"
+  }
+]
 
 ###
 
@@ -69,6 +335,12 @@ Authorization: {{token}}
 ###
 
 # 删除题目
-DELETE {{questionUrl}}/4 HTTP/1.1
+DELETE {{questionUrl}}/33 HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+# 随机获取题目
+GET {{ansUrl}}/1 HTTP/1.1
 Content-Type: application/json
 Authorization: {{token}}

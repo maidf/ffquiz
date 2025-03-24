@@ -5,7 +5,7 @@
 @emailUrl = {{baseUrl}}/email
 @questionUrl = {{baseUrl}}/question
 
-@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlOTk5IiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyNjg0NTQ1fQ.hR2aVlAsRUAzwOzWwgtQOZUTz5uo89KHBS7z8N61RdW9BN_qRU7X3q9nC9F5pAsEc3644oQ52at5SMk3ajMpYw
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlOTk5IiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyODY0Njg1fQ.ydtbAchC_aAtwHwJr8HI5B5WkVtdXYm-tT6VjG2t92cnp-u858wHm4S4tZ72eFKlAs8YAR4TFlNZfn3g6kLznA
 
 
 ###
@@ -16,8 +16,8 @@ Content-Type: application/json
 Authorization: {{token}}
 
 {
-    "name" : "JAVA题库",
-    "subject" : "JAVA"
+    "name" : "sql题库",
+    "subject" : "sql"
 }
 
 ###
@@ -36,6 +36,13 @@ Authorization: {{token}}
 
 # 查看题库
 GET {{questionUrl}}/bank HTTP/1.1
+Content-Type: application/json
+Authorization: {{token}}
+
+###
+
+# 查看题库
+GET {{questionUrl}}/bank/2 HTTP/1.1
 Content-Type: application/json
 Authorization: {{token}}
 

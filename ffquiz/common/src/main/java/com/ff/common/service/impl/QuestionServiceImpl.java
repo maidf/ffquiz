@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
@@ -21,6 +23,9 @@ import com.ff.common.mapper.PaperQuestionMapper;
 import com.ff.common.mapper.QuestionMapper;
 import com.ff.common.service.QuestionService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         implements QuestionService {
@@ -60,9 +65,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
         // 2. 删除题目
         questionMapper.deleteById(id);
-
-        // 3. 刷新 Redis 缓存（重新加载该题库的题目ID列表）
-        initQuestionIdsToRedis(bankId);
     }
 
     // 检查题目是否被引用
@@ -101,6 +103,28 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         return bankId;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
+    public void rmQuestionIdFromRedis(Long bankId, Long questionId) {
+        String redisKey = Constant.RANDOM_QUESTION_KEY + bankId;
+        String lockKey = "lock:" + redisKey;
+
+        // 1. 加分布式锁（防止并发重复初始化）
+        Boolean locked = redisTemplate.opsForValue().setIfAbsent(
+                lockKey, (long) 1, 10, TimeUnit.SECONDS);
+        if (locked == null || !locked)
+            return;
+
+        try {
+            // 2. 从数据库查询所有题目ID
+            redisTemplate.opsForSet().remove(redisKey, questionId);
+            log.info("Redis 缓存更新成功，移除 key: " + redisKey + ", id: " + questionId);
+        } finally {
+            redisTemplate.delete(lockKey); // 释放锁
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void initQuestionIdsToRedis(Long bankId) {
         String redisKey = Constant.RANDOM_QUESTION_KEY + bankId;
@@ -113,16 +137,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
             return;
 
         try {
-            // 2. 再次检查缓存（可能其他线程已初始化）
-            if (Boolean.TRUE.equals(redisTemplate.hasKey(redisKey))) {
-                return;
-            }
-
-            // 3. 从数据库查询所有题目ID
+            // 2. 从数据库查询所有题目ID
             List<Long> ids = questionMapper.selectIdsByBankId(bankId);
             if (!ids.isEmpty()) {
                 redisTemplate.opsForSet().add(redisKey, ids.toArray(new Long[0]));
                 redisTemplate.expire(redisKey, 1, TimeUnit.DAYS); // 设置过期时间
+                log.info("Redis 缓存更新成功，key: " + redisKey + ", ids: " + ids);
+            } else {
+                log.info("题库为空，未更新 Redis 缓存，key: " + redisKey);
             }
         } finally {
             redisTemplate.delete(lockKey); // 释放锁
