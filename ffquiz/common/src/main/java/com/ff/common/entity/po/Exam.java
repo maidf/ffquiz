@@ -1,5 +1,6 @@
 package com.ff.common.entity.po;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 /**
  * 考试记录
  */
-public class Exam {
+public class Exam implements Serializable{
     @TableId(type = IdType.AUTO)
     private Long id;
     private Long userId;

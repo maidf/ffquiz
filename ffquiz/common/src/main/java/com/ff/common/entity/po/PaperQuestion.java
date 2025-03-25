@@ -1,5 +1,7 @@
 package com.ff.common.entity.po;
 
+import java.io.Serializable;
+
 import org.springframework.stereotype.Component;
 
 import com.baomidou.mybatisplus.annotation.IdType;
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @TableName("paper_question")
-public class PaperQuestion {
+public class PaperQuestion implements Serializable{
     @TableId(type = IdType.AUTO)
     private Long id;
     private Long paperId;

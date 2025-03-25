@@ -1,5 +1,6 @@
 package com.ff.common.entity.po;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 /**
  * 答题记录
  */
-public class AnsRecord {
+public class AnsRecord implements Serializable{
     @TableId(type = IdType.AUTO)
     private Long id;
     private Long userId;

@@ -1,5 +1,6 @@
 package com.ff.common.entity.po;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName(value = "question", autoResultMap = true)
-public class Question {
+public class Question implements Serializable{
     @TableId(type = IdType.AUTO)
     private Long id;
     private Long bankId;

@@ -62,6 +62,12 @@
                 <artifactId>spring-boot-starter-data-redis</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <!-- 缓存 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-cache</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
 
             <!-- 使用redis储存session，跨端口使用session -->
             <dependency>

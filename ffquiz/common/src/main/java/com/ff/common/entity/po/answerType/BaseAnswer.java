@@ -1,5 +1,7 @@
 package com.ff.common.entity.po.answerType;
 
+import java.io.Serializable;
+
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -23,6 +25,6 @@ import lombok.NoArgsConstructor;
         @JsonSubTypes.Type(value = SingleChoiceAnswer.class, name = "SINGLE_CHOICE"),
         @JsonSubTypes.Type(value = TrueFalseAnswer.class, name = "TRUE_FALSE")
 })
-public abstract class BaseAnswer {
+public abstract class BaseAnswer implements Serializable{
     private String correctAnswer;
 }

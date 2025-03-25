@@ -73,7 +73,7 @@ public class PaperController {
      * @return
      */
     @LoginValidate(teacher = false)
-    @GetMapping("{id}/questions")
+    @GetMapping("{paperId}/questions")
     public ResponseEntity<String> getPaperQuestions(@PathVariable Long paperId) {
 
         return Result.success(paperService.listQuestions(paperId));
@@ -104,16 +104,15 @@ public class PaperController {
      * @return
      */
     @CheckOwnerShip(type = EntityTypeEnum.PAPER)
-    @PostMapping("question")
-    public ResponseEntity<String> addPaperQuestion(@RequestBody List<AddPaperQuestionDto> dtos) {
+    @PostMapping("{paperId}/questions")
+    public ResponseEntity<String> addPaperQuestion(@PathVariable Long paperId, @RequestBody List<AddPaperQuestionDto> dtos) {
         List<PaperQuestion> paperQuestions = new ArrayList<>();
         dtos.forEach((d) -> {
-            paperQuestions.add(d.toPaperQuestion());
+            paperQuestions.add(d.toPaperQuestion(paperId));
         });
         paperQuestionService.saveBatch(paperQuestions);
 
         // 更新试卷总分
-        Long paperId = paperQuestions.get(0).getPaperId();
         Integer addTotalScore = 0;
         for (PaperQuestion paperQuestion : paperQuestions) {
             addTotalScore += paperQuestion.getScore();

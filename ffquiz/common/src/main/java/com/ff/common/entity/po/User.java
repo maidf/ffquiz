@@ -1,5 +1,6 @@
 package com.ff.common.entity.po;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @TableName("user")
-public class User {
+public class User implements Serializable{
     @TableId(type = IdType.AUTO)
     private Long id;
     private String account;

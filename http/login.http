@@ -4,7 +4,7 @@
 @stuUrl = http://127.0.0.1:9902/student
 @emailUrl = {{baseUrl}}/email
 
-@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlOTk5IiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyODY0Njg1fQ.ydtbAchC_aAtwHwJr8HI5B5WkVtdXYm-tT6VjG2t92cnp-u858wHm4S4tZ72eFKlAs8YAR4TFlNZfn3g6kLznA
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlIiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyOTI4MDI2fQ.QjZ6q9ABUuNsOJV4UONaKz0_716KsLDbUe3TfkKVzMmtwWpxDXebM4tJEUK4EShilClEFNmzPkHwqVf7cnqkmQ
 
 #
 GET {{baseUrl}}/captcha HTTP/1.1
@@ -66,7 +66,7 @@ Content-Type: application/json
 {
   "account": "alice999",
   "password": "alice123",
-  "captcha": "4gfsb"
+  "captcha": "anznc"
 }
 
 ###
