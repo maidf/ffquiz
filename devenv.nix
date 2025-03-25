@@ -20,6 +20,12 @@
     maven.enable = true;
   };
 
+  languages.javascript = {
+    enable = true;
+    npm.enable = true;
+    package = pkgs.nodejs_23;
+  };
+
   services.mysql = {
     enable = true;
     package = pkgs.mysql80;
@@ -56,6 +62,8 @@
   enterShell = ''
     hello
     java --version
+    node -v
+    npm -v
   '';
 
   # https://devenv.sh/tasks/
