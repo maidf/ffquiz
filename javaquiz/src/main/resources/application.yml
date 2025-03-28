@@ -1,0 +1,35 @@
+# Conversion to YAML from Properties formar report
+# Warnings:
+# - The yaml file had comments which are lost in the refactoring!
+spring:
+  application:
+    name: javaquiz
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/quiz?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123
+    hikari:
+      minimum-idle: 1
+      maximum-pool-size: 20
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+server:
+  port: 9901
+jwt:
+  secret: quiz-secret
+  header: Authorization
+  exp: 10800000
+  prefix: "Bearer "
+encry:
+  salt: quiz-hash-salt
+  algorithm: SHA-256
+  sym-algorithm: AES
+  key: quiz-aes-key
+email:
+  host: smtp.larksuite.com
+  from: maid@fufu.moe
+  username: maid@fufu.moe
+  password: ONms0iTCdffRJ7no

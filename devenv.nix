@@ -5,7 +5,9 @@
   inputs,
   ...
 }:
-
+let
+  unpkgs = import inputs.unpkgs { system = pkgs.stdenv.system; };
+in
 {
 
   # https://devenv.sh/basics/
@@ -16,19 +18,22 @@
 
   languages.java = {
     enable = true;
-    jdk.package = pkgs.jdk23;
+    jdk.package = unpkgs.jdk23;
     maven.enable = true;
   };
 
   languages.javascript = {
     enable = true;
-    npm.enable = true;
-    package = pkgs.nodejs_23;
+    package = unpkgs.nodejs-slim;
+    pnpm = {
+      enable = true;
+      package = unpkgs.pnpm;
+    };
   };
 
   services.mysql = {
     enable = true;
-    package = pkgs.mysql80;
+    package = unpkgs.mysql80;
     ensureUsers = [
       {
         name = "root";
@@ -44,7 +49,19 @@
   };
 
   services.redis.enable = true;
-  
+
+  # 项目启动流程
+  processes = {
+    backend = {
+      exec = "cd javaquiz && mvn spring-boot:run";
+      process-compose.depends_on = {
+        redis.condition = "process_running";
+        mysql.condition = "process_running";
+      };
+    };
+    frontend.exec = "cd uniquiz && pnpm dev:h5";
+  };
+
   # https://devenv.sh/languages/
   # languages.rust.enable = true;
 
@@ -65,21 +82,4 @@
     node -v
     npm -v
   '';
-
-  # https://devenv.sh/tasks/
-  # tasks = {
-  #   "myproj:setup".exec = "mytool build";
-  #   "devenv:enterShell".after = [ "myproj:setup" ];
-  # };
-
-  # https://devenv.sh/tests/
-  # enterTest = ''
-  #   echo "Running tests"
-  #   git --version | grep --color=auto "${pkgs.git.version}"
-  # '';
-
-  # https://devenv.sh/pre-commit-hooks/
-  # pre-commit.hooks.shellcheck.enable = true;
-
-  # See full reference at https://devenv.sh/reference/options/
 }

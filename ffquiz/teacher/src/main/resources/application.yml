@@ -1,8 +1,0 @@
-spring:
-  profiles:
-    include:
-    - common
-  application:
-    name: teacher
-server:
-  port: 9901
