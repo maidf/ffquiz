@@ -4,8 +4,7 @@
 @stuUrl = http://127.0.0.1:9901/student
 @emailUrl = {{baseUrl}}/email
 
-@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlIiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyOTI4MDI2fQ.QjZ6q9ABUuNsOJV4UONaKz0_716KsLDbUe3TfkKVzMmtwWpxDXebM4tJEUK4EShilClEFNmzPkHwqVf7cnqkmQ
-
+@token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6ImFsaWNlODg4IiwidGVhY2hlciI6ZmFsc2UsImV4cCI6MTc0MzE4MTIwM30.fBhtOVVoMGDBiz_svs7DCLes7ayHykWfjXDO0VMRXBxKnhB9PvWPJUsOBfqmC1F5IHYduINPQN-KHoQ1HAy2Dg
 #
 GET {{baseUrl}}/captcha HTTP/1.1
 
@@ -30,7 +29,7 @@ Content-Type: application/json
 {
   "account": "alice888",
   "password": "alice123",
-  "captcha": "gabcu"
+  "captcha": "mxbua"
 }
 
 ###
@@ -84,7 +83,7 @@ Content-Type: application/json
 ###
 
 # 获取账号信息
-GET {{baseUrl}}/info HTTP/1.1
+GET {{baseUrl}}/usr/info HTTP/1.1
 Content-Type: application/json
 Authorization: {{token}}
 
@@ -92,7 +91,7 @@ Authorization: {{token}}
 ###
 
 # 修改信息
-PUT {{baseUrl}}/info HTTP/1.1
+PUT {{baseUrl}}/usr/info HTTP/1.1
 Content-Type: application/json
 Authorization: {{token}}
 

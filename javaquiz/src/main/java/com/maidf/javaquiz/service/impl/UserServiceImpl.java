@@ -23,6 +23,9 @@ import com.maidf.javaquiz.util.EmailSender;
 import com.maidf.javaquiz.util.EncryUtil;
 import com.maidf.javaquiz.util.JwtUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
     @Autowired
@@ -95,13 +98,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private void verifyCode(String key, String input) throws Exception {
         try {
             String code = redis.opsForValue().get(key);
+            log.info("redis_code:{}", code);
+            if (code == null) {
+                throw new Exception("验证码过期");
+            }
             if (input.equals(code)) {
+                log.info("delete_redis_code:{}_{}", key, code);
                 redis.delete(key);
             } else {
                 throw new Exception("验证码错误");
             }
         } catch (Exception e) {
-            throw new Exception("验证码过期");
+            throw e;
         }
     }
 
@@ -126,8 +134,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         Long userId = jwtUtil.getLoginUserId(token);
 
         try {
-            logout(token);
-            verifyCode(userId.toString() + EmailMsgEnum.LOGOFF.type(), code);
+            String key = userId.toString() + EmailMsgEnum.LOGOFF.type();
+            log.info("logoff_key:{}, logoff_input_code:{}", key, code);
+            verifyCode(key, code);
         } catch (Exception e) {
             throw e;
         }
@@ -138,6 +147,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
                 .set("email", null)
                 .set("name", "用户已注销");
         userMapper.update(null, updateWrapper); // 强制更新
+
+        logout(token);
     }
 
     @Override

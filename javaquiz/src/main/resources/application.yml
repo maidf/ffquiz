@@ -19,8 +19,8 @@ spring:
 server:
   port: 9901
 jwt:
-  secret: quiz-secret
-  header: Authorization
+  secret: "quiz-secret"
+  header: "Authorization"
   exp: 10800000
   prefix: "Bearer "
 encry:

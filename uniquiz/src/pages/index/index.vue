@@ -1,55 +1,72 @@
 <template>
     <view class="content">
-        <view>{{ token }}</view>
-        <navigator url="/pages/user/login" open-type="navigate" hover-class="navigator-hover">
-            跳转
-        </navigator>
+
+        <button @click="goto_usr_msg">用户信息</button>
+        <button @click="login">重新登录</button>
+        <button @click="logout(token)">退出登录</button>
+        <button @click="logoff(token)">注销账号</button>
     </view>
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { ref } from 'vue'
-
-
-const token = ref('')
-uni.getStorage({
-    key: 'Authorization'
-}).then((res: any) => {
-    token.value = res.data
+onMounted(() => {
+    get_token()
 })
+
+const get_token = () => {
+    token.value = uni.getStorageSync(
+        'Authorization'
+    )
+
+    if (!token.value) {
+        uni.redirectTo({ url: "/pages/user/login" })
+    }
+}
+const token = ref()
+
+
+const login = () => {
+    uni.redirectTo({ url: "/pages/user/login" })
+}
+
+const goto_usr_msg = () => {
+    uni.navigateTo({ url: "/pages/user/usr-msg" })
+}
+
+const logout = (token: string) => {
+    uni.request({
+        url: "/api/usr/logout",
+        header: { 'Authorization': token }
+    })
+    uni.redirectTo({ url: "/pages/user/login" })
+}
+
+const logoff = (token: string) => {
+    uni.request({
+        url: "/api/email/logoff",
+        header: { 'Authorization': token }
+    }).then(res => {
+        if (res.statusCode == 200) {
+            uni.navigateTo({ url: "/pages/user/logoff" })
+        } else {
+            alert(res.data)
+        }
+    }).catch(err => alert(err))
+}
+
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .content {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    view {
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
-        border: 2px solid red;
-        overflow-wrap: break-word;
-        
-    }
-}
 
-
-
-.content {
-    .box1 {
-        border: 2px solid red;
-    }
-
-    .box2 {
-        border: 2px solid blue;
-    }
-
-    .box3 {
-        width: 300px;
-        height: 200px;
-        border: 2px solid pink;
+    button {
+        margin-top: 10px;
     }
 }
 </style>

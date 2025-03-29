@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,9 +23,12 @@ import com.maidf.javaquiz.util.Result;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @LoginValidate
 @RestController
+@RequestMapping("usr")
 public class CommonUserController {
 
     @Autowired
@@ -35,7 +39,7 @@ public class CommonUserController {
 
     @GetMapping("logout")
     public ResponseEntity<String> logout(HttpServletRequest req, HttpSession session) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         try {
             userService.logout(token);
         } catch (Exception e) {
@@ -67,10 +71,10 @@ public class CommonUserController {
         ObjectMapper mapper = new ObjectMapper();
         UpdateInfoDto updateInfo = mapper.readValue(entity, UpdateInfoDto.class);
 
-        if (updateInfo.getName() != null) {
+        if (updateInfo.getName() != null && !updateInfo.getName().isBlank()) {
             user.setName(updateInfo.getName());
         }
-        if (updateInfo.getEmail() != null) {
+        if (updateInfo.getEmail() != null && !updateInfo.getEmail().isBlank()) {
             user.setEmail(updateInfo.getEmail());
         }
 
@@ -112,7 +116,7 @@ public class CommonUserController {
     @DeleteMapping("logoff/{code}")
     public ResponseEntity<String> logoff(HttpServletRequest req, @PathVariable String code) {
         HttpSession session = req.getSession();
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         if (token == null) {
             return Result.error("未登录");
         }

@@ -51,11 +51,12 @@ public class LoginValiAspect {
 
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         if (jwtUtil.validateToken(token)) {
             return joinPoint.proceed(joinPoint.getArgs());
         } else {
             log.error("没有登录");
+            log.error("token:{}", token);
             return Result.error("没有登录");
         }
     }
@@ -79,7 +80,7 @@ public class LoginValiAspect {
 
         HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes())
                 .getRequest();
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         if (jwtUtil.verifyIdentity(token)) {
             return joinPoint.proceed(joinPoint.getArgs());
         } else {

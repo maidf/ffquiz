@@ -27,8 +27,8 @@
             </radio-group>
         </view>
 
-        <button size="mini" type="button" @click="login(idtag)">登录</button>
-        <button size="mini" @click="register">注册</button>
+        <button size="mini" type="button" @click="register(idtag)">注册</button>
+        <button size="mini" type="button" @click="login">登录</button>
         <button size="mini" color="primary" id="get_captcha" @click="get_captcha">获取验证码</button>
         <view v-if="imgsrc" class="captcha">
             <image :src="imgsrc" mode="scaleToFill" style="width: 120px; height: 40px;" />
@@ -38,6 +38,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+// import { axios } from 'axios'
 
 const user_account = ref({
     account: '',
@@ -47,16 +48,16 @@ const user_account = ref({
 
 const imgsrc = ref()
 
+const idtag = ref('student')
 
 const change_tag = (t: any) => {
     idtag.value = t.detail.value
     console.log("idtag:", idtag.value)
 }
-const idtag = ref("student")
 
-const login = (idtag: string) => {
+const register = (idtag: string) => {
     uni.request({
-        url: "/api/" + idtag + "/login",
+        url: "/api/" + idtag + "/register",
         data: user_account.value,
         method: "POST"
     }).then((rep) => {
@@ -64,9 +65,10 @@ const login = (idtag: string) => {
             uni.setStorage({ key: "Authorization", data: rep.data })
                 .then(() => {
                     uni.redirectTo({
-                        url: "/pages/index/index"
+                        url: "/pages/user/login"
                     })
                 })
+            alert(rep.data)
         } else {
             alert(rep.data)
         }
@@ -81,20 +83,15 @@ const get_captcha = () => {
         url: "/api/captcha",
         responseType: "arraybuffer"
     }).then((rep: any) => {
-        if (rep.statusCode == 200) {
-            const base64 = uni.arrayBufferToBase64(rep.data)
-            imgsrc.value = `data:image/png;base64,${base64}`
-        } else {
-            alert("获取失败")
-        }
+        const base64 = uni.arrayBufferToBase64(rep.data)
+        imgsrc.value = `data:image/png;base64,${base64}`
     }).catch((err) => {
         alert(err)
     })
 }
 
-
-const register = () => {
-    uni.navigateTo({ url: "/pages/user/register" })
+const login = () =>{
+    uni.navigateTo({url: "/pages/user/login"})
 }
 </script>
 
@@ -129,15 +126,5 @@ button {
 .idtag {
     margin-top: 5px;
     margin-bottom: 5px;
-}
-
-.navigator {
-    width: 60px;
-    height: 25px;
-    border: 1px solid black;
-    border-radius: 3px;
-    text-align: center;
-    background-color: blueviolet;
-    margin: 5px;
 }
 </style>
