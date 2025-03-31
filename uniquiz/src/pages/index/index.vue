@@ -1,16 +1,72 @@
 <template>
     <view class="content">
-
+        <!-- 
         <button @click="goto_usr_msg">用户信息</button>
         <button @click="login">重新登录</button>
         <button @click="logout(token)">退出登录</button>
-        <button @click="logoff(token)">注销账号</button>
+        <button @click="logoff(token)">注销账号</button> -->
+
+        <uni-fab ref="fab" :pattern="pattern" :content="content" horizontal="right" vertical="bottom"
+            direction="vertical" @trigger="trigger" />
     </view>
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+
+const pattern = ref({
+    color: '#7A7E83',
+    backgroundColor: '#fff',
+    selectedColor: '#007AFF',
+    buttonColor: '#007AFF',
+    iconColor: '#fff'
+})
+
+const content = ref([{
+    iconPath: '/static/user.png',
+    selectedIconPath: '/static/logo.png',
+    text: '用户信息',
+    active: false
+},
+{
+    iconPath: '/static/login.png',
+    selectedIconPath: '/static/logo.png',
+    text: '重新登录',
+    active: false
+},
+{
+    iconPath: '/static/logout.png',
+    selectedIconPath: '/static/logo.png',
+    text: '退出登录',
+    active: false
+},
+{
+    iconPath: '/static/logoff.png',
+    selectedIconPath: '/static/logo.png',
+    text: '注销账号',
+    active: false
+}
+])
+
+
+const trigger = (e: any) => {
+    switch (e.item.text) {
+        case '用户信息':
+            goto_usr_msg()
+            break
+        case '重新登录':
+            login()
+            break
+        case '退出登录':
+            logout(token.value)
+            break
+        case '注销账号':
+            logoff(token.value)
+            break
+    }
+}
+
+
 onMounted(() => {
     get_token()
 })
@@ -51,9 +107,9 @@ const logoff = (token: string) => {
         if (res.statusCode == 200) {
             uni.navigateTo({ url: "/pages/user/logoff" })
         } else {
-            alert(res.data)
+            uni.showToast({ title: res.data.toString(), icon: 'none' })
         }
-    }).catch(err => alert(err))
+    }).catch(err => uni.showToast({ title: err, icon: 'none' }))
 }
 
 </script>

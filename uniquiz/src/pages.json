@@ -37,6 +37,12 @@
             "style": {
                 "navigationBarTitleText": "注销用户"
             }
+        },
+        {
+            "path": "pages/user/upd-pass",
+            "style": {
+                "navigationBarTitleText": "修改密码"
+            }
         }
     ],
     "globalStyle": {

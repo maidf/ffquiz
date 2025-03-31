@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.RedisTemplate;

@@ -43,7 +43,7 @@ const logoff = (token: string, captcha: string) => {
         if (res.statusCode == 200) {
             uni.redirectTo({ url: "/pages/user/login" })
         }
-        alert(res.data)
+        uni.showToast({ title: res.data.toString(), icon: 'none' })
     }).catch(err => alert(err))
 }
 

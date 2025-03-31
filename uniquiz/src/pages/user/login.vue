@@ -1,31 +1,21 @@
 <template>
     <view class="context">
-        <view>
-            <label for="account">账号</label>
-            <input type="text" v-model="user_account.account" id="account" />
-        </view>
 
-        <view>
-            <label for="password">密码</label>
-            <input type="text" v-model="user_account.password" id="password" />
-        </view>
+        <uni-forms :modelValue="user_account">
+            <uni-forms-item label="账号" name="account">
+                <uni-easyinput type="text" v-model="user_account.account" />
+            </uni-forms-item>
+            <uni-forms-item label="密码" name="password">
+                <uni-easyinput type="password" v-model="user_account.password" />
+            </uni-forms-item>
+            <uni-forms-item name="code" label="验证码">
+                <uni-easyinput type="text" v-model="user_account.captcha" />
+            </uni-forms-item>
+            <uni-forms-item label="身份" name="idtag">
+                <uni-data-checkbox v-model="idtag" :localdata="tags" mode="default" @change="change_tag" />
+            </uni-forms-item>
+        </uni-forms>
 
-        <view>
-            <label for="captcha">验证码</label>
-            <input type="text" v-model="user_account.captcha" id="captcha" />
-        </view>
-
-        <view class="idtag">
-            <radio-group @change="change_tag">
-                <label>
-                    <radio value="student" :checked="true" />
-                    学生
-                </label>
-                <label>
-                    <radio value="teacher" />教师
-                </label>
-            </radio-group>
-        </view>
 
         <button size="mini" type="button" @click="login(idtag)">登录</button>
         <button size="mini" @click="register">注册</button>
@@ -50,9 +40,19 @@ const imgsrc = ref()
 
 const change_tag = (t: any) => {
     idtag.value = t.detail.value
-    console.log("idtag:", idtag.value)
 }
-const idtag = ref("student")
+const idtag = ref('student')
+
+const tags = ref([
+    {
+        text: '学生',
+        value: 'student'
+    },
+    {
+        text: '教师',
+        value: 'teacher'
+    }
+])
 
 const login = (idtag: string) => {
     uni.request({
@@ -68,11 +68,11 @@ const login = (idtag: string) => {
                     })
                 })
         } else {
-            alert(rep.data)
+            uni.showToast({ title: rep.data.toString(), icon: 'none' })
         }
 
     }).catch(err => {
-        alert(err)
+        uni.showToast({ title: err, icon: 'none' })
     })
 }
 
@@ -85,10 +85,10 @@ const get_captcha = () => {
             const base64 = uni.arrayBufferToBase64(rep.data)
             imgsrc.value = `data:image/png;base64,${base64}`
         } else {
-            alert("获取失败")
+            uni.showToast({ title: "获取失败", icon: 'none' })
         }
     }).catch((err) => {
-        alert(err)
+        uni.showToast({ title: err, icon: 'none' })
     })
 }
 
@@ -106,17 +106,8 @@ const register = () => {
     justify-content: center;
 }
 
-input {
-    border: 1px blue solid;
-    border-radius: 2px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 2px;
-}
-
 button {
-    margin-top: 2px;
+    margin-top: 10px;
     display: inline;
 }
 
@@ -124,11 +115,6 @@ button {
     border: 1px blue solid;
     border-radius: 2px;
     margin-top: 5px;
-}
-
-.idtag {
-    margin-top: 5px;
-    margin-bottom: 5px;
 }
 
 .navigator {

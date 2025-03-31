@@ -23,6 +23,9 @@
         <button size="mini" @click="update_usr_msg(token)">
             更新
         </button>
+        <button size="mini" @click="to_upd_password">
+            修改密码
+        </button>
     </view>
 </template>
 
@@ -86,10 +89,10 @@ const update_usr_msg = (token: string) => {
         }
     }).then(res => {
         if (res.statusCode == 200) {
-            alert(res.data)
+            uni.showToast({ title: res.data.toString(), icon: 'none' })
             fetch_usr_msg(token)
         }
-    }).catch(err => alert(err))
+    }).catch(err => uni.showToast({ title: err, icon: 'none' }))
 }
 
 const fetch_usr_msg = (token: string) => {
@@ -102,9 +105,14 @@ const fetch_usr_msg = (token: string) => {
         if (res.statusCode == 200) {
             user.value = res.data as usr
         } else {
-            alert(res.data)
+            uni.showToast({ title: res.data.toString(), icon: 'none' })
         }
-    }).catch(err => alert(err))
+    }).catch(err => uni.showToast({ title: err, icon: 'none' }))
+}
+
+
+const to_upd_password = () => {
+    uni.navigateTo({ url: "/pages/user/upd-pass" })
 }
 
 </script>
@@ -118,32 +126,7 @@ const fetch_usr_msg = (token: string) => {
 
 }
 
-.content {
-    .box1 {
-        border: 2px solid red;
-    }
-
-    .box2 {
-        border: 2px solid blue;
-    }
-
-    .box3 {
-        width: 300px;
-        height: 200px;
-        border: 2px solid pink;
-    }
-}
-
-uni-easyinput[disabled] {
-    background-color: white !important;
-    /* 设置背景色 */
-    color: black !important;
-    /* 设置字体颜色 */
-    opacity: 1 !important;
-    /* 取消透明效果 */
-    border: 1px solid #ccc !important;
-    /* 设置边框样式 */
-    cursor: not-allowed;
-    /* 保持不可点击的鼠标样式 */
+button {
+    margin-bottom: 10px;
 }
 </style>

@@ -25,7 +25,7 @@ public class EmailController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @GetMapping("resetPassword")
+    @GetMapping("password")
     public ResponseEntity<String> resetPassword(HttpServletRequest req) {
         String token = req.getHeader("Authorization");
         Long userId = jwtUtil.getLoginUserId(token);
