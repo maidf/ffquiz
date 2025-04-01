@@ -10,4 +10,7 @@ import com.maidf.javaquiz.entity.po.Question;
 public interface QuestionMapper extends BaseMapper<Question> {
     @Select("SELECT id FROM question WHERE bank_id = #{bankId}")
     List<Long> selectIdsByBankId(Long bankId);
+
+    @Select("SELECT id FROM question WHERE bank_id IS NOT NULL")
+    List<Long> selectIds();
 }

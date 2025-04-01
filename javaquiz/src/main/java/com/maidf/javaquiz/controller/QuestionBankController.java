@@ -1,5 +1,6 @@
 package com.maidf.javaquiz.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maidf.javaquiz.annotation.CheckOwnerShip;
 import com.maidf.javaquiz.annotation.LoginValidate;
 import com.maidf.javaquiz.entity.dto.BankDto;
+import com.maidf.javaquiz.entity.dto.BankRes;
 import com.maidf.javaquiz.entity.po.QuestionBank;
+import com.maidf.javaquiz.entity.po.User;
 import com.maidf.javaquiz.service.QuestionBankService;
+import com.maidf.javaquiz.service.UserService;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
 
@@ -37,8 +41,20 @@ public class QuestionBankController {
     private QuestionBankService bankService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * 添加题库
+     * 
+     * @param entity
+     * @param req
+     * @return
+     * @throws JsonMappingException
+     * @throws JsonProcessingException
+     */
     @PostMapping("bank")
     public ResponseEntity<String> createBank(@RequestBody String entity, HttpServletRequest req)
             throws JsonMappingException, JsonProcessingException {
@@ -68,6 +84,12 @@ public class QuestionBankController {
         return Result.success();
     }
 
+    /**
+     * 删除指定题库
+     * 
+     * @param id
+     * @return
+     */
     @CheckOwnerShip
     @DeleteMapping("bank/{id}")
     public ResponseEntity<String> deleteBank(@PathVariable Long id) {
@@ -79,18 +101,39 @@ public class QuestionBankController {
         return Result.success();
     }
 
+    /**
+     * 获取所有题库
+     * 
+     * @return
+     */
     @LoginValidate(teacher = false)
     @GetMapping("bank")
     public ResponseEntity<String> getBanks() {
+
         List<QuestionBank> banks = bankService.list();
-        return Result.success(banks);
+        List<BankRes> bankRes = new ArrayList<>();
+
+        banks.forEach((b) -> {
+            User user = userService.getById(b.getCreatorId());
+            bankRes.add(new BankRes(b, user.getName()));
+        });
+
+        return Result.success(bankRes);
     }
 
+    /**
+     * 获取指定题库信息
+     * 
+     * @param id
+     * @return
+     */
     @LoginValidate(teacher = false)
     @GetMapping("bank/{id}")
     public ResponseEntity<String> getBank(@PathVariable Long id) {
         QuestionBank bank = bankService.getById(id);
-        return Result.success(bank);
+        User user = userService.getById(bank.getCreatorId());
+        BankRes bankRes = new BankRes(bank, user.getName());
+        return Result.success(bankRes);
     }
 
 }

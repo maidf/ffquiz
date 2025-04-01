@@ -40,6 +40,12 @@ public class QuestionController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * 获取指定题库的题目
+     * 
+     * @param bankId
+     * @return
+     */
     @LoginValidate(teacher = false)
     @GetMapping("bank/{bankId}/question")
     public ResponseEntity<String> getBankQuestion(@PathVariable Long bankId) {
@@ -109,6 +115,7 @@ public class QuestionController {
         Long bankId = questionService.getById(questionId).getBankId();
         questionService.rmById(questionId);
         questionService.rmQuestionIdFromRedis(bankId, questionId);
+        questionService.rmQnIdFromRedis(questionId);
         return Result.success();
     }
 }

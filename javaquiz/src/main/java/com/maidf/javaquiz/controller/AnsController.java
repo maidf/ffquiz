@@ -45,9 +45,26 @@ public class AnsController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * 从指定题库中随机抽题
+     */
     @GetMapping("{bankId}")
     public ResponseEntity<String> randomGetQuestion(@PathVariable Long bankId) {
         Long questionId = questionService.getRandomQuestionId(bankId);
+        if (questionId == null) {
+            return Result.error("没有题目");
+        }
+
+        Question question = questionService.getById(questionId);
+        return Result.success(question);
+    }
+
+    /**
+     * 从所有题目中随机抽题
+     */
+    @GetMapping("daily")
+    public ResponseEntity<String> dailyQuestion() {
+        Long questionId = questionService.getRandomQuestionId();
         if (questionId == null) {
             return Result.error("没有题目");
         }

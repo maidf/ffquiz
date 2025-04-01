@@ -14,5 +14,11 @@ public interface QuestionService extends IService<Question> {
 
     void rmQuestionIdFromRedis(Long bankId, Long questionId);
 
+    void initDailyQnIdToRedis();
+
+    void rmQnIdFromRedis(Long qnId);
+
     Long getRandomQuestionId(Long bankId);
+
+    Long getRandomQuestionId();
 }

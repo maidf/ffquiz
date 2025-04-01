@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,6 +26,7 @@ import com.maidf.javaquiz.util.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
+
 
 @CrossOrigin("*")
 @Slf4j
@@ -51,6 +53,17 @@ public class CommonUserController {
         session.invalidate();
         return Result.success();
     }
+
+    @LoginValidate(login = false)
+    @GetMapping("name/{usrId}")
+    public ResponseEntity<String> getUserName(@PathVariable Long usrId) {
+        QueryWrapper<User> wrapper = new QueryWrapper<User>();
+        wrapper.eq("id", usrId);
+        wrapper.select("name");
+        User user = userService.getOne(wrapper);
+        return Result.success(user.getName());
+    }
+    
 
     @GetMapping("info")
     public ResponseEntity<String> info(HttpServletRequest req) {

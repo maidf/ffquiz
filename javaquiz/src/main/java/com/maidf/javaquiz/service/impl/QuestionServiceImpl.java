@@ -1,5 +1,6 @@
 package com.maidf.javaquiz.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -106,7 +107,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void rmQuestionIdFromRedis(Long bankId, Long questionId) {
-        String redisKey = Constant.RANDOM_QUESTION_KEY + bankId;
+        StringBuilder redisKeyBuilder = new StringBuilder();
+        redisKeyBuilder.append(Constant.RANDOM_QUESTION_KEY);
+        if (bankId != null) {
+            redisKeyBuilder.append(bankId);
+        }
+        String redisKey = redisKeyBuilder.toString();
         String lockKey = "lock:" + redisKey;
 
         // 1. 加分布式锁（防止并发重复初始化）
@@ -116,7 +122,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
             return;
 
         try {
-            // 2. 从数据库查询所有题目ID
             redisTemplate.opsForSet().remove(redisKey, questionId);
             log.info("Redis 缓存更新成功，移除 key: " + redisKey + ", id: " + questionId);
         } finally {
@@ -127,7 +132,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void initQuestionIdsToRedis(Long bankId) {
-        String redisKey = Constant.RANDOM_QUESTION_KEY + bankId;
+        StringBuilder redisKeyBuilder = new StringBuilder();
+        redisKeyBuilder.append(Constant.RANDOM_QUESTION_KEY);
+        if (bankId != null) {
+            redisKeyBuilder.append(bankId);
+        }
+        String redisKey = redisKeyBuilder.toString();
         String lockKey = "lock:" + redisKey;
 
         // 1. 加分布式锁（防止并发重复初始化）
@@ -137,8 +147,14 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
             return;
 
         try {
-            // 2. 从数据库查询所有题目ID
-            List<Long> ids = questionMapper.selectIdsByBankId(bankId);
+            List<Long> ids = new ArrayList<>();
+            if (bankId != null) {
+                // 2. 从数据库查询所有题目ID
+                ids = questionMapper.selectIdsByBankId(bankId);
+            } else {
+                ids = questionMapper.selectIds();
+            }
+
             if (!ids.isEmpty()) {
                 redisTemplate.opsForSet().add(redisKey, ids.toArray(new Long[0]));
                 redisTemplate.expire(redisKey, 1, TimeUnit.DAYS); // 设置过期时间
@@ -162,6 +178,80 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
         // 2. 从Redis随机选取一个ID
         return redisTemplate.opsForSet().randomMember(redisKey);
+    }
+
+    @Override
+    public Long getRandomQuestionId() {
+
+        String dailyKey = Constant.DAILY_QUESTION_KEY;
+        if (Boolean.FALSE.equals(redisTemplate.hasKey(dailyKey))) {
+            initDailyQnIdToRedis();
+        }
+
+        return redisTemplate.opsForValue().get(dailyKey);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void initDailyQnIdToRedis() {
+        String dailyKey = Constant.DAILY_QUESTION_KEY;
+        String allQsKey = Constant.ALL_QUESTION_KEY;
+        String lockKey1 = "lock:" + dailyKey;
+        String lockKey2 = "lock:" + allQsKey;
+
+        // 1. 加分布式锁（防止并发重复初始化)
+        Boolean locked1 = redisTemplate.opsForValue().setIfAbsent(
+                lockKey1, (long) 1, 10, TimeUnit.SECONDS);
+        Boolean locked2 = redisTemplate.opsForValue().setIfAbsent(
+                lockKey2, (long) 1, 10, TimeUnit.SECONDS);
+        if (locked1 == null || !locked1)
+            return;
+        if (locked2 == null || !locked2)
+            return;
+
+        try {
+            List<Long> ids = questionMapper.selectIds();
+            if (!ids.isEmpty()) {
+                if (Boolean.FALSE.equals(redisTemplate.hasKey(allQsKey))) {
+                    redisTemplate.opsForSet().add(allQsKey, ids.toArray(new Long[0]));
+                    redisTemplate.expire(allQsKey, 1, TimeUnit.DAYS);
+                }
+                Long qnId = redisTemplate.opsForSet().randomMember(allQsKey);
+                redisTemplate.opsForValue().set(dailyKey, qnId);
+            }
+        } finally {
+            redisTemplate.delete(lockKey1); // 释放锁
+            redisTemplate.delete(lockKey2); // 释放锁
+        }
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void rmQnIdFromRedis(Long qnId) {
+        String dailyKey = Constant.DAILY_QUESTION_KEY;
+        String allQsKey = Constant.ALL_QUESTION_KEY;
+        String lockKey1 = "lock:" + dailyKey;
+        String lockKey2 = "lock:" + allQsKey;
+
+        // 1. 加分布式锁（防止并发重复初始化)
+        Boolean locked1 = redisTemplate.opsForValue().setIfAbsent(
+                lockKey1, (long) 1, 10, TimeUnit.SECONDS);
+        Boolean locked2 = redisTemplate.opsForValue().setIfAbsent(
+                lockKey2, (long) 1, 10, TimeUnit.SECONDS);
+        if (locked1 == null || !locked1)
+            return;
+        if (locked2 == null || !locked2)
+            return;
+
+        try {
+            redisTemplate.opsForSet().remove(allQsKey);
+            redisTemplate.opsForValue().getAndDelete(dailyKey);
+            log.info("Redis 缓存更新成功，移除 key: " + allQsKey);
+            log.info("Redis 缓存更新成功，移除 key: " + dailyKey + ", qnId: " + qnId);
+        } finally {
+            redisTemplate.delete(lockKey1); // 释放锁
+            redisTemplate.delete(lockKey2); // 释放锁
+        }
     }
 
 }
