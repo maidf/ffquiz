@@ -1,5 +1,6 @@
 package com.maidf.javaquiz.entity.dto;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
@@ -13,7 +14,7 @@ import lombok.Data;
 
 @Component
 @Data
-public class PaperQuestionDto {
+public class PaperQuestionDto implements Serializable{
     private Long id;
     private String bankName;
     private QuestionTypeEnum type;
