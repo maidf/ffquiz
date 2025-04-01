@@ -1,10 +1,7 @@
 <template>
     <view class="content">
-        <!-- 
-        <button @click="goto_usr_msg">用户信息</button>
-        <button @click="login">重新登录</button>
-        <button @click="logout(token)">退出登录</button>
-        <button @click="logoff(token)">注销账号</button> -->
+
+        <mf-home></mf-home>
 
         <uni-fab ref="fab" :pattern="pattern" :content="content" horizontal="right" vertical="bottom"
             direction="vertical" @trigger="trigger" />
@@ -13,6 +10,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+
 
 const pattern = ref({
     color: '#7A7E83',

@@ -80,6 +80,6 @@ in
     hello
     java --version
     node -v
-    npm -v
+    pnpm -v
   '';
 }

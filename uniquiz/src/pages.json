@@ -43,6 +43,24 @@
             "style": {
                 "navigationBarTitleText": "修改密码"
             }
+        },
+        {
+            "path": "pages/quiz/random-qs",
+            "style": {
+                "navigationBarTitleText": "随机题目"
+            }
+        },
+        {
+            "path": "pages/quiz/qs",
+            "style": {
+                "navigationBarTitleText": "题目"
+            }
+        },
+        {
+            "path": "pages/tea/tea",
+            "style": {
+                "navigationBarTitleText": "tea"
+            }
         }
     ],
     "globalStyle": {
