@@ -67,6 +67,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String hashPassword = encryUtil.hash(password);
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         User user = userMapper.selectOne(wrapper.eq(User::getAccount, account));
+        if (user == null) {
+            throw new Exception("没有账号，请先注册");
+        }
 
         if (user.getAccount() == null) {
             throw new Exception("账号密码错误");

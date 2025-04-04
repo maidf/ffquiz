@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class QnRep {
+public class PaperQnRep{
     @TableId(type = IdType.AUTO)
     private Long id;
     private String sub;
@@ -33,4 +33,5 @@ public class QnRep {
     @JsonProperty("create_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Timestamp createTime;
+    private Integer score;
 }

@@ -1,8 +1,8 @@
 package com.maidf.javaquiz.mapper;
 
-import com.github.yulichang.base.MPJBaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.maidf.javaquiz.entity.po.Exam;
 
-public interface ExamMapper extends MPJBaseMapper<Exam> {
+public interface ExamMapper extends BaseMapper<Exam> {
 
 }

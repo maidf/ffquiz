@@ -13,14 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.github.yulichang.toolkit.JoinWrappers;
 import com.maidf.javaquiz.entity.constant.Constant;
 import com.maidf.javaquiz.entity.po.AnsRecord;
 import com.maidf.javaquiz.entity.po.Mistake;
 import com.maidf.javaquiz.entity.po.PaperQuestion;
 import com.maidf.javaquiz.entity.po.Question;
-import com.maidf.javaquiz.entity.po.QuestionBank;
-import com.maidf.javaquiz.entity.po.User;
 import com.maidf.javaquiz.entity.rep.QnRep;
 import com.maidf.javaquiz.mapper.AnsRecordMapper;
 import com.maidf.javaquiz.mapper.MistakeMapper;
@@ -52,41 +49,12 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
     @Override
     public List<QnRep> listByBankId(Long bankId) {
-
-        var wrapper = JoinWrappers
-                .lambda(Question.class)
-                .selectAs(Question::getId, "id")
-                .selectAs(Question::getType, "type")
-                .selectAs(Question::getContent, "content")
-                .selectAs(Question::getOptions, "options")
-                .selectAs(Question::getAnswer, "answer")
-                .selectAs(Question::getAna, "ana")
-                .selectAs(Question::getDiff, "diff")
-                .selectAs(User::getName, "creator")
-                .selectAs(Question::getCreateTime, "create_time")
-                .leftJoin(User.class, User::getId, Question::getCreatorId)
-                .eq(QuestionBank::getId, bankId);
-
-        return questionMapper.selectJoinList(QnRep.class, wrapper);
+        return questionMapper.selectListQn(bankId);
     }
 
     @Override
-    public QnRep getQnById(Long id) {
-        var wrapper = JoinWrappers
-                .lambda(Question.class)
-                .selectAs(Question::getId, "id")
-                .selectAs(Question::getType, "type")
-                .selectAs(Question::getContent, "content")
-                .selectAs(Question::getOptions, "options")
-                .selectAs(Question::getAnswer, "answer")
-                .selectAs(Question::getAna, "ana")
-                .selectAs(Question::getDiff, "diff")
-                .selectAs(User::getName, "creator")
-                .selectAs(Question::getCreateTime, "create_time")
-                .leftJoin(User.class, User::getId, Question::getCreatorId)
-                .eq(Question::getId, id);
-
-        return questionMapper.selectJoinOne(QnRep.class, wrapper);
+    public QnRep getQnById(Long qnId) {
+        return questionMapper.selectQn(qnId);
     }
 
     @Override

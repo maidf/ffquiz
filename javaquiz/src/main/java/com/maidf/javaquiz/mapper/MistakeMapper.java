@@ -1,8 +1,8 @@
 package com.maidf.javaquiz.mapper;
 
-import com.github.yulichang.base.MPJBaseMapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.maidf.javaquiz.entity.po.Mistake;
 
-public interface MistakeMapper extends MPJBaseMapper<Mistake> {
+public interface MistakeMapper extends BaseMapper<Mistake> {
 
 }
