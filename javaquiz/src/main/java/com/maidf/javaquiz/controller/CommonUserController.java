@@ -21,10 +21,12 @@ import com.maidf.javaquiz.service.impl.UserServiceImpl;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
+@SecurityRequirement(name = "jwt")
 @CrossOrigin("*")
 @Slf4j
 @LoginValidate

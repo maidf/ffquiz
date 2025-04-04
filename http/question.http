@@ -1,11 +1,10 @@
 @baseUrl = http://127.0.0.1:9901
-@base2Url = http://127.0.0.1:9902
 
 @teaUrl = {{baseUrl}}/teacher
-@stuUrl = {{base2Url}}/student
+@stuUrl = {{baseUrl}}/student
 @emailUrl = {{baseUrl}}/email
 @questionUrl = {{baseUrl}}/question
-@ansUrl = {{base2Url}}/ans
+@ansUrl = {{baseUrl}}/ans
 
 @token = Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwibmFtZSI6ImFsaWNlIiwidGVhY2hlciI6dHJ1ZSwiZXhwIjoxNzQyOTI4MDI2fQ.QjZ6q9ABUuNsOJV4UONaKz0_716KsLDbUe3TfkKVzMmtwWpxDXebM4tJEUK4EShilClEFNmzPkHwqVf7cnqkmQ
 

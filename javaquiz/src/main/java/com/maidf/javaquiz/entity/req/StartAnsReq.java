@@ -5,6 +5,7 @@ import java.time.Instant;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.maidf.javaquiz.entity.po.AnsRecord;
 
 import lombok.Data;
@@ -12,7 +13,9 @@ import lombok.Data;
 @Component
 @Data
 public class StartAnsReq {
+    @JsonProperty("question_id")
     private Long questionId;
+    @JsonProperty("exam_id")
     private Long examId;
 
     public AnsRecord startAns(Long userId) {

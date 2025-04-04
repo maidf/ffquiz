@@ -33,3 +33,9 @@ email:
   from: maid@fufu.moe
   username: maid@fufu.moe
   password: Mrx28ibeuKpls18d+79ufQ==
+
+
+# api文档访问接口
+springdoc:
+  swagger-ui:
+    path: /v3/api

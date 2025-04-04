@@ -1,4 +1,4 @@
-package com.maidf.javaquiz.util;
+package com.maidf.javaquiz.conf;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
