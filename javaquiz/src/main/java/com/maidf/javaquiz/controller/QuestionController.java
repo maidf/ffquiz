@@ -1,6 +1,5 @@
 package com.maidf.javaquiz.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maidf.javaquiz.annotation.CheckOwnerShip;
 import com.maidf.javaquiz.annotation.LoginValidate;
-import com.maidf.javaquiz.entity.dto.QuestionDto;
 import com.maidf.javaquiz.entity.enums.EntityTypeEnum;
 import com.maidf.javaquiz.entity.po.Question;
+import com.maidf.javaquiz.entity.rep.QnRep;
 import com.maidf.javaquiz.service.QuestionService;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
@@ -32,7 +30,7 @@ import jakarta.servlet.http.HttpServletRequest;
 @CrossOrigin("*")
 @LoginValidate(teacher = true)
 @RestController
-@RequestMapping("question")
+@RequestMapping("qn")
 public class QuestionController {
     @Autowired
     private QuestionService questionService;
@@ -41,81 +39,83 @@ public class QuestionController {
     private JwtUtil jwtUtil;
 
     /**
-     * 获取指定题库的题目
+     * 获取指定题库的所有题目
      * 
      * @param bankId
      * @return
      */
     @LoginValidate(teacher = false)
-    @GetMapping("bank/{bankId}/question")
+    @GetMapping("bank/{bankId}/qs")
     public ResponseEntity<String> getBankQuestion(@PathVariable Long bankId) {
-        List<Question> questions = questionService.listByBankId(bankId);
+        List<QnRep> questions = questionService.listByBankId(bankId);
         return Result.success(questions);
     }
 
+    /**
+     * 获取指定题目
+     */
     @LoginValidate(teacher = false)
-    @GetMapping("{questionId}")
-    public ResponseEntity<String> getQuestionById(@PathVariable Long questionId) {
+    @GetMapping("{qnId}")
+    public ResponseEntity<String> getQuestionById(@PathVariable Long qnId) {
 
-        return Result.success(questionService.getById(questionId));
+        return Result.success(questionService.getQnById(qnId));
     }
 
+    /**
+     * 创建题目
+     */
     @PostMapping
-    public ResponseEntity<String> createQuestion(@RequestBody String entity, HttpServletRequest req)
+    public ResponseEntity<String> createQuestion(@RequestBody Question question, HttpServletRequest req)
             throws JsonMappingException, JsonProcessingException {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
-        ObjectMapper mapper = new ObjectMapper();
-        Question question = mapper.readValue(entity, QuestionDto.class).toQuestion(userId);
+        question.setCreatorId(userId);
 
         questionService.save(question);
-        questionService.initQuestionIdsToRedis(question.getBankId());
         return Result.success();
     }
 
+    /**
+     * 批量创建题目
+     */
     @PostMapping("batch")
-    public ResponseEntity<String> batchCreateQuestion(@RequestBody List<QuestionDto> questionDtos,
-            HttpServletRequest req)
-            throws JsonMappingException, JsonProcessingException {
-        String token = req.getHeader("Authorization");
+    public ResponseEntity<String> batchCreateQuestion(@RequestBody List<Question> questions,
+            HttpServletRequest req) {
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
-        List<Question> questions = new ArrayList<>();
-        questionDtos.forEach((d) -> {
-            questions.add(d.toQuestion(userId));
+        questions.forEach((e) -> {
+            e.setCreatorId(userId);
         });
 
         questionService.saveBatch(questions);
-        questions.forEach((q) -> {
-            questionService.initQuestionIdsToRedis(q.getBankId());
-        });
         return Result.success();
     }
 
+    /**
+     * 更新题目
+     */
     @CheckOwnerShip(type = EntityTypeEnum.QUESTION)
-    @PutMapping("{questionId}")
-    public ResponseEntity<String> updateQuestion(@PathVariable Long questionId, @RequestBody String entity,
-            HttpServletRequest req)
-            throws JsonMappingException, JsonProcessingException {
-        String token = req.getHeader("Authorization");
-        Long userId = jwtUtil.getLoginUserId(token);
+    @PutMapping("{qnId}")
+    public ResponseEntity<String> updateQuestion(@PathVariable Long qnId, @RequestBody Question question) {
 
-        ObjectMapper mapper = new ObjectMapper();
-        Question question = mapper.readValue(entity, QuestionDto.class).toQuestion(userId);
-        question.setId(questionId);
+        question.setId(qnId);
 
         questionService.updateById(question);
         return Result.success();
     }
 
+    /**
+     * 删除题目
+     */
     @CheckOwnerShip(type = EntityTypeEnum.QUESTION)
-    @DeleteMapping("{questionId}")
-    public ResponseEntity<String> deleteBank(@PathVariable Long questionId) {
-        Long bankId = questionService.getById(questionId).getBankId();
-        questionService.rmById(questionId);
-        questionService.rmQuestionIdFromRedis(bankId, questionId);
-        questionService.rmQnIdFromRedis(questionId);
+    @DeleteMapping("{qnId}")
+    public ResponseEntity<String> deleteBank(@PathVariable Long qnId) {
+        Long bankId = questionService.getById(qnId).getBankId();
+        questionService.rmById(qnId);
+        questionService.rmQuestionIdFromRedis(bankId, qnId);
+        questionService.rmQnIdFromRedis(qnId);
         return Result.success();
     }
 }

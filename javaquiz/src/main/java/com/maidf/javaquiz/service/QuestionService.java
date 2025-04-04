@@ -4,9 +4,12 @@ import java.util.List;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.maidf.javaquiz.entity.po.Question;
+import com.maidf.javaquiz.entity.rep.QnRep;
 
 public interface QuestionService extends IService<Question> {
-    List<Question> listByBankId(Long bankId);
+    List<QnRep> listByBankId(Long bankId);
+
+    QnRep getQnById(Long id);
 
     void rmById(Long id);
 

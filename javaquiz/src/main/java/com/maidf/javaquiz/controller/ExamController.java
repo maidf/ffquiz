@@ -19,12 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.maidf.javaquiz.annotation.LoginValidate;
 import com.maidf.javaquiz.entity.constant.Constant;
-import com.maidf.javaquiz.entity.dto.EndAnsDto;
 import com.maidf.javaquiz.entity.po.AnsRecord;
 import com.maidf.javaquiz.entity.po.Exam;
 import com.maidf.javaquiz.entity.po.Mistake;
 import com.maidf.javaquiz.entity.po.PaperQuestion;
 import com.maidf.javaquiz.entity.po.Question;
+import com.maidf.javaquiz.entity.req.EndAnsReq;
 import com.maidf.javaquiz.service.AnsRecordService;
 import com.maidf.javaquiz.service.ExamService;
 import com.maidf.javaquiz.service.MistakeService;
@@ -62,7 +62,7 @@ public class ExamController {
 
     @GetMapping("record")
     public ResponseEntity<String> getExamRecord(HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
         QueryWrapper<Exam> wrapper = new QueryWrapper<Exam>();
         wrapper.eq("user_id", userId);
@@ -71,9 +71,9 @@ public class ExamController {
     }
 
     @PostMapping("end")
-    public ResponseEntity<String> endExam(@RequestBody List<EndAnsDto> dtos, HttpServletRequest req,
+    public ResponseEntity<String> endExam(@RequestBody List<EndAnsReq> dtos, HttpServletRequest req,
             HttpSession session) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         Long examId = (Long) session.getAttribute(Constant.EXAM_KEY + userId);
@@ -84,7 +84,7 @@ public class ExamController {
         dtos.forEach((d) -> {
             ansRecords.add(d.newExamAns(userId, examId));
             Question question = questionService.getById(d.getQuestionId());
-            if (d.getUserAnswer().equals(question.getAnswer().getCorrectAnswer())) {
+            if (d.getUserAnswer().equals(question.getAnswer())) {
                 Long paperId = exam.getPaperId();
                 QueryWrapper<PaperQuestion> wrapper = new QueryWrapper<PaperQuestion>();
                 wrapper.eq("paper_id", paperId).eq("question_id", question.getId());
@@ -106,7 +106,7 @@ public class ExamController {
 
     @PostMapping("start/{paperId}")
     public ResponseEntity<String> startExam(@PathVariable Long paperId, HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         Timestamp now = Timestamp.from(Instant.now());
@@ -121,7 +121,7 @@ public class ExamController {
 
     @DeleteMapping("record/{id}")
     public ResponseEntity<String> deleteAnsRecord(@PathVariable Long id, HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         QueryWrapper<Exam> wrapper = new QueryWrapper<>();

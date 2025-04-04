@@ -1,4 +1,4 @@
-package com.maidf.javaquiz.entity.dto;
+package com.maidf.javaquiz.entity.req;
 
 import java.sql.Timestamp;
 import java.time.Instant;
@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Component
 @Data
-public class EndAnsDto {
+public class EndAnsReq {
     private Long questionId;
     private String userAnswer;
 

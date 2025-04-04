@@ -1,8 +1,8 @@
 package com.maidf.javaquiz.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.github.yulichang.base.MPJBaseMapper;
 import com.maidf.javaquiz.entity.po.Paper;
 
-public interface PaperMapper extends BaseMapper<Paper> {
+public interface PaperMapper extends MPJBaseMapper<Paper> {
 
 }

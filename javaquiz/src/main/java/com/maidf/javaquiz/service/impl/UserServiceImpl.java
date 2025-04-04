@@ -13,10 +13,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.maidf.javaquiz.entity.dto.SessionUserDto;
-import com.maidf.javaquiz.entity.dto.UpdatePasswordDto;
 import com.maidf.javaquiz.entity.enums.EmailMsgEnum;
 import com.maidf.javaquiz.entity.enums.UserRoleEnum;
 import com.maidf.javaquiz.entity.po.User;
+import com.maidf.javaquiz.entity.req.UpdatePasswordReq;
 import com.maidf.javaquiz.mapper.UserMapper;
 import com.maidf.javaquiz.service.UserService;
 import com.maidf.javaquiz.util.EmailSender;
@@ -114,14 +114,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public void updatePassword(UpdatePasswordDto updatePasswordDto, User user) throws Exception {
-        String hashOldPassword = encryUtil.hash(updatePasswordDto.getOldPassword());
-        String hashNewPassword = encryUtil.hash(updatePasswordDto.getNewPassword());
+    public void updatePassword(UpdatePasswordReq entity, User user) throws Exception {
+        String hashOldPassword = encryUtil.hash(entity.getOldPassword());
+        String hashNewPassword = encryUtil.hash(entity.getNewPassword());
         if (!user.getPassword().equals(hashOldPassword)) {
             throw new Exception("密码错误");
         }
         try {
-            verifyCode(user.getId().toString() + EmailMsgEnum.RESET_PASSWORD.type(), updatePasswordDto.getCode());
+            verifyCode(user.getId().toString() + EmailMsgEnum.RESET_PASSWORD.type(), entity.getCode());
         } catch (Exception e) {
             throw e;
         }

@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.maidf.javaquiz.annotation.LoginValidate;
 import com.maidf.javaquiz.entity.constant.Constant;
-import com.maidf.javaquiz.entity.dto.EndAnsDto;
-import com.maidf.javaquiz.entity.dto.StartAnsDto;
 import com.maidf.javaquiz.entity.po.AnsRecord;
 import com.maidf.javaquiz.entity.po.Mistake;
 import com.maidf.javaquiz.entity.po.Question;
+import com.maidf.javaquiz.entity.req.EndAnsReq;
+import com.maidf.javaquiz.entity.req.StartAnsReq;
 import com.maidf.javaquiz.service.AnsRecordService;
 import com.maidf.javaquiz.service.MistakeService;
 import com.maidf.javaquiz.service.QuestionService;
@@ -75,7 +75,7 @@ public class AnsController {
 
     @GetMapping("record")
     public ResponseEntity<String> getAnsRecord(HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
         QueryWrapper<AnsRecord> wrapper = new QueryWrapper<>();
         wrapper.eq("user_id", userId);
@@ -84,9 +84,9 @@ public class AnsController {
     }
 
     @PostMapping("end")
-    public ResponseEntity<String> ansQuestion(@RequestBody EndAnsDto endAnsDto, HttpSession session,
+    public ResponseEntity<String> ansQuestion(@RequestBody EndAnsReq endAnsDto, HttpSession session,
             HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         Long ansId = (Long) session.getAttribute(Constant.RANDOM_QUESTION_KEY + userId);
@@ -96,7 +96,7 @@ public class AnsController {
 
         // 记录错题
         Question question = questionService.getById(ansRecord.getQuestionId());
-        if (!ansRecord.getUserAnswer().equals(question.getAnswer().getCorrectAnswer())) {
+        if (!ansRecord.getUserAnswer().equals(question.getAnswer())) {
             Mistake mistake = new Mistake(null, userId, question.getId(), ansRecord.getUserAnswer());
             mistakeService.save(mistake);
         }
@@ -104,8 +104,8 @@ public class AnsController {
     }
 
     @PostMapping("start")
-    public ResponseEntity<String> startAnswer(@RequestBody StartAnsDto startAnsDto, HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+    public ResponseEntity<String> startAnswer(@RequestBody StartAnsReq startAnsDto, HttpServletRequest req) {
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         AnsRecord ansRecord = startAnsDto.startAns(userId);
@@ -119,7 +119,7 @@ public class AnsController {
 
     @DeleteMapping("record/{id}")
     public ResponseEntity<String> deleteAnsRecord(@PathVariable Long id, HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         QueryWrapper<AnsRecord> wrapper = new QueryWrapper<AnsRecord>();

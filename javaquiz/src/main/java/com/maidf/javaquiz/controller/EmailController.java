@@ -29,7 +29,7 @@ public class EmailController {
 
     @GetMapping("password")
     public ResponseEntity<String> resetPassword(HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
         User user = userService.getById(userId);
         String email = user.getEmail();
@@ -47,7 +47,7 @@ public class EmailController {
 
     @GetMapping("logoff")
     public ResponseEntity<String> logoff(HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         User user = userService.getById(userId);

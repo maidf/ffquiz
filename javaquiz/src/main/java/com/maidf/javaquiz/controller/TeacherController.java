@@ -8,12 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maidf.javaquiz.entity.constant.Constant;
-import com.maidf.javaquiz.entity.dto.RegisterOrLoginDto;
 import com.maidf.javaquiz.entity.dto.SessionUserDto;
+import com.maidf.javaquiz.entity.req.RegisterOrLoginReq;
 import com.maidf.javaquiz.service.impl.UserServiceImpl;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
@@ -32,10 +29,7 @@ public class TeacherController {
     private JwtUtil jwtUtil;
 
     @PostMapping("register")
-    public ResponseEntity<String> register(HttpSession session, @RequestBody String entity)
-            throws JsonMappingException, JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        RegisterOrLoginDto user = mapper.readValue(entity, RegisterOrLoginDto.class);
+    public ResponseEntity<String> register(HttpSession session, @RequestBody RegisterOrLoginReq user) {
         if (user.getAccount() == null || user.getPassword() == null || user.getCaptcha() == null) {
             return Result.error("请求参数错误");
         }
@@ -61,10 +55,7 @@ public class TeacherController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<String> login(HttpSession session, @RequestBody String entity)
-            throws JsonMappingException, JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        RegisterOrLoginDto user = mapper.readValue(entity, RegisterOrLoginDto.class);
+    public ResponseEntity<String> login(HttpSession session, @RequestBody RegisterOrLoginReq user) {
         if (user.getAccount() == null || user.getPassword() == null || user.getCaptcha() == null) {
             return Result.error("请求参数错误");
         }

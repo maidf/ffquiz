@@ -11,14 +11,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maidf.javaquiz.annotation.LoginValidate;
-import com.maidf.javaquiz.entity.dto.UpdateInfoDto;
-import com.maidf.javaquiz.entity.dto.UpdatePasswordDto;
 import com.maidf.javaquiz.entity.po.User;
+import com.maidf.javaquiz.entity.req.UpdateInfoReq;
+import com.maidf.javaquiz.entity.req.UpdatePasswordReq;
 import com.maidf.javaquiz.service.impl.UserServiceImpl;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
@@ -26,7 +24,6 @@ import com.maidf.javaquiz.util.Result;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
-
 
 @CrossOrigin("*")
 @Slf4j
@@ -49,42 +46,26 @@ public class CommonUserController {
         } catch (Exception e) {
             return Result.error("验证身份失败");
         }
-        ;
+
         session.invalidate();
         return Result.success();
     }
 
-    @LoginValidate(login = false)
-    @GetMapping("name/{usrId}")
-    public ResponseEntity<String> getUserName(@PathVariable Long usrId) {
-        QueryWrapper<User> wrapper = new QueryWrapper<User>();
-        wrapper.eq("id", usrId);
-        wrapper.select("name");
-        User user = userService.getOne(wrapper);
-        return Result.success(user.getName());
-    }
-    
-
     @GetMapping("info")
     public ResponseEntity<String> info(HttpServletRequest req) {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
         User user = userService.getById(userId);
         return Result.success(user);
     }
 
     @PutMapping("info")
-    public ResponseEntity<String> updateInfo(HttpServletRequest req, @RequestBody String entity)
-            throws JsonMappingException, JsonProcessingException {
-        String token = req.getHeader("Authorization");
+    public ResponseEntity<String> updateInfo(HttpServletRequest req, @RequestBody UpdateInfoReq updateInfo) {
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         // 获取用户信息
         User user = userService.getById(userId);
-
-        // 读取更新信息
-        ObjectMapper mapper = new ObjectMapper();
-        UpdateInfoDto updateInfo = mapper.readValue(entity, UpdateInfoDto.class);
 
         if (updateInfo.getName() != null && !updateInfo.getName().isBlank()) {
             user.setName(updateInfo.getName());
@@ -99,9 +80,9 @@ public class CommonUserController {
     }
 
     @PutMapping("password")
-    public ResponseEntity<String> updatePassword(HttpServletRequest req, @RequestBody String entity)
+    public ResponseEntity<String> updatePassword(HttpServletRequest req, @RequestBody UpdatePasswordReq entity)
             throws JsonMappingException, JsonProcessingException {
-        String token = req.getHeader("Authorization");
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
         // 获取用户信息
@@ -111,16 +92,12 @@ public class CommonUserController {
             return Result.error("未绑定邮箱");
         }
 
-        // 读取更新信息
-        ObjectMapper mapper = new ObjectMapper();
-        UpdatePasswordDto updatePasswordDto = mapper.readValue(entity, UpdatePasswordDto.class);
-
-        if (updatePasswordDto.getNewPassword() == null || updatePasswordDto.getNewPassword().isBlank()) {
+        if (entity.getNewPassword() == null || entity.getNewPassword().isBlank()) {
             return Result.error("修改失败");
         }
 
         try {
-            userService.updatePassword(updatePasswordDto, user);
+            userService.updatePassword(entity, user);
         } catch (Exception e) {
             return Result.error(e.getMessage());
         }

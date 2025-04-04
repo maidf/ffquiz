@@ -7,7 +7,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/quiz?useUnicode=true&characterEncoding=utf-8
-    username: root
+    username: quiz
     password: 123
     hikari:
       minimum-idle: 1
@@ -32,4 +32,4 @@ email:
   host: smtp.larksuite.com
   from: maid@fufu.moe
   username: maid@fufu.moe
-  password: ONms0iTCdffRJ7no
+  password: Mrx28ibeuKpls18d+79ufQ==

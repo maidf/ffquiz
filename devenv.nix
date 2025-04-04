@@ -1,7 +1,5 @@
 {
   pkgs,
-  lib,
-  config,
   inputs,
   ...
 }:
@@ -9,6 +7,7 @@ let
   unpkgs = import inputs.unpkgs { system = pkgs.stdenv.system; };
 in
 {
+  cachix.enable = false;
 
   # https://devenv.sh/basics/
   env.GREET = "devenv";
@@ -36,8 +35,11 @@ in
     package = unpkgs.mysql80;
     ensureUsers = [
       {
-        name = "root";
+        name = "quiz";
         password = "123";
+        ensurePermissions = {
+          "quiz.*" = "ALL PRIVILEGES";
+        };
       }
     ];
     initialDatabases = [

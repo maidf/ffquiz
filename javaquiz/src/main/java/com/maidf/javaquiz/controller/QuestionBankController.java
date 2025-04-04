@@ -1,6 +1,5 @@
 package com.maidf.javaquiz.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,17 +14,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maidf.javaquiz.annotation.CheckOwnerShip;
 import com.maidf.javaquiz.annotation.LoginValidate;
-import com.maidf.javaquiz.entity.dto.BankDto;
-import com.maidf.javaquiz.entity.dto.BankRes;
 import com.maidf.javaquiz.entity.po.QuestionBank;
-import com.maidf.javaquiz.entity.po.User;
+import com.maidf.javaquiz.entity.rep.BankRep;
 import com.maidf.javaquiz.service.QuestionBankService;
-import com.maidf.javaquiz.service.UserService;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
 
@@ -34,14 +27,11 @@ import jakarta.servlet.http.HttpServletRequest;
 @CrossOrigin("*")
 @LoginValidate(teacher = true)
 @RestController
-@RequestMapping("question")
+@RequestMapping("bank")
 public class QuestionBankController {
 
     @Autowired
     private QuestionBankService bankService;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -49,35 +39,29 @@ public class QuestionBankController {
     /**
      * 添加题库
      * 
-     * @param entity
-     * @param req
-     * @return
-     * @throws JsonMappingException
-     * @throws JsonProcessingException
      */
-    @PostMapping("bank")
-    public ResponseEntity<String> createBank(@RequestBody String entity, HttpServletRequest req)
-            throws JsonMappingException, JsonProcessingException {
-        String token = req.getHeader("Authorization");
+    @PostMapping
+    public ResponseEntity<String> createBank(@RequestBody QuestionBank bank, HttpServletRequest req) {
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
-        ObjectMapper mapper = new ObjectMapper();
-        QuestionBank bank = mapper.readValue(entity, BankDto.class).toBank(userId);
+        bank.setCreatorId(userId);
 
         bankService.save(bank);
         return Result.success();
     }
 
+    /**
+     * 修改题库
+     */
     @CheckOwnerShip
-    @PutMapping("bank/{id}")
-    public ResponseEntity<String> updateBank(@PathVariable Long id, @RequestBody String entity,
-            HttpServletRequest req)
-            throws JsonMappingException, JsonProcessingException {
-        String token = req.getHeader("Authorization");
+    @PutMapping("{id}")
+    public ResponseEntity<String> updateBank(@PathVariable Long id, @RequestBody QuestionBank bank,
+            HttpServletRequest req) {
+        String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
-        ObjectMapper mapper = new ObjectMapper();
-        QuestionBank bank = mapper.readValue(entity, BankDto.class).toBank(userId);
+        bank.setCreatorId(userId);
         bank.setId(id);
 
         bankService.updateById(bank);
@@ -91,7 +75,7 @@ public class QuestionBankController {
      * @return
      */
     @CheckOwnerShip
-    @DeleteMapping("bank/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<String> deleteBank(@PathVariable Long id) {
         try {
             bankService.rmById(id);
@@ -107,18 +91,12 @@ public class QuestionBankController {
      * @return
      */
     @LoginValidate(teacher = false)
-    @GetMapping("bank")
+    @GetMapping("all")
     public ResponseEntity<String> getBanks() {
 
-        List<QuestionBank> banks = bankService.list();
-        List<BankRes> bankRes = new ArrayList<>();
+        List<BankRep> banks = bankService.listBanks();
 
-        banks.forEach((b) -> {
-            User user = userService.getById(b.getCreatorId());
-            bankRes.add(new BankRes(b, user.getName()));
-        });
-
-        return Result.success(bankRes);
+        return Result.success(banks);
     }
 
     /**
@@ -128,12 +106,10 @@ public class QuestionBankController {
      * @return
      */
     @LoginValidate(teacher = false)
-    @GetMapping("bank/{id}")
+    @GetMapping("{id}")
     public ResponseEntity<String> getBank(@PathVariable Long id) {
-        QuestionBank bank = bankService.getById(id);
-        User user = userService.getById(bank.getCreatorId());
-        BankRes bankRes = new BankRes(bank, user.getName());
-        return Result.success(bankRes);
+        BankRep bank = bankService.getBankById(id);
+        return Result.success(bank);
     }
 
 }
