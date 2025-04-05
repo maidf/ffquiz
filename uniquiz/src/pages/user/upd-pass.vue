@@ -60,11 +60,7 @@ const msg = ref<usr_password>({
 const upd_password = (token: string) => {
     uni.request({
         url: "/api/usr/password",
-        data: {
-            oldPassword: msg.value?.old_password,
-            newPassword: msg.value?.new_password,
-            code: msg.value?.code
-        },
+        data: msg.value,
         method: "PUT",
         header: { 'Authorization': token }
     }).then(res => {

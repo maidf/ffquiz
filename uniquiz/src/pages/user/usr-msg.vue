@@ -16,7 +16,7 @@
                 <uni-easyinput disabled type="text" v-model="user.role" />
             </uni-forms-item>
             <uni-forms-item label="创建时间" name="createTime">
-                <uni-easyinput disabled type="text" v-model="user.createTime" />
+                <uni-easyinput disabled type="text" v-model="user.create_time" />
             </uni-forms-item>
         </uni-forms>
 
@@ -43,7 +43,7 @@ interface usr {
     name: string | null
     email: string | null
     role: string | null
-    createTime: Date | null
+    create_time: Date | null
 }
 
 const user = ref<usr>({
@@ -52,7 +52,7 @@ const user = ref<usr>({
     name: null,
     email: null,
     role: null,
-    createTime: null
+    create_time: null
 })
 
 const get_token = () => {

@@ -14,7 +14,7 @@
             }
         },
         {
-            "path": "pages/index/index",
+            "path": "pages/index/home",
             "style": {
                 "navigationBarTitleText": "主页"
             },
@@ -57,9 +57,17 @@
             }
         },
         {
-            "path": "pages/tea/tea",
+            "path": "pages/tea/tea-home",
             "style": {
-                "navigationBarTitleText": "tea"
+                "navigationBarTitleText": "主页",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/tea/tea-bank",
+            "style": {
+                "navigationBarTitleText": "题库",
+                "enablePullDownRefresh": true
             }
         }
     ],

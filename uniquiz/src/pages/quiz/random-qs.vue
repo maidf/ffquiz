@@ -1,5 +1,5 @@
 <template>
-    <view class="content">ans-qs</view>
+    <view class="content">random-qs</view>
 </template>
 
 <script lang="ts" setup>

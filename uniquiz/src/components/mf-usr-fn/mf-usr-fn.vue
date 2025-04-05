@@ -1,14 +1,9 @@
 <template>
-    <view class="content">
-
-        <mf-home></mf-home>
-
-        <uni-fab ref="fab" :pattern="pattern" :content="content" horizontal="right" vertical="bottom"
-            direction="vertical" @trigger="trigger" />
-    </view>
+    <uni-fab ref="fab" :pattern="pattern" :content="content" horizontal="right" vertical="bottom" direction="vertical"
+        @trigger="trigger" />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 
 
@@ -24,12 +19,6 @@ const content = ref([{
     iconPath: '/static/user.png',
     selectedIconPath: '/static/logo.png',
     text: '用户信息',
-    active: false
-},
-{
-    iconPath: '/static/login.png',
-    selectedIconPath: '/static/logo.png',
-    text: '重新登录',
     active: false
 },
 {
@@ -52,13 +41,12 @@ const trigger = (e: any) => {
         case '用户信息':
             goto_usr_msg()
             break
-        case '重新登录':
-            login()
-            break
         case '退出登录':
+            uni.clearStorage()
             logout(token.value)
             break
         case '注销账号':
+            uni.clearStorage()
             logoff(token.value)
             break
     }
@@ -79,11 +67,6 @@ const get_token = () => {
     }
 }
 const token = ref()
-
-
-const login = () => {
-    uni.redirectTo({ url: "/pages/user/login" })
-}
 
 const goto_usr_msg = () => {
     uni.navigateTo({ url: "/pages/user/usr-msg" })

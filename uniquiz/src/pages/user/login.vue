@@ -27,6 +27,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useTokenStore } from '@/stores/token'
+import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
 
 const user_account = ref({
@@ -61,11 +63,25 @@ const login = (idtag: string) => {
         method: "POST"
     }).then((rep) => {
         if (rep.statusCode == 200) {
+            // 保存状态
+            const token = rep.data.toString()
+            const store = useTokenStore()
+            const { save } = store
+            save(token)
             uni.setStorage({ key: "Authorization", data: rep.data })
                 .then(() => {
-                    uni.redirectTo({
-                        url: "/pages/index/index"
-                    })
+                    const { teacher } = storeToRefs(store)
+                    uni.setStorageSync("login_tag", idtag)
+                    if (idtag == 'teacher' && teacher.value) {
+                        uni.redirectTo({
+                            url: "/pages/tea/tea-home"
+                        })
+                    } else {
+                        uni.redirectTo({
+                            url: "/pages/index/index"
+                        })
+                    }
+
                 })
         } else {
             uni.showToast({ title: rep.data.toString(), icon: 'none' })
