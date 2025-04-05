@@ -1,5 +1,6 @@
 package com.maidf.javaquiz.entity.rep;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Component
 @Data
-public class BankRep {
+public class BankRep implements Serializable{
     private Long id;
     private String name;
     private String subject;

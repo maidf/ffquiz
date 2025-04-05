@@ -1,6 +1,7 @@
 package com.maidf.javaquiz.controller;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -74,7 +75,7 @@ public class QuestionController {
 
         question.setCreatorId(userId);
 
-        questionService.save(question);
+        questionService.saveQn(question);
         return Result.success();
     }
 
@@ -104,7 +105,7 @@ public class QuestionController {
 
         question.setId(qnId);
 
-        questionService.updateById(question);
+        questionService.updateQn(question);
         return Result.success();
     }
 
@@ -116,8 +117,12 @@ public class QuestionController {
     public ResponseEntity<String> deleteBank(@PathVariable Long qnId) {
         Long bankId = questionService.getById(qnId).getBankId();
         questionService.rmById(qnId);
-        questionService.rmQuestionIdFromRedis(bankId, qnId);
-        questionService.rmQnIdFromRedis(qnId);
+
+        // 使用CompletableFuture异步执行
+        CompletableFuture.runAsync(() -> {
+            questionService.rmQuestionIdFromRedis(bankId, qnId);
+            questionService.rmQnIdFromRedis(qnId);
+        });
         return Result.success();
     }
 }

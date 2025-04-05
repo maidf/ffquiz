@@ -12,4 +12,8 @@ public interface QuestionBankService extends IService<QuestionBank> {
     List<BankRep> listBanks();
 
     BankRep getBankById(Long bankId);
+
+    void saveBank(QuestionBank bank);
+
+    void updateBank(QuestionBank bank);
 }

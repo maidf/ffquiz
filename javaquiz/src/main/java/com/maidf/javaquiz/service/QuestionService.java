@@ -7,6 +7,11 @@ import com.maidf.javaquiz.entity.po.Question;
 import com.maidf.javaquiz.entity.rep.QnRep;
 
 public interface QuestionService extends IService<Question> {
+
+    void saveQn(Question qn);
+
+    void updateQn(Question qn);
+
     List<QnRep> listByBankId(Long bankId);
 
     QnRep getQnById(Long id);

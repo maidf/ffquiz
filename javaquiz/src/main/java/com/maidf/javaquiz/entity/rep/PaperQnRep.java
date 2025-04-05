@@ -1,5 +1,6 @@
 package com.maidf.javaquiz.entity.rep;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PaperQnRep{
+public class PaperQnRep implements Serializable{
     @TableId(type = IdType.AUTO)
     private Long id;
     private String sub;

@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,6 +30,7 @@ import com.maidf.javaquiz.service.QuestionService;
 
 import lombok.extern.slf4j.Slf4j;
 
+@CacheConfig(cacheNames = "qn_cache")
 @Slf4j
 @Service
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
@@ -47,6 +51,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Autowired
     private RedisTemplate<String, Long> redisTemplate;
 
+    @Cacheable(key = "#bankId")
     @Override
     public List<QnRep> listByBankId(Long bankId) {
         return questionMapper.selectListQn(bankId);
@@ -57,6 +62,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         return questionMapper.selectQn(qnId);
     }
 
+    @CacheEvict(cacheNames = "qn_cache", allEntries = true)
     @Override
     public void rmById(Long id) {
         Question question = questionMapper.selectById(id);
@@ -126,8 +132,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
             return;
 
         try {
-            redisTemplate.opsForSet().remove(redisKey, questionId);
-            log.info("Redis 缓存更新成功，移除 key: " + redisKey + ", id: " + questionId);
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(redisKey))) {
+                redisTemplate.opsForSet().remove(redisKey, questionId);
+                log.info("Redis 缓存更新成功，移除 key: " + redisKey + ", id: " + questionId);
+            }
         } finally {
             redisTemplate.delete(lockKey); // 释放锁
         }
@@ -248,14 +256,31 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
             return;
 
         try {
-            redisTemplate.opsForSet().remove(allQsKey);
-            redisTemplate.opsForValue().getAndDelete(dailyKey);
-            log.info("Redis 缓存更新成功，移除 key: " + allQsKey);
-            log.info("Redis 缓存更新成功，移除 key: " + dailyKey + ", qnId: " + qnId);
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(allQsKey))) {
+                redisTemplate.opsForSet().remove(allQsKey);
+                log.info("Redis 缓存更新成功，移除 key: " + allQsKey);
+            }
+            if (Boolean.TRUE.equals(redisTemplate.hasKey(dailyKey))) {
+                redisTemplate.opsForValue().getAndDelete(dailyKey);
+                log.info("Redis 缓存更新成功，移除 key: " + dailyKey + ", qnId: " + qnId);
+            }
+
         } finally {
             redisTemplate.delete(lockKey1); // 释放锁
             redisTemplate.delete(lockKey2); // 释放锁
         }
+    }
+
+    @CacheEvict(cacheNames = "qn_cache", allEntries = true)
+    @Override
+    public void saveQn(Question qn) {
+        super.save(qn);
+    }
+
+    @CacheEvict(cacheNames = "qn_cache", allEntries = true)
+    @Override
+    public void updateQn(Question qn) {
+        super.updateById(qn);
     }
 
 }

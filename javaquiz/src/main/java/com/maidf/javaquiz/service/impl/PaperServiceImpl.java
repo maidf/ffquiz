@@ -20,7 +20,7 @@ import com.maidf.javaquiz.mapper.PaperMapper;
 import com.maidf.javaquiz.mapper.PaperQuestionMapper;
 import com.maidf.javaquiz.service.PaperService;
 
-@CacheConfig(cacheNames = "paper")
+@CacheConfig(cacheNames = "paper_cache")
 @Service
 public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements PaperService {
     @Autowired
@@ -53,6 +53,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         return paperQuestionMapper.selectListQn(paperId);
     }
 
+    @Cacheable(key = "#paperId")
     @Override
     public List<PaperRep> listPapers() {
         return paperMapper.selectListPaper();
