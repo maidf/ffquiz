@@ -14,15 +14,16 @@
                     </uni-forms-item>
                     <uni-forms-item label="试卷总分" name="total_score">
                         <uni-easyinput disabled :inputBorder="false" class="disable"
-                            :styles="{ color: '#fff', disableColor: '#696969' }" type="text" v-model="paper.total_score" />
+                            :styles="{ color: '#fff', disableColor: '#696969' }" type="text"
+                            v-model="paper.total_score" />
                     </uni-forms-item>
                     <uni-forms-item label="试卷作者" name="creator">
                         <uni-easyinput disabled :inputBorder="false" class="disable"
                             :styles="{ color: '#fff', disableColor: '#696969' }" type="text" v-model="paper.creator" />
                     </uni-forms-item>
                 </uni-forms>
-                <button size="mini" @click="">修改</button>
-                <button size="mini" @click="">删除</button>
+                <button size="mini" @click="update_paper(paper)">修改</button>
+                <button size="mini" @click="rm_paper(paper.id)">删除</button>
                 <button size="mini" @click="show_qs">查看题目</button>
                 <button size="mini" @click="show_qn">添加题目</button>
             </view>
@@ -34,13 +35,12 @@
 </template>
 
 <script lang="ts" setup>
-import { useBankStore } from '@/stores/bank'
+import { usePaperStore, type paper } from '@/stores/paper'
+import { qn_diff } from '@/stores/qn'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import mfAddQn from './mf-add-qn/mf-add-qn.vue'
 import mfQs from './mf-qs/mf-qs.vue'
-import type { paper } from '@/stores/paper'
-import { qn_diff } from '@/stores/qn'
 
 const mf_qs = ref(false)
 
@@ -95,7 +95,7 @@ onLoad((opt: any) => {
     paper.value = JSON.parse(decodeURIComponent(opt.paper))
 })
 
-const { update_bank, delete_bank } = useBankStore()
+const { update_paper, rm_paper } = usePaperStore()
 </script>
 
 <style lang="scss" scoped>

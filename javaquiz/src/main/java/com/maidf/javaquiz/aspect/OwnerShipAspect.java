@@ -75,6 +75,7 @@ public class OwnerShipAspect {
             switch (entityType) {
                 case EntityTypeEnum.PAPER:
                     checkPaperOwnerShip(userId, entityId);
+                    break;
                 case EntityTypeEnum.QUESTION:
                     checkQuestionOwnerShip(userId, entityId);
                     break;

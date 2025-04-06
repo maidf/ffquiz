@@ -107,7 +107,7 @@ export interface qn {
     create_time: Date
 }
 
-interface opt_type {
+export interface opt_type {
     A: string
     B: string
     C: string

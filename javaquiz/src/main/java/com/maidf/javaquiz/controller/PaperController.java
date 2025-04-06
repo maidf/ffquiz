@@ -102,8 +102,12 @@ public class PaperController {
     @PostMapping("{paperId}/qs")
     public ResponseEntity<String> addPaperQuestion(@PathVariable Long paperId,
             @RequestBody List<PaperQuestion> pQs) {
+        try {
+            paperQuestionService.saveBatchQn(paperId, pQs);
 
-        paperQuestionService.saveBatchQn(paperId, pQs);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
 
         return Result.success();
     }
@@ -145,7 +149,11 @@ public class PaperController {
     @CheckOwnerShip(type = EntityTypeEnum.PAPER)
     @DeleteMapping("{paperId}/qn/{qnId}")
     public ResponseEntity<String> rmPaperQuestion(@PathVariable Long paperId, @PathVariable Long qnId) {
-        paperQuestionService.rmQn(paperId, qnId);
+        try {
+            paperQuestionService.rmQn(paperId, qnId);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
         return Result.success();
     }
 

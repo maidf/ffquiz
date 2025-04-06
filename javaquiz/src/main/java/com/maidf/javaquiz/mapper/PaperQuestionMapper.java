@@ -11,7 +11,7 @@ import com.maidf.javaquiz.entity.rep.PaperQnRep;
 public interface PaperQuestionMapper extends BaseMapper<PaperQuestion> {
     @Select("""
                 select
-                    pq.id,
+                    pq.question_id as id,
                     qb.subject as sub,
                     q.type,
                     q.content,

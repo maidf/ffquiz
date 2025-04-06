@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.maidf.javaquiz.entity.po.PaperQuestion;
 
 public interface PaperQuestionService extends IService<PaperQuestion> {
-    void rmQn(Long paperId, Long qnId);
+    void rmQn(Long paperId, Long qnId) throws Exception;
 
-    void saveBatchQn(Long paperId, List<PaperQuestion> pQs);
+    void saveBatchQn(Long paperId, List<PaperQuestion> pQs) throws Exception;
 }

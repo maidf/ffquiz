@@ -26,7 +26,7 @@ public class PaperQuestion implements Serializable {
     @JsonProperty(value = "paper_id", required = false)
     private Long paperId;
 
-    @JsonProperty("question_id")
+    @JsonProperty("qn_id")
     private Long questionId;
     
     private Integer score;

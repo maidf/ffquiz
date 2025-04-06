@@ -14,7 +14,9 @@ import com.maidf.javaquiz.mapper.PaperMapper;
 import com.maidf.javaquiz.mapper.PaperQuestionMapper;
 import com.maidf.javaquiz.service.PaperQuestionService;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class PaperQuestionServiceImpl extends ServiceImpl<PaperQuestionMapper, PaperQuestion>
         implements PaperQuestionService {
@@ -27,12 +29,18 @@ public class PaperQuestionServiceImpl extends ServiceImpl<PaperQuestionMapper, P
 
     @CacheEvict(cacheNames = "paper_cache", allEntries = true)
     @Override
-    public void rmQn(Long paperId, Long qnId) {
+    public void rmQn(Long paperId, Long qnId) throws Exception {
         QueryWrapper<PaperQuestion> wrapper = new QueryWrapper<PaperQuestion>();
         wrapper.eq("paper_id", paperId).eq("question_id", qnId);
 
+        PaperQuestion qn = paperQuestionMapper.selectOne(wrapper);
+        log.info("删除题目: {}, paperId:{}, qnId: {}", qn, paperId, qnId);
+        if (qn == null) {
+            throw new RuntimeException("题目已删除");
+        }
+
         Integer minusTotalScore = 0;
-        minusTotalScore += paperQuestionMapper.selectOne(wrapper).getScore();
+        minusTotalScore += qn.getScore();
 
         // 删除题目
         paperQuestionMapper.delete(wrapper);
@@ -45,12 +53,20 @@ public class PaperQuestionServiceImpl extends ServiceImpl<PaperQuestionMapper, P
 
     @CacheEvict(cacheNames = "paper_cache", allEntries = true)
     @Override
-    public void saveBatchQn(Long paperId, List<PaperQuestion> pQs) {
+    public void saveBatchQn(Long paperId, List<PaperQuestion> pQs) throws Exception {
         pQs.forEach(e -> {
             e.setPaperId(paperId);
+            if (e.getScore() == null) {
+                throw new RuntimeException("必须设置分值");
+            }
         });
-        // 批量插入题目
-        super.saveBatch(pQs);
+        try {
+            // 批量插入题目
+            super.saveBatch(pQs);
+        } catch (Exception e) {
+            throw new RuntimeException("已有重复题目");
+        }
+
         // 更新试卷总分
         Integer addTotalScore = 0;
         for (PaperQuestion pQn : pQs) {
