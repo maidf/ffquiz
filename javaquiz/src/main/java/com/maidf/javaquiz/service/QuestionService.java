@@ -12,6 +12,8 @@ public interface QuestionService extends IService<Question> {
 
     void updateQn(Question qn);
 
+    List<QnRep> listQn();
+
     List<QnRep> listByBankId(Long bankId);
 
     QnRep getQnById(Long id);

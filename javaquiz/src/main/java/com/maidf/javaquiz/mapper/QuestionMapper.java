@@ -57,6 +57,29 @@ public interface QuestionMapper extends BaseMapper<Question> {
                     left join
                         question_bank qb on qb.id = q.bank_id
                 where
+                    q.bank_id is not null
+            """)
+    List<QnRep> selectListQn();
+
+    @Select("""
+                select
+                    q.id,
+                    qb.subject as sub,
+                    q.type,
+                    q.content,
+                    q.options,
+                    q.answer,
+                    q.ana,
+                    q.diff,
+                    u.name as creator,
+                    q.create_time
+                from
+                    question q
+                    left join
+                        user u on u.id = q.creator_id
+                    left join
+                        question_bank qb on qb.id = q.bank_id
+                where
                     q.id = #{qnId}
             """)
     QnRep selectQn(Long qnId);

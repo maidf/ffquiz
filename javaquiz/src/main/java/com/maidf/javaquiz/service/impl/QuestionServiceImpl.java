@@ -283,4 +283,10 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         super.updateById(qn);
     }
 
+    @Cacheable
+    @Override
+    public List<QnRep> listQn() {
+        return questionMapper.selectListQn();
+    }
+
 }

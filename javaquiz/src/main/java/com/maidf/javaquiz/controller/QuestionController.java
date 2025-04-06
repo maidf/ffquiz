@@ -41,6 +41,12 @@ public class QuestionController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @LoginValidate(teacher = false)
+    @GetMapping("all")
+    public ResponseEntity<String> getAllQn() {
+        return Result.success(questionService.listQn());
+    }
+
     /**
      * 获取指定题库的所有题目
      * 
