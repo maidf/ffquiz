@@ -2,6 +2,7 @@
     <uni-table border stripe emptyText="暂无更多数据">
         <!-- 表头行 -->
         <uni-tr>
+            <uni-th>分类</uni-th>
             <uni-th>类型</uni-th>
             <uni-th>题目</uni-th>
             <uni-th>选项</uni-th>
@@ -12,6 +13,7 @@
         </uni-tr>
         <!-- 表格数据行 -->
         <uni-tr v-for="(v, k) in qs" :key="k">
+            <uni-td>{{ v.sub }}</uni-td>
             <uni-td>{{ v.type }}</uni-td>
             <uni-td>{{ v.content }}</uni-td>
             <uni-td v-if="v.options.A">
@@ -25,8 +27,7 @@
             <uni-td>{{ v.ana }}</uni-td>
             <uni-td>{{ v.diff }}</uni-td>
             <uni-td align="center">
-                <uni-button size="mini">编辑</uni-button>
-                <uni-button @click="delete_qn(v.id)" type="warn" size="mini">删除</uni-button>
+                <uni-button @click="" type="warn" size="mini">删除</uni-button>
             </uni-td>
         </uni-tr>
     </uni-table>
@@ -34,23 +35,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useBankStore } from '@/stores/bank'
-import { useQnStore } from '@/stores/qn'
+import { usePaperStore } from '@/stores/paper'
 import { storeToRefs } from 'pinia'
-import { onMounted, ref } from 'vue'
+import { onMounted } from 'vue'
 
 onMounted(() => {
-    req_qs(bank_id)
+    req_qs(paper_id)
 })
 
-const { bank_id } = defineProps(['bank_id'])
+const { paper_id } = defineProps(['paper_id'])
 
-const bank_store = useBankStore()
-const { qs } = storeToRefs(bank_store)
-const { req_qs } = bank_store
-
-const qn_store = useQnStore()
-const { delete_qn } = qn_store
+const store = usePaperStore()
+const { qs } = storeToRefs(store)
+const { req_qs } = store
 
 </script>
 

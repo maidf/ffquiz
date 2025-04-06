@@ -1,5 +1,5 @@
 <template>
-    <view>paper页面</view>
+    <mf-tea-paper></mf-tea-paper>
 </template>
 
 <script lang="ts" setup>

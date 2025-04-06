@@ -6,11 +6,11 @@ export const useQnStore = defineStore('qn', () => {
     const qn = ref<qn>()
     const qs = ref<qn[]>()
 
-    const req_qs = (bank_id: number) => {
+    const req_qs = () => {
         const { get_token } = useTokenStore()
         const token = get_token()
         uni.request({
-            url: "/api/qn/bank/" + bank_id + "/qs",
+            url: "/api/qn/all",
             header: { 'Authorization': token }
         }).then((rep: any) => {
             if (rep.statusCode == 200) {
@@ -20,16 +20,11 @@ export const useQnStore = defineStore('qn', () => {
                     options: e.options ? JSON.parse(e.options) : {}
                 }))
             } else {
-
                 uni.showToast({ title: rep.data.toString() })
             }
         }).catch(err => uni.showToast({ title: err }))
     }
 
-
-    const req_qn = () => {
-
-    }
 
     const req_daily_qn = () => {
         const { get_token } = useTokenStore()
@@ -119,7 +114,7 @@ interface opt_type {
     D: string
 }
 
-interface qn_rep {
+export interface qn_rep {
     id: number
     sub: string
     type: qn_type

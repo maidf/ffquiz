@@ -1,12 +1,33 @@
 import { defineStore } from "pinia"
-import { useTokenStore } from "./token"
 import { ref } from "vue"
+import type { qn, qn_rep } from "./qn"
+import { useTokenStore } from "./token"
 
 
 export const useBankStore = defineStore('bank', () => {
     const banks = ref<bank[]>()
     const bank = ref<bank>()
+    const qs = ref<qn[]>()
 
+    const req_qs = (bank_id: number) => {
+        const { get_token } = useTokenStore()
+        const token = get_token()
+        uni.request({
+            url: "/api/qn/bank/" + bank_id + "/qs",
+            header: { 'Authorization': token }
+        }).then((rep: any) => {
+            if (rep.statusCode == 200) {
+                const qn_rep: qn_rep[] = rep.data
+                qs.value = qn_rep.map(e => ({
+                    ...e,
+                    options: e.options ? JSON.parse(e.options) : {}
+                }))
+            } else {
+
+                uni.showToast({ title: rep.data.toString() })
+            }
+        }).catch(err => uni.showToast({ title: err }))
+    }
 
     const req_banks = () => {
         const { get_token } = useTokenStore()
@@ -88,7 +109,7 @@ export const useBankStore = defineStore('bank', () => {
         }).catch(err => uni.showToast({ title: err }))
     }
 
-    return { bank, banks, req_bank, req_banks, add_bank, update_bank, delete_bank }
+    return { bank, banks, qs, req_bank, req_banks, add_bank, update_bank, delete_bank, req_qs }
 })
 
 

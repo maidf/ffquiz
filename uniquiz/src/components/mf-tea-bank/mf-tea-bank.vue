@@ -29,10 +29,10 @@
 <script lang="ts" setup>
 import type { bank } from '@/stores/bank'
 import { useBankStore } from '@/stores/bank'
-import { getCurrentInstance, onMounted, ref } from 'vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { ref } from 'vue'
 import mfAddQn from './mf-add-qn/mf-add-qn.vue'
 import mfQs from './mf-qs/mf-qs.vue'
-import { onLoad } from '@dcloudio/uni-app'
 
 const mf_qs = ref(false)
 
