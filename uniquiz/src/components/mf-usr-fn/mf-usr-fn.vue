@@ -4,8 +4,9 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue'
-
+import { ref } from 'vue'
+import { useUsrStore } from '@/stores/usr'
+import { useTokenStore } from '@/stores/token'
 
 const pattern = ref({
     color: '#7A7E83',
@@ -15,83 +16,69 @@ const pattern = ref({
     iconColor: '#fff'
 })
 
-const content = ref([{
-    iconPath: '/static/user.png',
-    selectedIconPath: '/static/logo.png',
-    text: '用户信息',
-    active: false
-},
-{
-    iconPath: '/static/logout.png',
-    selectedIconPath: '/static/logo.png',
-    text: '退出登录',
-    active: false
-},
-{
-    iconPath: '/static/logoff.png',
-    selectedIconPath: '/static/logo.png',
-    text: '注销账号',
-    active: false
-}
+const content = ref([
+    {
+        iconPath: '/static/bank.png',
+        selectedIconPath: '/static/bank.png',
+        text: '题库',
+        active: false
+    },
+    {
+        iconPath: '/static/paper.png',
+        selectedIconPath: '/static/paper.png',
+        text: '试卷',
+        active: false
+    },
+    {
+        iconPath: '/static/user.png',
+        selectedIconPath: '/static/user.png',
+        text: '用户信息',
+        active: false
+    },
+    {
+        iconPath: '/static/logout.png',
+        selectedIconPath: '/static/logout.png',
+        text: '退出登录',
+        active: false
+    },
+    {
+        iconPath: '/static/logoff.png',
+        selectedIconPath: '/static/logoff.png',
+        text: '注销账号',
+        active: false
+    }
 ])
 
 
 const trigger = (e: any) => {
     switch (e.item.text) {
+        case '题库':
+            if (teacher) {
+                uni.redirectTo({ url: "/pages/tea/tea-home" })
+            }
+            break
+        case '试卷':
+            if (teacher) {
+                uni.redirectTo({ url: "/pages/tea/tea-home2" })
+            }
+            break
         case '用户信息':
-            goto_usr_msg()
+            uni.navigateTo({ url: "/pages/user/usr-msg" })
             break
         case '退出登录':
             uni.clearStorage()
-            logout(token.value)
+            logout()
             break
         case '注销账号':
             uni.clearStorage()
-            logoff(token.value)
+            logoff()
             break
     }
 }
 
+const { logout, logoff } = useUsrStore()
 
-onMounted(() => {
-    get_token()
-})
-
-const get_token = () => {
-    token.value = uni.getStorageSync(
-        'Authorization'
-    )
-
-    if (!token.value) {
-        uni.redirectTo({ url: "/pages/user/login" })
-    }
-}
-const token = ref()
-
-const goto_usr_msg = () => {
-    uni.navigateTo({ url: "/pages/user/usr-msg" })
-}
-
-const logout = (token: string) => {
-    uni.request({
-        url: "/api/usr/logout",
-        header: { 'Authorization': token }
-    })
-    uni.redirectTo({ url: "/pages/user/login" })
-}
-
-const logoff = (token: string) => {
-    uni.request({
-        url: "/api/email/logoff",
-        header: { 'Authorization': token }
-    }).then(res => {
-        if (res.statusCode == 200) {
-            uni.navigateTo({ url: "/pages/user/logoff" })
-        } else {
-            uni.showToast({ title: res.data.toString(), icon: 'none' })
-        }
-    }).catch(err => uni.showToast({ title: err, icon: 'none' }))
-}
+const { teacher } = useTokenStore()
 
 </script>
 

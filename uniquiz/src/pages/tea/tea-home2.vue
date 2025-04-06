@@ -1,5 +1,5 @@
 <template>
-    <mf-tea-banks></mf-tea-banks>
+    <mf-tea-papers></mf-tea-papers>
     <mf-usr-fn></mf-usr-fn>
 </template>
 

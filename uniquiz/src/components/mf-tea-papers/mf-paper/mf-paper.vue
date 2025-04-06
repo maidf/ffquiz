@@ -1,9 +1,9 @@
 <template>
-    <mf-tea-banks></mf-tea-banks>
-    <mf-usr-fn></mf-usr-fn>
+  <div class="mf-paper">mf-paper</div>
 </template>
 
 <script lang="ts" setup>
+  const props = defineProps();
 </script>
 
 <style lang="scss" scoped></style>

@@ -17,8 +17,7 @@
             "path": "pages/index/home",
             "style": {
                 "navigationBarTitleText": "主页"
-            },
-            "needLogin": true
+            }
         },
         {
             "path": "pages/user/register",
@@ -64,9 +63,23 @@
             }
         },
         {
+            "path": "pages/tea/tea-home2",
+            "style": {
+                "navigationBarTitleText": "主页",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
             "path": "pages/tea/tea-bank",
             "style": {
                 "navigationBarTitleText": "题库",
+                "enablePullDownRefresh": true
+            }
+        },
+        {
+            "path": "pages/tea/tea-paper",
+            "style": {
+                "navigationBarTitleText": "试卷",
                 "enablePullDownRefresh": true
             }
         }
