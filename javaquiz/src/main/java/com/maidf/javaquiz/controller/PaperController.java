@@ -90,33 +90,20 @@ public class PaperController {
 
         paper.setCreatorId(userId);
 
-        paperService.save(paper);
+        paperService.savePaper(paper);
         return Result.success();
     }
 
     /**
      * 添加试卷题目
      * 
-     * @param dtos
-     * @return
      */
     @CheckOwnerShip(type = EntityTypeEnum.PAPER)
     @PostMapping("{paperId}/qs")
     public ResponseEntity<String> addPaperQuestion(@PathVariable Long paperId,
             @RequestBody List<PaperQuestion> pQs) {
-        pQs.forEach(e -> {
-            e.setPaperId(paperId);
-        });
-        paperQuestionService.saveBatch(pQs);
 
-        // 更新试卷总分
-        Integer addTotalScore = 0;
-        for (PaperQuestion pQn : pQs) {
-            addTotalScore += pQn.getScore();
-        }
-        Paper paper = paperService.getById(paperId);
-        paper.setTotalScore(paper.getTotalScore() + addTotalScore);
-        paperService.updateById(paper);
+        paperQuestionService.saveBatchQn(paperId, pQs);
 
         return Result.success();
     }
@@ -130,7 +117,7 @@ public class PaperController {
     public ResponseEntity<String> updatePaper(@PathVariable Long id, @RequestBody Paper paper) {
         paper.setId(id);
 
-        paperService.updateById(paper);
+        paperService.updatePaper(paper);
         return Result.success();
     }
 

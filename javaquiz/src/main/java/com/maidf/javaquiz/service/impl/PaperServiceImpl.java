@@ -32,7 +32,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     @Autowired
     private PaperQuestionMapper paperQuestionMapper;
 
-    @CacheEvict(key = "#paperId")
+    @CacheEvict(cacheNames = "paper_cache", allEntries = true)
     @Override
     public void rmById(Long paperId) throws Exception {
         QueryWrapper<Exam> wrapper = new QueryWrapper<>();
@@ -53,7 +53,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         return paperQuestionMapper.selectListQn(paperId);
     }
 
-    @Cacheable(key = "#paperId")
+    @Cacheable
     @Override
     public List<PaperRep> listPapers() {
         return paperMapper.selectListPaper();
@@ -62,6 +62,18 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     @Override
     public PaperRep getPaperById(Long paperId) {
         return paperMapper.selectPaper(paperId);
+    }
+
+    @CacheEvict(cacheNames = "paper_cache", allEntries = true)
+    @Override
+    public void savePaper(Paper paper) {
+        super.save(paper);
+    }
+
+    @CacheEvict(cacheNames = "paper_cache", allEntries = true)
+    @Override
+    public void updatePaper(Paper paper) {
+        paperMapper.updateById(paper);
     }
 
 }

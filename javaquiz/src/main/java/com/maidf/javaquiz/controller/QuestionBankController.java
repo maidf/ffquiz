@@ -49,7 +49,7 @@ public class QuestionBankController {
 
         bank.setCreatorId(userId);
 
-        bankService.save(bank);
+        bankService.saveBank(bank);
         return Result.success();
     }
 
@@ -66,7 +66,7 @@ public class QuestionBankController {
         bank.setCreatorId(userId);
         bank.setId(id);
 
-        bankService.updateById(bank);
+        bankService.updateBank(bank);
         return Result.success();
     }
 
