@@ -78,7 +78,7 @@ const login = (idtag: string) => {
                         })
                     } else {
                         uni.redirectTo({
-                            url: "/pages/index/index"
+                            url: "/pages/index/home"
                         })
                     }
 

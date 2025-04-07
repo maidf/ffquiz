@@ -41,7 +41,11 @@ export const useTokenStore = defineStore('token', () => {
         return token
     }
 
-    return { name, sub, teacher, save, get_token }
+    const get_tag = () => {
+        return uni.getStorageSync("login_tag")
+    }
+
+    return { name, sub, teacher, save, get_token, get_tag }
 })
 
 interface token_type {

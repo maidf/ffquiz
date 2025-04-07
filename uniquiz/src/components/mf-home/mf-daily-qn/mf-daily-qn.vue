@@ -1,14 +1,17 @@
 <template>
     <view class="content">
         <uni-section title="每日一题" type="line">
-            <uni-card title="每日一题" :extra="qn?.sub" thumbnail="/static/logo.png" @click="to_ans_qs">
+            <uni-card title="每日一题" :extra="qn?.sub" thumbnail="/static/logo.png" @click="to_ans_qn(qn)">
                 <text class="uni-body">
-                    问题({{ qn?.type }})：{{ qn?.content }}<br>
-                    <text v-if="qn?.options" v-for="(v, k) in qn?.options" :key="k">
+                    问题({{ qn?.type == qn_type.SINGLE_CHOICE ? '单选' :
+                        qn?.type == qn_type.MULTIPLE_CHOICE ? '多选' :
+                            qn?.type == qn_type.FILL_BLANK ? '填空' : '判断'
+                    }})：{{ qn?.content }}<br>
+                    <text v-if="qn?.options.A" v-for="(v, k) in qn.options" :key="k">
                         {{ k }}: {{ v }}
                         <br>
                     </text>
-                    难度：{{ qn?.diff }}
+                    难度：{{ qn?.diff == qn_diff.EASY ? '简单' : qn?.diff == qn_diff.MEDIUM ? '中等' : '困难' }}
                 </text>
             </uni-card>
         </uni-section>
@@ -16,14 +19,16 @@
 </template>
 
 <script lang="ts" setup>
-import { useQnStore } from '@/stores/qn'
+import { qn_diff, qn_type, useQnStore, type qn } from '@/stores/qn'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 
 // 跳转到答题页面
 
-const to_ans_qs = () => {
-    uni.navigateTo({ url: "/pages/quiz/ans-qs" })
+const to_ans_qn = (v: qn | undefined) => {
+    uni.navigateTo({
+        url: "/pages/quiz/ans-qn?qn=" + encodeURIComponent(JSON.stringify(v))
+    })
 }
 
 // 获取token

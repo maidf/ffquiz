@@ -16,7 +16,7 @@ onLaunch(() => {
         if (login_tag == "teacher" && teacher.value) {
             uni.redirectTo({ url: "/pages/tea/tea-home" })
         } else {
-            uni.redirectTo({ url: "/pages/index/index" })
+            uni.redirectTo({ url: "/pages/index/home" })
         }
     }
 

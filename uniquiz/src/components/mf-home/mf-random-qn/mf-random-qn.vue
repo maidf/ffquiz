@@ -2,7 +2,7 @@
     <view class="content">
         <uni-section title="随机刷题" type="line">
             <uni-card v-for="(v, k) in banks" :key="k" :title="v.name" :extra="v.subject" thumbnail="/static/logo.png"
-                @click="to_ans_qs">
+                @click="to_ans_qn(v.id)">
                 <text class="uni-body">
                     创建者：{{ v.creator }}<br>
                     创建时间：{{ v.create_time }}
@@ -19,8 +19,8 @@ import { onMounted, ref } from 'vue'
 
 // 跳转到答题页面
 
-const to_ans_qs = () => {
-    uni.navigateTo({ url: "/pages/quiz/random-qs" })
+const to_ans_qn = (v: number) => {
+    uni.navigateTo({ url: "/pages/quiz/random-qn?bank_id=" + v })
 }
 
 onMounted(() => {

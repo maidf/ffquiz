@@ -51,14 +51,17 @@ const content = ref([
 
 
 const trigger = (e: any) => {
+    const tag = get_tag()
     switch (e.item.text) {
         case '题库':
-            if (teacher) {
+            if (tag == "teacher" && teacher) {
                 uni.redirectTo({ url: "/pages/tea/tea-home" })
+            } else {
+                uni.redirectTo({ url: "/pages/index/home" })
             }
             break
         case '试卷':
-            if (teacher) {
+            if (tag == "teacher" && teacher) {
                 uni.redirectTo({ url: "/pages/tea/tea-home2" })
             }
             break
@@ -78,7 +81,7 @@ const trigger = (e: any) => {
 
 const { logout, logoff } = useUsrStore()
 
-const { teacher } = useTokenStore()
+const { teacher, get_tag } = useTokenStore()
 
 </script>
 

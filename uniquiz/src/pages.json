@@ -44,15 +44,15 @@
             }
         },
         {
-            "path": "pages/quiz/random-qs",
+            "path": "pages/quiz/random-qn",
             "style": {
                 "navigationBarTitleText": "随机题目"
             }
         },
         {
-            "path": "pages/quiz/qs",
+            "path": "pages/quiz/ans-qn",
             "style": {
-                "navigationBarTitleText": "题目"
+                "navigationBarTitleText": "答题"
             }
         },
         {
