@@ -47,13 +47,13 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         }
     }
 
-    @Cacheable(key = "#paperId")
+    @Cacheable(key = "'list_qs'+#paperId")
     @Override
     public List<PaperQnRep> listQs(Long paperId) {
         return paperQuestionMapper.selectListQn(paperId);
     }
 
-    @Cacheable
+    @Cacheable(key = "'list_papers'")
     @Override
     public List<PaperRep> listPapers() {
         return paperMapper.selectListPaper();

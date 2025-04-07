@@ -36,7 +36,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
                 where
                     q.bank_id = #{bankId}
             """)
-    List<QnRep> selectListQn(Long bankId);
+    List<QnRep> selectBankQs(Long bankId);
 
     @Select("""
                 select

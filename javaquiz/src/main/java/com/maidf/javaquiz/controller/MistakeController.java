@@ -29,7 +29,7 @@ public class MistakeController {
     @Autowired
     private JwtUtil jwtUtil;
 
-    @GetMapping("record")
+    @GetMapping
     public ResponseEntity<String> getAnsRecord(HttpServletRequest req) {
         String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);

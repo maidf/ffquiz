@@ -40,7 +40,7 @@ public class QuestionBankServiceImpl extends ServiceImpl<QuestionBankMapper, Que
         }
     }
 
-    @Cacheable
+    @Cacheable(key = "'list_banks'")
     @Override
     public List<BankRep> listBanks() {
         return bankMapper.selectListBank();

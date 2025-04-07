@@ -51,12 +51,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @Autowired
     private RedisTemplate<String, Long> redisTemplate;
 
-    @Cacheable(key = "#bankId")
+    @Cacheable(key = "'list_bank_qs' + #bankId")
     @Override
     public List<QnRep> listByBankId(Long bankId) {
-        return questionMapper.selectListQn(bankId);
+        log.info("进入listByBankId:{} service", bankId);
+
+        return questionMapper.selectBankQs(bankId);
     }
 
+    @Cacheable(key = "'qn_id'+#qnId")
     @Override
     public QnRep getQnById(Long qnId) {
         return questionMapper.selectQn(qnId);
@@ -283,7 +286,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         super.updateById(qn);
     }
 
-    @Cacheable
+    @Cacheable(key = "'list_qn'")
     @Override
     public List<QnRep> listQn() {
         return questionMapper.selectListQn();

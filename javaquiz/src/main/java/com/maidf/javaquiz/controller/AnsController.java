@@ -17,6 +17,7 @@ import com.maidf.javaquiz.entity.constant.Constant;
 import com.maidf.javaquiz.entity.po.AnsRecord;
 import com.maidf.javaquiz.entity.po.Mistake;
 import com.maidf.javaquiz.entity.po.Question;
+import com.maidf.javaquiz.entity.rep.QnRep;
 import com.maidf.javaquiz.entity.req.EndAnsReq;
 import com.maidf.javaquiz.entity.req.StartAnsReq;
 import com.maidf.javaquiz.service.AnsRecordService;
@@ -57,7 +58,7 @@ public class AnsController {
             return Result.error("没有题目");
         }
 
-        Question question = questionService.getById(questionId);
+        QnRep question = questionService.getQnById(questionId);
         return Result.success(question);
     }
 
@@ -71,7 +72,7 @@ public class AnsController {
             return Result.error("没有题目");
         }
 
-        Question question = questionService.getById(questionId);
+        QnRep question = questionService.getQnById(questionId);
         return Result.success(question);
     }
 

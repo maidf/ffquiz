@@ -5,8 +5,6 @@ import java.sql.Timestamp;
 
 import org.springframework.stereotype.Component;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.maidf.javaquiz.entity.enums.DifficultyEnum;
@@ -21,7 +19,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class PaperQnRep implements Serializable{
-    @TableId(type = IdType.AUTO)
     private Long id;
     private String sub;
     private QuestionTypeEnum type;

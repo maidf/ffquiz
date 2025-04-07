@@ -21,14 +21,15 @@ import com.maidf.javaquiz.annotation.CheckOwnerShip;
 import com.maidf.javaquiz.annotation.LoginValidate;
 import com.maidf.javaquiz.entity.enums.EntityTypeEnum;
 import com.maidf.javaquiz.entity.po.Question;
-import com.maidf.javaquiz.entity.rep.QnRep;
 import com.maidf.javaquiz.service.QuestionService;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @SecurityRequirement(name = "jwt")
 @CrossOrigin("*")
 @LoginValidate(teacher = true)
@@ -56,8 +57,8 @@ public class QuestionController {
     @LoginValidate(teacher = false)
     @GetMapping("bank/{bankId}/qs")
     public ResponseEntity<String> getBankQuestion(@PathVariable Long bankId) {
-        List<QnRep> questions = questionService.listByBankId(bankId);
-        return Result.success(questions);
+        log.info("进入bank/{}/qs接口", bankId);
+        return Result.success(questionService.listByBankId(bankId));
     }
 
     /**
