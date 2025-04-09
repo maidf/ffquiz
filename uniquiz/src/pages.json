@@ -20,6 +20,18 @@
             }
         },
         {
+            "path": "pages/index/paper",
+            "style": {
+                "navigationBarTitleText": "试卷"
+            }
+        },
+        {
+            "path": "pages/index/qs",
+            "style": {
+                "navigationBarTitleText": "题目"
+            }
+        },
+        {
             "path": "pages/user/register",
             "style": {
                 "navigationBarTitleText": "注册"

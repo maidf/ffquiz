@@ -29,6 +29,7 @@
             <view class="uni-body">
                 <text>正确答案：{{ cor_ans }} <br></text>
                 <text>提交答案：{{ usr_ans }} <br></text>
+                <text>题目解析：{{ qn.ana }} <br></text>
             </view>
         </uni-card>
     </view>

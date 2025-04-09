@@ -3,7 +3,7 @@
         <uni-card title="每日一题" :extra="qn.sub" thumbnail="/static/logo.png">
             <view class="uni-body">
                 问题({{ qn.type == qn_type.SINGLE_CHOICE ? '单选' :
-                    qn?.type == qn_type.MULTIPLE_CHOICE ? '多选' :
+                    qn.type == qn_type.MULTIPLE_CHOICE ? '多选' :
                         qn.type == qn_type.FILL_BLANK ? '填空' : '判断'
                 }})：{{ qn.content }}<br>
                 <text v-if="qn.options.A" v-for="(v, k) in qn.options" :key="k">
@@ -29,6 +29,7 @@
             <view class="uni-body">
                 <text>正确答案：{{ cor_ans }} <br></text>
                 <text>提交答案：{{ usr_ans }} <br></text>
+                <text>题目解析：{{ qn.ana }} <br></text>
             </view>
         </uni-card>
     </view>

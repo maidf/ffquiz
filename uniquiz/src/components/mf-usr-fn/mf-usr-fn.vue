@@ -63,6 +63,8 @@ const trigger = (e: any) => {
         case '试卷':
             if (tag == "teacher" && teacher) {
                 uni.redirectTo({ url: "/pages/tea/tea-home2" })
+            } else {
+                uni.redirectTo({ url: "/pages/index/paper" })
             }
             break
         case '用户信息':

@@ -138,7 +138,7 @@ export interface paper_qn extends qn {
     score: number
 }
 
-interface paper_qn_rep {
+export interface paper_qn_rep {
     id: number
     sub: string
     type: qn_type
