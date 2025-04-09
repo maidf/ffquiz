@@ -10,7 +10,7 @@
                     {{ k }}: {{ v }}
                     <br>
                 </text>
-                <uni-forms>
+                <uni-forms v-if="!cor_ans">
                     <uni-forms-item v-if="opt_show" label="答案" name="answer">
                         <uni-data-checkbox multiple @change="change_ans" :localdata="ans" />
                     </uni-forms-item>
@@ -21,7 +21,14 @@
                         <uni-easyinput type="text" v-model="usr_ans" />
                     </uni-forms-item>
                 </uni-forms>
-                <button size="mini" @click="">提交</button>
+                <button v-if="!cor_ans" size="mini" @click="submit">提交</button>
+            </view>
+        </uni-card>
+
+        <uni-card v-if="cor_ans" title="答案" :thumbnail="show_icon">
+            <view class="uni-body">
+                <text>正确答案：{{ cor_ans }} <br></text>
+                <text>提交答案：{{ usr_ans }} <br></text>
             </view>
         </uni-card>
     </view>
@@ -34,8 +41,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { storeToRefs } from 'pinia'
 import { ref, watch } from 'vue'
 
-
-
+const show_icon = ref()
 
 const opt_show = ref(true)
 const judge_show = ref(false)
@@ -97,13 +103,24 @@ onLoad((opt: any) => {
 const bank_id = ref<number>(0)
 
 const store = useAnsStore()
-const { qn } = storeToRefs(store)
-const { req_qn } = store
+const { qn, cor_ans } = storeToRefs(store)
+const { req_qn, start_ans, end_ans } = store
 
 const usr_ans = ref<string>('')
+const submit = () => {
+    if (qn.value) {
+        end_ans(usr_ans.value)
+    }
 
+}
 
-
+watch(cor_ans, (newAns) => {
+    if (usr_ans.value == newAns) {
+        show_icon.value = "/static/check.png"
+    } else {
+        show_icon.value = "/static/close.png"
+    }
+}, { immediate: true })
 
 watch(qn, (newQn) => {
     if (newQn) {
@@ -127,6 +144,12 @@ watch(qn, (newQn) => {
         }
         // 清空上一次的答案
         usr_ans.value = ''
+        if (newQn.id > 0) {
+            start_ans({
+                qn_id: newQn.id,
+                exam_id: null
+            })
+        }
     }
 }, { immediate: true })
 </script>

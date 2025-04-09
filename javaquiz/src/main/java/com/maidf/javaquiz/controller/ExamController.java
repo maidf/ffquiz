@@ -75,48 +75,48 @@ public class ExamController {
     @PostMapping("end")
     public ResponseEntity<String> endExam(@RequestBody List<EndAnsReq> dtos, HttpServletRequest req,
             HttpSession session) {
-        String token = req.getHeader(jwtUtil.getHeader());
-        Long userId = jwtUtil.getLoginUserId(token);
+        // String token = req.getHeader(jwtUtil.getHeader());
+        // Long userId = jwtUtil.getLoginUserId(token);
 
-        Long examId = (Long) session.getAttribute(Constant.EXAM_KEY + userId);
-        Exam exam = examService.getById(examId);
+        // Long examId = (Long) session.getAttribute(Constant.EXAM_KEY + userId);
+        // Exam exam = examService.getById(examId);
 
-        // 保存答题记录
-        List<AnsRecord> ansRecords = new ArrayList<>();
-        dtos.forEach((d) -> {
-            ansRecords.add(d.newExamAns(userId, examId));
-            Question question = questionService.getById(d.getQuestionId());
-            if (d.getUserAnswer().equals(question.getAnswer())) {
-                Long paperId = exam.getPaperId();
-                QueryWrapper<PaperQuestion> wrapper = new QueryWrapper<PaperQuestion>();
-                wrapper.eq("paper_id", paperId).eq("question_id", question.getId());
-                Integer score = paperQuestionService.getOne(wrapper).getScore();
-                exam.setScore(exam.getScore() + score);
-            } else {
-                Mistake mistake = new Mistake(null, userId, question.getId(), d.getUserAnswer());
-                mistakeService.save(mistake);
-            }
-        });
-        ansRecordService.saveBatch(ansRecords);
+        // // 保存答题记录
+        // List<AnsRecord> ansRecords = new ArrayList<>();
+        // dtos.forEach((d) -> {
+        //     ansRecords.add(d.newExamAns(userId, examId));
+        //     Question question = questionService.getById(d.getQuestionId());
+        //     if (d.getUserAnswer().equals(question.getAnswer())) {
+        //         Long paperId = exam.getPaperId();
+        //         QueryWrapper<PaperQuestion> wrapper = new QueryWrapper<PaperQuestion>();
+        //         wrapper.eq("paper_id", paperId).eq("question_id", question.getId());
+        //         Integer score = paperQuestionService.getOne(wrapper).getScore();
+        //         exam.setScore(exam.getScore() + score);
+        //     } else {
+        //         Mistake mistake = new Mistake(null, userId, question.getId(), d.getUserAnswer());
+        //         mistakeService.save(mistake);
+        //     }
+        // });
+        // ansRecordService.saveBatch(ansRecords);
 
-        // 更新考试记录
-        exam.setEndTime(Timestamp.from(Instant.now()));
-        examService.updateById(exam);
-        session.removeAttribute(Constant.EXAM_KEY + userId);
+        // // 更新考试记录
+        // exam.setEndTime(Timestamp.from(Instant.now()));
+        // examService.updateById(exam);
+        // session.removeAttribute(Constant.EXAM_KEY + userId);
         return Result.success();
     }
 
     @PostMapping("start/{paperId}")
     public ResponseEntity<String> startExam(@PathVariable Long paperId, HttpServletRequest req) {
-        String token = req.getHeader(jwtUtil.getHeader());
-        Long userId = jwtUtil.getLoginUserId(token);
+        // String token = req.getHeader(jwtUtil.getHeader());
+        // Long userId = jwtUtil.getLoginUserId(token);
 
-        Timestamp now = Timestamp.from(Instant.now());
-        Exam exam = new Exam(null, userId, paperId, null, now, null);
-        examService.save(exam);
+        // Timestamp now = Timestamp.from(Instant.now());
+        // Exam exam = new Exam(null, userId, paperId, null, now, null);
+        // examService.save(exam);
 
-        HttpSession session = req.getSession();
-        session.setAttribute(Constant.EXAM_KEY + userId, exam.getId());
+        // HttpSession session = req.getSession();
+        // session.setAttribute(Constant.EXAM_KEY + userId, exam.getId());
 
         return Result.success();
     }

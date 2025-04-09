@@ -81,7 +81,7 @@ CREATE TABLE ans_record (
     user_id BIGINT NOT NULL COMMENT '用户ID',
     question_id BIGINT NOT NULL COMMENT '题目ID',
     exam_id BIGINT COMMENT '考试记录ID',
-    user_answer VARCHAR(255) NOT NULL COMMENT '用户提交的答案',
+    user_answer VARCHAR(255) COMMENT '用户提交的答案',
     start_time DATETIME COMMENT '开始答题时间',
     end_time DATETIME COMMENT '结束答题时间',
     FOREIGN KEY (user_id) REFERENCES user (id),

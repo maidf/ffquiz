@@ -1,5 +1,5 @@
 <template>
-    <view class="content">
+    <view class="content" v-if="qn">
         <uni-card title="每日一题" :extra="qn.sub" thumbnail="/static/logo.png">
             <view class="uni-body">
                 问题({{ qn.type == qn_type.SINGLE_CHOICE ? '单选' :
@@ -10,7 +10,7 @@
                     {{ k }}: {{ v }}
                     <br>
                 </text>
-                <uni-forms :modelValue="qn">
+                <uni-forms v-if="!cor_ans">
                     <uni-forms-item v-if="opt_show" label="答案" name="answer">
                         <uni-data-checkbox multiple @change="change_ans" :localdata="ans" />
                     </uni-forms-item>
@@ -18,19 +18,30 @@
                         <uni-data-checkbox @change="select_ans" :localdata="select" />
                     </uni-forms-item>
                     <uni-forms-item v-else label="答案" name="answer">
-                        <uni-easyinput type="text" v-model="qn.answer" />
+                        <uni-easyinput type="text" v-model="usr_ans" />
                     </uni-forms-item>
                 </uni-forms>
+                <button v-if="!cor_ans" size="mini" @click="submit">提交</button>
+            </view>
+        </uni-card>
+
+        <uni-card v-if="cor_ans" title="答案" :thumbnail="show_icon">
+            <view class="uni-body">
+                <text>正确答案：{{ cor_ans }} <br></text>
+                <text>提交答案：{{ usr_ans }} <br></text>
             </view>
         </uni-card>
     </view>
 </template>
 
 <script lang="ts" setup>
+import { useAnsStore } from '@/stores/ans'
 import { qn_diff, qn_type, type qn } from '@/stores/qn'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { ref, watch } from 'vue'
 
+const show_icon = ref()
 const opt_show = ref(true)
 const judge_show = ref(false)
 
@@ -40,13 +51,13 @@ const change_ans = (t: any) => {
     const arr = ref('')
     t.detail.value.forEach((a: string) => arr.value += a)
     console.log("arr:", arr.value)
-    qn.value.answer = arr.value
-    console.log("qn.ans:", qn.value.answer)
+    usr_ans.value = arr.value
+    console.log("usr_ans.value:", usr_ans.value)
 }
 
 const select_ans = (t: any) => {
-    qn.value.answer = t.detail.value
-    console.log("qn.ans:", qn.value.answer)
+    usr_ans.value = t.detail.value
+    console.log("usr_ans.value:", usr_ans.value)
 }
 
 const ans = ref([
@@ -81,7 +92,6 @@ const select = ref([
 
 
 
-// 跳转到答题页面
 
 onLoad((opt: any) => {
     qn.value = JSON.parse(decodeURIComponent(opt.qn))
@@ -105,7 +115,62 @@ const qn = ref<qn>({
     create_time: new Date
 })
 
+const store = useAnsStore()
+const { cor_ans } = storeToRefs(store)
+const { start_ans, end_ans } = store
 
+const usr_ans = ref<string>('')
+const submit = () => {
+    if (qn.value) {
+        end_ans(usr_ans.value)
+        if (usr_ans.value == cor_ans.value) {
+            show_icon.value = "/static/check.png"
+        } else {
+            show_icon.value = "/static/close.png"
+        }
+    }
+
+}
+
+watch(cor_ans, (newAns) => {
+    if (usr_ans.value == newAns) {
+        show_icon.value = "/static/check.png"
+    } else {
+        show_icon.value = "/static/close.png"
+    }
+})
+
+watch(qn, (newQn) => {
+    if (newQn) {
+        switch (newQn.type) {
+            case qn_type.SINGLE_CHOICE:
+                opt_show.value = true
+                judge_show.value = false
+                break
+            case qn_type.MULTIPLE_CHOICE:
+                opt_show.value = true
+                judge_show.value = false
+                break
+            case qn_type.FILL_BLANK:
+                opt_show.value = false
+                judge_show.value = false
+                break
+            case qn_type.TRUE_FALSE:
+                opt_show.value = false
+                judge_show.value = true
+                break
+        }
+        // 清空上一次的答案
+        usr_ans.value = ''
+        if (newQn.id > 0) {
+            start_ans({
+                qn_id: newQn.id,
+                exam_id: null
+            })
+        }
+
+    }
+}, { immediate: true })
 </script>
 
 <style lang="scss" scoped>

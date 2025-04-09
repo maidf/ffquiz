@@ -13,15 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.maidf.javaquiz.annotation.LoginValidate;
-import com.maidf.javaquiz.entity.constant.Constant;
 import com.maidf.javaquiz.entity.po.AnsRecord;
-import com.maidf.javaquiz.entity.po.Mistake;
-import com.maidf.javaquiz.entity.po.Question;
 import com.maidf.javaquiz.entity.rep.QnRep;
 import com.maidf.javaquiz.entity.req.EndAnsReq;
 import com.maidf.javaquiz.entity.req.StartAnsReq;
 import com.maidf.javaquiz.service.AnsRecordService;
-import com.maidf.javaquiz.service.MistakeService;
 import com.maidf.javaquiz.service.QuestionService;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
@@ -29,21 +25,21 @@ import com.maidf.javaquiz.util.Result;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @SecurityRequirement(name = "jwt")
 @CrossOrigin("*")
 @LoginValidate
 @RestController
 @RequestMapping("ans")
 public class AnsController {
+
     @Autowired
     private QuestionService questionService;
 
     @Autowired
     private AnsRecordService ansRecordService;
-
-    @Autowired
-    private MistakeService mistakeService;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -89,35 +85,28 @@ public class AnsController {
     @PostMapping("end")
     public ResponseEntity<String> ansQuestion(@RequestBody EndAnsReq endAnsDto, HttpSession session,
             HttpServletRequest req) {
-        String token = req.getHeader(jwtUtil.getHeader());
-        Long userId = jwtUtil.getLoginUserId(token);
 
-        Long ansId = (Long) session.getAttribute(Constant.RANDOM_QUESTION_KEY + userId);
-        AnsRecord ansRecord = endAnsDto.toEndAns(ansId);
-        ansRecordService.updateById(ansRecord);
-        session.removeAttribute(Constant.EXAM_KEY + userId);
-
-        // 记录错题
-        Question question = questionService.getById(ansRecord.getQuestionId());
-        if (!ansRecord.getUserAnswer().equals(question.getAnswer())) {
-            Mistake mistake = new Mistake(null, userId, question.getId(), ansRecord.getUserAnswer());
-            mistakeService.save(mistake);
+        String ans;
+        try {
+            ans = ansRecordService.endAns(endAnsDto);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
         }
-        return Result.success();
+        return Result.success(ans);
     }
 
     @PostMapping("start")
-    public ResponseEntity<String> startAnswer(@RequestBody StartAnsReq startAnsDto, HttpServletRequest req) {
+    public ResponseEntity<String> startAnswer(@RequestBody StartAnsReq startAnsReq, HttpServletRequest req) {
         String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
 
-        AnsRecord ansRecord = startAnsDto.startAns(userId);
-        ansRecordService.save(ansRecord);
+        try {
+            String t = ansRecordService.startAns(startAnsReq, userId);
+            return Result.success(t);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
 
-        HttpSession session = req.getSession();
-        session.setAttribute(Constant.RANDOM_QUESTION_KEY + userId, ansRecord.getId());
-
-        return Result.success();
     }
 
     @DeleteMapping("record/{id}")

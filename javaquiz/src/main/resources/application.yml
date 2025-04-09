@@ -27,6 +27,9 @@ jwt:
   header: "Authorization"
   exp: 10800000
   prefix: "Bearer "
+ans:
+  secret: "quiz-answer-secret"
+  exp: 10800000
 encry:
   salt: quiz-hash-salt
   algorithm: SHA-256
