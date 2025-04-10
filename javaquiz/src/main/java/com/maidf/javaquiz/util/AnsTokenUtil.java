@@ -2,7 +2,6 @@ package com.maidf.javaquiz.util;
 
 import java.sql.Date;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +29,8 @@ public class AnsTokenUtil {
     private RedisTemplate<String, String> redis;
 
     public String generateToken(StartAnsReq ansMsg, Long userId) {
-        Timestamp now = Timestamp.from(Instant.now());
+        Long now = System.currentTimeMillis();
+        log.info("生成token");
         return JWT.create()
                 .withSubject(userId.toString())
                 .withClaim("qn", ansMsg.getQuestionId())
@@ -41,7 +41,8 @@ public class AnsTokenUtil {
     }
 
     public String generateToken(StartAnsReq ansMsg, Long userId, Long exp) {
-        Timestamp now = Timestamp.from(Instant.now());
+        Long now = System.currentTimeMillis();
+        log.info("生成token");
         return JWT.create()
                 .withSubject(userId.toString())
                 .withClaim("qn", ansMsg.getQuestionId())
@@ -128,12 +129,12 @@ public class AnsTokenUtil {
 
     public Timestamp getStartTime(String token) throws Exception {
         try {
-            Timestamp time = JWT.require(Algorithm.HMAC512(secret))
+            Long time = JWT.require(Algorithm.HMAC512(secret))
                     .build()
                     .verify(token)
-                    .getClaim("time").as(Timestamp.class);
+                    .getClaim("time").asLong();
             log.info("获取start_time: {}", time);
-            return time;
+            return new Timestamp(time);
         } catch (Exception e) {
             throw new Exception("token中没有start_time");
         }
