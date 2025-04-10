@@ -76,10 +76,8 @@ public class AnsController {
     public ResponseEntity<String> getAnsRecord(HttpServletRequest req) {
         String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
-        QueryWrapper<AnsRecord> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", userId);
 
-        return Result.success(ansRecordService.list(wrapper));
+        return Result.success(ansRecordService.listRecord(userId));
     }
 
     @PostMapping("end")

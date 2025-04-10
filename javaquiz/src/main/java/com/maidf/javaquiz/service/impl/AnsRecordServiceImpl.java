@@ -2,6 +2,7 @@ package com.maidf.javaquiz.service.impl;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.maidf.javaquiz.entity.po.AnsRecord;
 import com.maidf.javaquiz.entity.po.Mistake;
 import com.maidf.javaquiz.entity.po.Question;
+import com.maidf.javaquiz.entity.rep.AnsRecordRep;
 import com.maidf.javaquiz.entity.req.EndAnsReq;
 import com.maidf.javaquiz.entity.req.StartAnsReq;
 import com.maidf.javaquiz.mapper.AnsRecordMapper;
@@ -100,6 +102,11 @@ public class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord
         });
 
         return qn.getAnswer();
+    }
+
+    @Override
+    public List<AnsRecordRep> listRecord(Long userId) {
+        return ansRecordMapper.selectListRecord(userId);
     }
 
 }

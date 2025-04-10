@@ -41,18 +41,14 @@ const content = ref([
 const trigger = (e: any) => {
     const tag = get_tag()
     switch (e.item.text) {
-        case '题库':
-            if (tag == "teacher" && teacher) {
-                uni.redirectTo({ url: "/pages/tea/tea-home" })
-            } else {
-                uni.redirectTo({ url: "/pages/index/home" })
+        case '答题记录':
+            if (!(tag == "teacher" && teacher)) {
+                uni.navigateTo({ url: "/pages/index/record" })
             }
             break
-        case '试卷':
-            if (tag == "teacher" && teacher) {
-                uni.redirectTo({ url: "/pages/tea/tea-home2" })
-            } else {
-                uni.redirectTo({ url: "/pages/index/paper" })
+        case '错题记录':
+            if (!(tag == "teacher" && teacher)) {
+                uni.redirectTo({ url: "/pages/index/mistake" })
             }
             break
         case '退出登录':

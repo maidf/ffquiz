@@ -1,0 +1,36 @@
+package com.maidf.javaquiz.entity.rep;
+
+import java.sql.Timestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.maidf.javaquiz.entity.enums.DifficultyEnum;
+import com.maidf.javaquiz.entity.enums.QuestionTypeEnum;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
+public class AnsRecordRep {
+    private String sub;
+    private QuestionTypeEnum type;
+    private String content;
+    private String options;
+    private String ans;
+    private String ana;
+    private DifficultyEnum diff;
+
+    @JsonProperty("usr_ans")
+    private String userAnswer;
+
+    @JsonProperty("start_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Timestamp startTime;
+
+    @JsonProperty("end_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Timestamp endTime;
+}
