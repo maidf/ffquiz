@@ -74,8 +74,8 @@ export const useAnsStore = defineStore('ans', () => {
 
 
 export interface start_req {
-    qn_id: number
-    exam_id: number | null
+    qn_id: number | null
+    paper_id: number | null
 }
 
 export interface end_req {

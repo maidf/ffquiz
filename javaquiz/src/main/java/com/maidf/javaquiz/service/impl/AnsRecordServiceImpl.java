@@ -70,7 +70,7 @@ public class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord
                 null,
                 tokenUtil.getUserId(token),
                 tokenUtil.getQnId(token),
-                tokenUtil.getExamId(token),
+                null,
                 ansMsg.getUserAnswer(),
                 tokenUtil.getStartTime(token),
                 now);

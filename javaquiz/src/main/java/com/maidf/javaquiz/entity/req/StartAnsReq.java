@@ -9,8 +9,8 @@ import lombok.Data;
 @Component
 @Data
 public class StartAnsReq {
-    @JsonProperty("qn_id")
+    @JsonProperty(value = "qn_id", required = false)
     private Long questionId;
-    @JsonProperty(value = "exam_id", required = false)
-    private Long examId;
+    @JsonProperty(value = "paper_id", required = false)
+    private Long paperId;
 }

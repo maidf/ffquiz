@@ -34,9 +34,9 @@ public class AnsTokenUtil {
         return JWT.create()
                 .withSubject(userId.toString())
                 .withClaim("qn", ansMsg.getQuestionId())
-                .withClaim("exam", ansMsg.getExamId())
+                .withClaim("paper", ansMsg.getPaperId())
                 .withClaim("time", now)
-                .withExpiresAt(new Date(System.currentTimeMillis() + exp))
+                .withExpiresAt(new Date(System.currentTimeMillis() + exp + 30000))
                 .sign(Algorithm.HMAC512(secret));
     }
 
@@ -45,9 +45,9 @@ public class AnsTokenUtil {
         return JWT.create()
                 .withSubject(userId.toString())
                 .withClaim("qn", ansMsg.getQuestionId())
-                .withClaim("exam", ansMsg.getExamId())
+                .withClaim("paper", ansMsg.getPaperId())
                 .withClaim("time", now)
-                .withExpiresAt(new Date(System.currentTimeMillis() + exp))
+                .withExpiresAt(new Date(System.currentTimeMillis() + exp + 30000))
                 .sign(Algorithm.HMAC512(secret));
     }
 
@@ -113,16 +113,16 @@ public class AnsTokenUtil {
         }
     }
 
-    public Long getExamId(String token) throws Exception {
+    public Long getPaperId(String token) throws Exception {
         try {
             Long id = JWT.require(Algorithm.HMAC512(secret))
                     .build()
                     .verify(token)
-                    .getClaim("exam").asLong();
-            log.info("获取exam_id: {}", id);
+                    .getClaim("paper").asLong();
+            log.info("获取paper_id: {}", id);
             return id;
         } catch (Exception e) {
-            throw new Exception("token中没有exam_id");
+            throw new Exception("token中没有paper_id");
         }
     }
 
