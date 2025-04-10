@@ -19,7 +19,7 @@ import { onMounted } from 'vue'
 
 const to_paper_qs = (v: paper) => {
     uni.navigateTo({
-        url: "/pages/index/qs?paper=" + encodeURIComponent(JSON.stringify(v))
+        url: "/pages/quiz/exam?paper=" + encodeURIComponent(JSON.stringify(v))
     })
 }
 

@@ -26,9 +26,21 @@
             }
         },
         {
-            "path": "pages/index/qs",
+            "path": "pages/index/mistake",
             "style": {
-                "navigationBarTitleText": "题目"
+                "navigationBarTitleText": "错题本"
+            }
+        },
+        {
+            "path": "pages/index/record",
+            "style": {
+                "navigationBarTitleText": "答题记录"
+            }
+        },
+        {
+            "path": "pages/quiz/exam",
+            "style": {
+                "navigationBarTitleText": "考试"
             }
         },
         {
@@ -96,6 +108,45 @@
             }
         }
     ],
+    "tabBar": {
+        "color": "#7A7E83",
+        "selectedColor": "#3cc51f",
+        "borderStyle": "black",
+        "backgroundColor": "#ffffff",
+        "custom": true,
+        "list": [
+            {
+                "pagePath": "pages/index/home",
+                "iconPath": "static/bank.png",
+                "selectedIconPath": "static/bank.png",
+                "text": "题库"
+            },
+            {
+                "pagePath": "pages/index/paper",
+                "iconPath": "static/paper.png",
+                "selectedIconPath": "static/paper.png",
+                "text": "试卷"
+            },
+            {
+                "pagePath": "pages/tea/tea-home",
+                "iconPath": "static/bank.png",
+                "selectedIconPath": "static/bank.png",
+                "text": "题库"
+            },
+            {
+                "pagePath": "pages/tea/tea-home2",
+                "iconPath": "static/paper.png",
+                "selectedIconPath": "static/paper.png",
+                "text": "试卷"
+            },
+            {
+                "pagePath": "pages/user/usr-msg",
+                "iconPath": "static/user.png",
+                "selectedIconPath": "static/user.png",
+                "text": "用户"
+            }
+        ]
+    },
     "globalStyle": {
         "navigationBarTextStyle": "black",
         "navigationBarTitleText": "uni-app",

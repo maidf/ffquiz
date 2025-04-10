@@ -20,31 +20,19 @@ const content = ref([
     {
         iconPath: '/static/bank.png',
         selectedIconPath: '/static/bank.png',
-        text: '题库',
+        text: '答题记录',
         active: false
     },
     {
         iconPath: '/static/paper.png',
         selectedIconPath: '/static/paper.png',
-        text: '试卷',
-        active: false
-    },
-    {
-        iconPath: '/static/user.png',
-        selectedIconPath: '/static/user.png',
-        text: '用户信息',
+        text: '错题记录',
         active: false
     },
     {
         iconPath: '/static/logout.png',
         selectedIconPath: '/static/logout.png',
         text: '退出登录',
-        active: false
-    },
-    {
-        iconPath: '/static/logoff.png',
-        selectedIconPath: '/static/logoff.png',
-        text: '注销账号',
         active: false
     }
 ])
@@ -67,21 +55,14 @@ const trigger = (e: any) => {
                 uni.redirectTo({ url: "/pages/index/paper" })
             }
             break
-        case '用户信息':
-            uni.navigateTo({ url: "/pages/user/usr-msg" })
-            break
         case '退出登录':
             uni.clearStorage()
             logout()
             break
-        case '注销账号':
-            uni.clearStorage()
-            logoff()
-            break
     }
 }
 
-const { logout, logoff } = useUsrStore()
+const { logout } = useUsrStore()
 
 const { teacher, get_tag } = useTokenStore()
 

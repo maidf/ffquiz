@@ -6,7 +6,23 @@
 </template>
 
 <script setup lang="ts">
+uni.setTabBarItem({
+    index: 0,
+    visible: true
+})
+uni.setTabBarItem({
+    index: 1,
+    visible: true
+})
+uni.setTabBarItem({
+    index: 2,
+    visible: false
+})
 
+uni.setTabBarItem({
+    index: 3,
+    visible: false
+})
 </script>
 
 <style lang="scss" scoped>

@@ -21,15 +21,19 @@
         </uni-forms>
 
         <button size="mini" @click="update_usr_msg(token)">
-            更新
+            更新信息
         </button>
         <button size="mini" @click="to_upd_password">
             修改密码
+        </button>
+        <button size="mini" @click="delete_usr">
+            注销账号
         </button>
     </view>
 </template>
 
 <script setup lang="ts">
+import { useUsrStore } from '@/stores/usr'
 import { onMounted, ref } from 'vue'
 
 onMounted(() => {
@@ -113,6 +117,14 @@ const fetch_usr_msg = (token: string) => {
 
 const to_upd_password = () => {
     uni.navigateTo({ url: "/pages/user/upd-pass" })
+}
+
+
+const { logoff } = useUsrStore()
+
+const delete_usr = () => {
+    uni.clearStorage()
+    logoff()
 }
 
 </script>

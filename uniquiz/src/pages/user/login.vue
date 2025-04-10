@@ -73,11 +73,11 @@ const login = (idtag: string) => {
                     const { teacher } = storeToRefs(store)
                     uni.setStorageSync("login_tag", idtag)
                     if (idtag == 'teacher' && teacher.value) {
-                        uni.redirectTo({
+                        uni.switchTab({
                             url: "/pages/tea/tea-home"
                         })
                     } else {
-                        uni.redirectTo({
+                        uni.switchTab({
                             url: "/pages/index/home"
                         })
                     }

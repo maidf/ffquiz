@@ -12,11 +12,11 @@ onLaunch(() => {
         save(token)
         const { teacher } = storeToRefs(store)
         const login_tag = uni.getStorageSync('login_tag')
-        
+
         if (login_tag == "teacher" && teacher.value) {
-            uni.redirectTo({ url: "/pages/tea/tea-home" })
+            uni.switchTab({ url: "/pages/tea/tea-home" })
         } else {
-            uni.redirectTo({ url: "/pages/index/home" })
+            uni.switchTab({ url: "/pages/index/home" })
         }
     }
 

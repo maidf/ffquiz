@@ -1,8 +1,5 @@
 package com.maidf.javaquiz.controller;
 
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,20 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.maidf.javaquiz.annotation.LoginValidate;
-import com.maidf.javaquiz.entity.constant.Constant;
-import com.maidf.javaquiz.entity.po.AnsRecord;
 import com.maidf.javaquiz.entity.po.Exam;
-import com.maidf.javaquiz.entity.po.Mistake;
-import com.maidf.javaquiz.entity.po.PaperQuestion;
-import com.maidf.javaquiz.entity.po.Question;
-import com.maidf.javaquiz.entity.req.EndAnsReq;
 import com.maidf.javaquiz.entity.req.EndExamReq;
 import com.maidf.javaquiz.entity.req.StartAnsReq;
-import com.maidf.javaquiz.service.AnsRecordService;
 import com.maidf.javaquiz.service.ExamService;
-import com.maidf.javaquiz.service.MistakeService;
-import com.maidf.javaquiz.service.PaperQuestionService;
-import com.maidf.javaquiz.service.QuestionService;
 import com.maidf.javaquiz.util.JwtUtil;
 import com.maidf.javaquiz.util.Result;
 
@@ -45,21 +32,8 @@ import jakarta.servlet.http.HttpSession;
 @RestController
 @RequestMapping("exam")
 public class ExamController {
-
-    @Autowired
-    private QuestionService questionService;
-
-    @Autowired
-    private AnsRecordService ansRecordService;
-
     @Autowired
     private ExamService examService;
-
-    @Autowired
-    private PaperQuestionService paperQuestionService;
-
-    @Autowired
-    private MistakeService mistakeService;
 
     @Autowired
     private JwtUtil jwtUtil;
