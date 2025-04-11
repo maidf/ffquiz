@@ -38,6 +38,12 @@
             }
         },
         {
+            "path": "pages/index/exam",
+            "style": {
+                "navigationBarTitleText": "考试记录"
+            }
+        },
+        {
             "path": "pages/quiz/exam",
             "style": {
                 "navigationBarTitleText": "考试"

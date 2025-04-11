@@ -3,16 +3,18 @@ import { useTokenStore } from "./token"
 import type { paper_qn, paper_qn_rep } from "./paper"
 import { ref } from "vue"
 import type { start_req } from "./ans"
+import type { qn_diff } from "./qn"
 
 export const useExamStore = defineStore('exam', () => {
     const qs = ref<exam_qn[]>()
     const token = ref<string>()
+    const records = ref<record[]>()
+
 
     const req_qs = (paper_id: number) => {
-        const token = useTokenStore().get_token()
         uni.request({
             url: "/api/paper/" + paper_id + "/qs",
-            header: { 'Authorization': token }
+            header: { 'Authorization': useTokenStore().get_token() }
         }).then((res: any) => {
             if (res.statusCode == 200) {
                 const qn_rep: paper_qn_rep[] = res.data
@@ -21,6 +23,21 @@ export const useExamStore = defineStore('exam', () => {
                     options: e.options ? JSON.parse(e.options) : {},
                     usr_ans: ''
                 }))
+            } else {
+                uni.showToast({ title: res.data.toString() })
+            }
+        }).catch(err => {
+            uni.showToast({ title: err })
+        })
+    }
+
+    const req_rds = () => {
+        uni.request({
+            url: "/api/exam/record",
+            header: { 'Authorization': useTokenStore().get_token() }
+        }).then((res) => {
+            if (res.statusCode === 200) {
+                records.value = res.data as record[]
             } else {
                 uni.showToast({ title: res.data.toString() })
             }
@@ -69,7 +86,23 @@ export const useExamStore = defineStore('exam', () => {
         })
     }
 
-    return { qs, req_qs, start_exam, end_exam }
+
+    const delete_exam = async (exam_id: number) => {
+        await uni.request({
+            url: "/api/exam/record/" + exam_id,
+            method: "DELETE",
+            header: { 'Authorization': useTokenStore().get_token() }
+        }).then((res: any) => {
+            if (res.statusCode == 200) {
+                records.value = records.value?.filter(e => e.id !== exam_id)
+            }
+            uni.showToast({ title: res.data.toString() })
+        }).catch(err => {
+            uni.showToast({ title: err })
+        })
+    }
+
+    return { qs, records, req_qs, start_exam, end_exam, req_rds, delete_exam }
 })
 
 
@@ -80,4 +113,15 @@ export interface end_req {
 
 export interface exam_qn extends paper_qn {
     usr_ans: ''
+}
+
+export interface record {
+    id: number
+    name: string
+    time_limit: number
+    diff: qn_diff
+    score: number
+    total_score: number
+    start_time: Date
+    end_time: Date
 }

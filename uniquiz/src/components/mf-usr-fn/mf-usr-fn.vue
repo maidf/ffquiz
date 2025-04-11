@@ -29,6 +29,12 @@ const content = ref([
         active: false
     },
     {
+        iconPath: '/static/paper.png',
+        selectedIconPath: '/static/paper.png',
+        text: '考试记录',
+        active: false
+    },
+    {
         iconPath: '/static/logout.png',
         selectedIconPath: '/static/logout.png',
         text: '退出登录',
@@ -43,7 +49,10 @@ const trigger = (e: any) => {
             uni.navigateTo({ url: "/pages/index/record" })
             break
         case '错题记录':
-            uni.redirectTo({ url: "/pages/index/mistake" })
+            uni.navigateTo({ url: "/pages/index/mistake" })
+            break
+        case '考试记录':
+            uni.navigateTo({ url: "/pages/index/exam" })
             break
         case '退出登录':
             uni.clearStorage()

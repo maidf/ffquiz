@@ -17,6 +17,8 @@ import com.maidf.javaquiz.entity.po.Mistake;
 import com.maidf.javaquiz.entity.po.Paper;
 import com.maidf.javaquiz.entity.po.PaperQuestion;
 import com.maidf.javaquiz.entity.po.Question;
+import com.maidf.javaquiz.entity.rep.ExamAnsRep;
+import com.maidf.javaquiz.entity.rep.ExamRep;
 import com.maidf.javaquiz.entity.req.EndExamReq;
 import com.maidf.javaquiz.entity.req.StartAnsReq;
 import com.maidf.javaquiz.mapper.AnsRecordMapper;
@@ -124,6 +126,43 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam>
             }
         });
 
+    }
+
+    @Override
+    public List<ExamRep> listExam(Long userId) {
+        return examMapper.selectListExam(userId);
+    }
+
+    @Override
+    public List<ExamAnsRep> listAns(Long examId) {
+        return examMapper.selectListAns(examId);
+    }
+
+    @Override
+    public void rmExam(Long examId) throws Exception {
+        log.info("开始删除考试记录: {}", examId);
+
+        log.info("删除题目记录");
+        QueryWrapper<AnsRecord> wrapper = new QueryWrapper<AnsRecord>();
+        wrapper.eq("exam_id", examId);
+        try {
+            ansRecordMapper.delete(wrapper);
+
+        } catch (Exception e) {
+            log.error("结束删除考试记录: {}", examId);
+            throw new Exception("删除题目失败");
+        }
+
+        log.info("删除考试记录");
+        try {
+            examMapper.deleteById(examId);
+
+        } catch (Exception e) {
+            log.error("结束删除考试记录: {}", examId);
+            throw new Exception("删除试卷失败");
+        }
+
+        log.info("结束删除考试记录: {}", examId);
     }
 
 }

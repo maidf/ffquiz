@@ -42,10 +42,13 @@ public class ExamController {
     public ResponseEntity<String> getExamRecord(HttpServletRequest req) {
         String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
-        QueryWrapper<Exam> wrapper = new QueryWrapper<Exam>();
-        wrapper.eq("user_id", userId);
 
-        return Result.success(examService.list(wrapper));
+        return Result.success(examService.listExam(userId));
+    }
+
+    @GetMapping("record/{examId}")
+    public ResponseEntity<String> getExamAns(@PathVariable Long examId, HttpServletRequest req) {
+        return Result.success(examService.listAns(examId));
     }
 
     @PostMapping("end")
@@ -75,16 +78,11 @@ public class ExamController {
 
     @DeleteMapping("record/{id}")
     public ResponseEntity<String> deleteAnsRecord(@PathVariable Long id, HttpServletRequest req) {
-        String token = req.getHeader(jwtUtil.getHeader());
-        Long userId = jwtUtil.getLoginUserId(token);
-
-        QueryWrapper<Exam> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", userId).eq("id", id);
         try {
-            examService.remove(wrapper);
+            examService.rmExam(id);
+            return Result.success();
         } catch (Exception e) {
-            return Result.error("找不到记录");
+            return Result.error(e.getMessage());
         }
-        return Result.success();
     }
 }
