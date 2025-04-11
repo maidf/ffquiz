@@ -33,10 +33,8 @@ public class MistakeController {
     public ResponseEntity<String> getAnsRecord(HttpServletRequest req) {
         String token = req.getHeader(jwtUtil.getHeader());
         Long userId = jwtUtil.getLoginUserId(token);
-        QueryWrapper<Mistake> wrapper = new QueryWrapper<>();
-        wrapper.eq("user_id", userId);
 
-        return Result.success(mistakeService.list(wrapper));
+        return Result.success(mistakeService.listMistake(userId));
     }
 
 }
