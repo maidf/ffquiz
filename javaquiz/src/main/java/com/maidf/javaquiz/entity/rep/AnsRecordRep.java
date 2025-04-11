@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class AnsRecordRep {
+    private Long id;
     private String sub;
     private QuestionTypeEnum type;
     private String content;

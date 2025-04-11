@@ -11,6 +11,7 @@ import com.maidf.javaquiz.entity.rep.AnsRecordRep;
 public interface AnsRecordMapper extends BaseMapper<AnsRecord> {
     @Select("""
                 select
+                    a.id,
                     qb.subject as sub,
                     q.type,
                     q.content,

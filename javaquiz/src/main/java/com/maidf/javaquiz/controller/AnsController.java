@@ -116,10 +116,10 @@ public class AnsController {
         wrapper.eq("user_id", userId).eq("id", id);
         try {
             ansRecordService.remove(wrapper);
+            return Result.success();
         } catch (Exception e) {
             return Result.error("找不到记录");
         }
-        return Result.success();
     }
 
 }

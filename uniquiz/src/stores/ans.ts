@@ -90,7 +90,23 @@ export const useAnsStore = defineStore('ans', () => {
         })
     }
 
-    return { qn, cor_ans, records, req_qn, start_ans, end_ans, req_rds }
+
+    const delete_ans = async (ans_id: number) => {
+        await uni.request({
+            url: "/api/ans/record/" + ans_id,
+            method: "DELETE",
+            header: { 'Authorization': useTokenStore().get_token() }
+        }).then((res: any) => {
+            if (res.statusCode == 200) {
+                records.value = records.value?.filter(e => e.id !== ans_id)
+            }
+            uni.showToast({ title: res.data.toString() })
+        }).catch(err => {
+            uni.showToast({ title: err })
+        })
+    }
+
+    return { qn, cor_ans, records, req_qn, start_ans, end_ans, req_rds, delete_ans }
 })
 
 
@@ -105,6 +121,7 @@ export interface end_req {
 }
 
 interface ans_rep {
+    id: number
     sub: string
     type: qn_type
     content: string
@@ -118,6 +135,7 @@ interface ans_rep {
 }
 
 export interface ans {
+    id: number
     sub: string
     type: qn_type
     content: string

@@ -4,9 +4,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
 import { useUsrStore } from '@/stores/usr'
-import { useTokenStore } from '@/stores/token'
+import { ref } from 'vue'
 
 const pattern = ref({
     color: '#7A7E83',
@@ -39,17 +38,12 @@ const content = ref([
 
 
 const trigger = (e: any) => {
-    const tag = get_tag()
     switch (e.item.text) {
         case '答题记录':
-            if (!(tag == "teacher" && teacher)) {
-                uni.navigateTo({ url: "/pages/index/record" })
-            }
+            uni.navigateTo({ url: "/pages/index/record" })
             break
         case '错题记录':
-            if (!(tag == "teacher" && teacher)) {
-                uni.redirectTo({ url: "/pages/index/mistake" })
-            }
+            uni.redirectTo({ url: "/pages/index/mistake" })
             break
         case '退出登录':
             uni.clearStorage()
@@ -60,7 +54,6 @@ const trigger = (e: any) => {
 
 const { logout } = useUsrStore()
 
-const { teacher, get_tag } = useTokenStore()
 
 </script>
 
