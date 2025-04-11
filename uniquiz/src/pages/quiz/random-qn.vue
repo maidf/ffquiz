@@ -148,7 +148,7 @@ watch(qn, (newQn) => {
         if (newQn.id > 0) {
             start_ans({
                 qn_id: newQn.id,
-                exam_id: null
+                paper_id: null
             })
         }
     }

@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.maidf.javaquiz.annotation.LoginValidate;
-import com.maidf.javaquiz.entity.po.Exam;
 import com.maidf.javaquiz.entity.req.EndExamReq;
 import com.maidf.javaquiz.entity.req.StartAnsReq;
 import com.maidf.javaquiz.service.ExamService;

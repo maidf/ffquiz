@@ -3,6 +3,7 @@
         <view v-if="records && records.length > 0">
             <uni-card v-for="(v, index) in show_records" :key="index" :title="v.name"
                 :extra="v.diff === qn_diff.EASY ? '简单' : v.diff === qn_diff.MEDIUM ? '中等' : '困难'"
+                @click="to_rd_qs(v.id)"
                 thumbnail="/static/logo.png">
                 <view class="uni-body">
                     <view>分数: {{ v.score }}/{{ v.total_score }} <br></view>
@@ -27,6 +28,11 @@ import { useExamStore } from '@/stores/exam'
 import { qn_diff, qn_type } from '@/stores/qn'
 import { storeToRefs } from 'pinia'
 import { computed, onMounted, ref } from 'vue'
+
+const to_rd_qs = (v: number) => {
+    uni.navigateTo({ url: "/pages/index/exam-ans?exam_id=" + v })
+}
+
 
 // 分页相关
 const now_page = ref(1)

@@ -8,6 +8,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -138,6 +139,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam>
         return examMapper.selectListAns(examId);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void rmExam(Long examId) throws Exception {
         log.info("开始删除考试记录: {}", examId);

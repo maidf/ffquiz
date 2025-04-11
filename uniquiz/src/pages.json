@@ -44,6 +44,12 @@
             }
         },
         {
+            "path": "pages/index/exam-ans",
+            "style": {
+                "navigationBarTitleText": "考试题目"
+            }
+        },
+        {
             "path": "pages/quiz/exam",
             "style": {
                 "navigationBarTitleText": "考试"

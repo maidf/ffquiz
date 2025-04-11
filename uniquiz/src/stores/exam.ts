@@ -3,12 +3,13 @@ import { useTokenStore } from "./token"
 import type { paper_qn, paper_qn_rep } from "./paper"
 import { ref } from "vue"
 import type { start_req } from "./ans"
-import type { qn_diff } from "./qn"
+import type { opt_type, qn_diff, qn_type } from "./qn"
 
 export const useExamStore = defineStore('exam', () => {
     const qs = ref<exam_qn[]>()
     const token = ref<string>()
     const records = ref<record[]>()
+    const rd_qs = ref<rd_qn[]>()
 
 
     const req_qs = (paper_id: number) => {
@@ -38,6 +39,25 @@ export const useExamStore = defineStore('exam', () => {
         }).then((res) => {
             if (res.statusCode === 200) {
                 records.value = res.data as record[]
+            } else {
+                uni.showToast({ title: res.data.toString() })
+            }
+        }).catch(err => {
+            uni.showToast({ title: err })
+        })
+    }
+
+    const req_rd_qs = (exam_id: number) => {
+        uni.request({
+            url: "/api/exam/record/" + exam_id,
+            header: { 'Authorization': useTokenStore().get_token() }
+        }).then((res) => {
+            if (res.statusCode === 200) {
+                const data = res.data as rd_qn_rep[]
+                rd_qs.value = data.map(e => ({
+                    ...e,
+                    options: e.options ? JSON.parse(e.options) : {}
+                }))
             } else {
                 uni.showToast({ title: res.data.toString() })
             }
@@ -102,7 +122,7 @@ export const useExamStore = defineStore('exam', () => {
         })
     }
 
-    return { qs, records, req_qs, start_exam, end_exam, req_rds, delete_exam }
+    return { qs, records, rd_qs, req_qs, start_exam, end_exam, req_rds, delete_exam, req_rd_qs }
 })
 
 
@@ -124,4 +144,28 @@ export interface record {
     total_score: number
     start_time: Date
     end_time: Date
+}
+
+export interface rd_qn {
+    id: number
+    sub: string
+    type: qn_type
+    content: string
+    options: opt_type
+    answer: string
+    ana: string
+    diff: qn_diff
+    usr_ans: string
+}
+
+interface rd_qn_rep {
+    id: number
+    sub: string
+    type: qn_type
+    content: string
+    options: string
+    answer: string
+    ana: string
+    diff: qn_diff
+    usr_ans: string
 }
