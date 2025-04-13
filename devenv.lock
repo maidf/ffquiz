@@ -3,10 +3,10 @@
     "devenv": {
       "locked": {
         "dir": "src/modules",
-        "lastModified": 1743783972,
+        "lastModified": 1744547306,
         "owner": "cachix",
         "repo": "devenv",
-        "rev": "2f53e2f867e0c2ba18b880e66169366e5f8ca554",
+        "rev": "ee3ff16a0380eaa21b0c121898f116dee6df00f5",
         "type": "github"
       },
       "original": {
@@ -24,10 +24,10 @@
         "rust-analyzer-src": "rust-analyzer-src"
       },
       "locked": {
-        "lastModified": 1742452566,
+        "lastModified": 1744231114,
         "owner": "nix-community",
         "repo": "fenix",
-        "rev": "7d9ba794daf5e8cc7ee728859bc688d8e26d5f06",
+        "rev": "0ccfe532b1433da8e5a23cd513ff6847e0f6a8c2",
         "type": "github"
       },
       "original": {
@@ -122,10 +122,10 @@
     "rust-analyzer-src": {
       "flake": false,
       "locked": {
-        "lastModified": 1743694511,
+        "lastModified": 1744391836,
         "owner": "rust-lang",
         "repo": "rust-analyzer",
-        "rev": "0d64633d31e9ab1de66cc5ea178ef8704256041b",
+        "rev": "afc367b96c093b410c8852e583ba467a196b58c8",
         "type": "github"
       },
       "original": {
@@ -138,7 +138,7 @@
     "unpkgs": {
       "locked": {
         "lastModified": 315532800,
-        "narHash": "sha256-yJ6RthtxP4KB+kjjo0IIDJrbYhftX/PHzLJKhDMDzEQ=",
+        "narHash": "sha256-xxl/VCMzBpfyoDm7bix+stpzeNHIUenI/o00SXPbisM=",
         "type": "tarball",
         "url": "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixpkgs-unstable/nixexprs.tar.xz"
       },

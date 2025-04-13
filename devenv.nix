@@ -17,7 +17,7 @@ in
 
   languages.java = {
     enable = true;
-    jdk.package = unpkgs.jdk23;
+    jdk.package = unpkgs.jdk;
     maven.enable = true;
   };
 
@@ -53,16 +53,16 @@ in
   services.redis.enable = true;
 
   # 项目启动流程
-  processes = {
-    backend = {
-      exec = "cd javaquiz && mvn spring-boot:run";
-      process-compose.depends_on = {
-        redis.condition = "process_running";
-        mysql.condition = "process_running";
-      };
-    };
-    frontend.exec = "cd uniquiz && pnpm dev:h5";
-  };
+  # processes = {
+  #   backend = {
+  #     exec = "cd javaquiz && mvn spring-boot:run";
+  #     process-compose.depends_on = {
+  #       redis.condition = "process_running";
+  #       mysql.condition = "process_running";
+  #     };
+  #   };
+  #   frontend.exec = "cd uniquiz && pnpm dev:h5";
+  # };
 
   # https://devenv.sh/languages/
   # languages.rust.enable = true;

@@ -36,7 +36,7 @@ import { useExamStore } from '@/stores/exam'
 import { qn_diff, qn_type } from '@/stores/qn'
 import { onLoad } from '@dcloudio/uni-app'
 import { storeToRefs } from 'pinia'
-import { computed, onMounted, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 // 分页相关
 const now_page = ref(1)
