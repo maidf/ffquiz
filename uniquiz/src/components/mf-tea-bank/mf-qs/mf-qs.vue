@@ -47,8 +47,8 @@ const sel_upd_qn = (qn: qn) => {
     old_qn.value = qn
     upd_state.value = true
 }
-const upd_state = defineModel<boolean>()
-const old_qn = defineModel<qn>()
+const upd_state = defineModel<boolean>('upd_state', { default: false })
+const old_qn = defineModel<qn>('old_qn')
 const { bank_id } = defineProps(['bank_id'])
 
 const bank_store = useBankStore()

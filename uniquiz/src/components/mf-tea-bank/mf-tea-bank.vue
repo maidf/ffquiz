@@ -22,7 +22,8 @@
         </uni-card>
 
         <mf-add-qn v-if="mf_qn" :bank_id="bank.id"></mf-add-qn>
-        <mf-qs v-if="mf_qs" :bank_id="bank.id"></mf-qs>
+        <mf-qs v-if="mf_qs" :bank_id="bank.id" v-model:old_qn="old_qn" v-model:upd_state="upd_state"></mf-qs>
+        <mf-upd-qn v-if="upd_state" :old_qn></mf-upd-qn>
     </view>
 </template>
 
@@ -33,10 +34,23 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import mfAddQn from './mf-add-qn/mf-add-qn.vue'
 import mfQs from './mf-qs/mf-qs.vue'
+import mfUpdQn from './mf-upd-qn/mf-upd-qn.vue'
+import { type qn } from '@/stores/qn'
+import { watch } from 'vue'
+
+const old_qn = ref<qn>()
+const upd_state = ref<boolean>()
+watch(upd_state, (new_state)=>{
+    if (new_state) {
+        mf_qn.value = false
+        mf_qs.value = false
+    }
+})
 
 const mf_qs = ref(false)
 
 const show_qs = () => {
+    upd_state.value = false
     mf_qn.value = false
     mf_qs.value = true
 }
@@ -44,6 +58,7 @@ const show_qs = () => {
 const mf_qn = ref(false)
 
 const show_qn = () => {
+    upd_state.value = false
     mf_qs.value = false
     mf_qn.value = true
 }

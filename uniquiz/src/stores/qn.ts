@@ -68,12 +68,25 @@ export const useQnStore = defineStore('qn', () => {
     const upd_qn = (q: qn) => {
         const { get_token } = useTokenStore()
         const token = get_token()
+        const qn_req: qn_rep = {
+            ...q,
+            options: q.options ? JSON.stringify(q.options) : '',
+            answer: q.answer.toString()
+        }
+        console.log("qn_req: ", qn_req)
+
+        if (q.type == qn_type.TRUE_FALSE || q.type == qn_type.FILL_BLANK) {
+            qn_req.options = ''
+        }
+
+        if (q.type == qn_type.MULTIPLE_CHOICE) {
+            qn_req.answer = qn_req.answer.toString().replace(/[^a-zA-Z]/g, '')
+        }
 
         uni.request({
-            url: '/api/qn',
+            url: '/api/qn/' + qn_req.id,
             data: {
-                ...q,
-                options: q.options ? JSON.stringify(q.options) : null,
+                ...qn_req,
                 create_time: null
             },
             method: "PUT",

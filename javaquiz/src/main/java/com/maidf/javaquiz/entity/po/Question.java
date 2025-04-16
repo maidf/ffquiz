@@ -27,8 +27,9 @@ public class Question implements Serializable {
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    @JsonProperty("bank_id")
+    @JsonProperty(value = "bank_id", required = false)
     private Long bankId;
+    
     private QuestionTypeEnum type;
     private String content;
     private String options;

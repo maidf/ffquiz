@@ -1,5 +1,3 @@
-
-
 -- 用户表
 CREATE TABLE user (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -100,3 +98,38 @@ CREATE TABLE mistake (
     FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (question_id) REFERENCES question (id)
 ) COMMENT = '用户错题本表';
+
+CREATE VIEW retry_stats AS
+SELECT
+    q.id,
+    q.content,
+    qb.subject as sub,
+    q.diff,
+    /* 重刷率 = 有重刷行为的用户数 / 总用户数 */
+    COUNT(DISTINCT retry_users.user_id) * 1.0 / NULLIF(COUNT(DISTINCT ar.user_id), 0) AS retry_rate,
+    /* 正确率 = 正确回答次数 / 总回答次数 */
+    SUM(
+        CASE
+            WHEN ar.user_answer = q.answer THEN 1
+            ELSE 0
+        END
+    ) * 1.0 / NULLIF(COUNT(ar.id), 0) AS avg_acc
+FROM
+    question q
+    JOIN question_bank qb ON q.bank_id = qb.id
+    JOIN ans_record ar ON q.id = ar.question_id
+    LEFT JOIN (
+        SELECT question_id, user_id
+        FROM ans_record
+        GROUP BY
+            question_id,
+            user_id
+        HAVING
+            COUNT(*) > 1
+    ) AS retry_users ON q.id = retry_users.question_id
+    AND ar.user_id = retry_users.user_id
+GROUP BY
+    q.id,
+    q.content,
+    qb.subject,
+    q.diff;

@@ -109,9 +109,7 @@ public class QuestionController {
     @CheckOwnerShip(type = EntityTypeEnum.QUESTION)
     @PutMapping("{qnId}")
     public ResponseEntity<String> updateQuestion(@PathVariable Long qnId, @RequestBody Question question) {
-
-        question.setId(qnId);
-
+        log.info("进入更新题目接口: {}", question);
         questionService.updateQn(question);
         return Result.success();
     }

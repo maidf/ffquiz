@@ -283,6 +283,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     @CacheEvict(cacheNames = "qn_cache", allEntries = true)
     @Override
     public void updateQn(Question qn) {
+        log.info("更新题目: {}", qn);
         super.updateById(qn);
     }
 

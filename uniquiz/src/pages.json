@@ -118,6 +118,13 @@
                 "navigationBarTitleText": "试卷",
                 "enablePullDownRefresh": true
             }
+        },
+        {
+            "path": "pages/stats/retry-rate",
+            "style": {
+                "navigationBarTitleText": "重刷率排行",
+                "enablePullDownRefresh": true
+            }
         }
     ],
     "tabBar": {
