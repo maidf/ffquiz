@@ -125,6 +125,13 @@
                 "navigationBarTitleText": "重刷率排行",
                 "enablePullDownRefresh": true
             }
+        },
+        {
+            "path": "pages/stats/bank-qn-nums",
+            "style": {
+                "navigationBarTitleText": "题目统计",
+                "enablePullDownRefresh": true
+            }
         }
     ],
     "tabBar": {

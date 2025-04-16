@@ -17,8 +17,8 @@
                     </view>
 
                     <!-- 难度标签 -->
-                    <view class="diff-tag" :style="{ backgroundColor: getDiffColor(item.diff) }">
-                        {{ formatDiff(item.diff) }}
+                    <view class="diff-tag" :style="{ backgroundColor: get_diff_color(item.diff) }">
+                        {{ format_diff(item.diff) }}
                     </view>
                 </view>
 
@@ -35,7 +35,7 @@
                     <view class="stat-item">
                         <text class="stat-label">平均准确率</text>
                         <view class="accuracy">
-                            <text class="accuracy-value" :style="{ color: getAccuracyColor(item.avg_acc) }">
+                            <text class="accuracy-value" :style="{ color: get_accuracy_color(item.avg_acc) }">
                                 {{ item.avg_acc }}%
                             </text>
                             <view class="trend-icon">
@@ -69,7 +69,7 @@ onMounted(() => {
 })
 
 // 难度颜色映射
-const getDiffColor = (diff: qn_diff) => {
+const get_diff_color = (diff: qn_diff) => {
     const colors = {
         [qn_diff.EASY]: '#4CAF50',    // 绿色
         [qn_diff.MEDIUM]: '#FF9800', // 橙色
@@ -79,17 +79,17 @@ const getDiffColor = (diff: qn_diff) => {
 }
 
 // 格式化难度显示
-const formatDiff = (diff:qn_diff) => {
-    const diffMap = {
+const format_diff = (diff:qn_diff) => {
+    const diff_map = {
         [qn_diff.EASY]: '简单',
         [qn_diff.MEDIUM]: '中等',
         [qn_diff.HARD]: '困难'
     }
-    return diffMap[diff] || '未知'
+    return diff_map[diff] || '未知'
 }
 
 // 准确率颜色映射
-const getAccuracyColor = (acc: number) => {
+const get_accuracy_color = (acc: number) => {
     return acc >= 80 ? '#4CAF50' : acc >= 60 ? '#FF9800' : '#F44336'
 }
 </script>

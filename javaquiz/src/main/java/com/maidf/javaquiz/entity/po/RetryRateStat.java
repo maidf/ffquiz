@@ -1,5 +1,7 @@
 package com.maidf.javaquiz.entity.po;
 
+import java.io.Serializable;
+
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Component
-public class RetryRateStat {
+public class RetryRateStat implements Serializable {
     private Long id;
     private String content;
     private String sub;

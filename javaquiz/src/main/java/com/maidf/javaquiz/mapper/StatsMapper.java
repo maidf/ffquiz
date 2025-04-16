@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import com.maidf.javaquiz.entity.po.BankQnNum;
 import com.maidf.javaquiz.entity.po.RetryRateStat;
 
 @Mapper
@@ -16,4 +17,13 @@ public interface StatsMapper {
             limit 10
             """)
     List<RetryRateStat> selectTop10RateStats();
+
+
+    @Select("""
+            select *
+            from bank_qn_num_view
+            order by qn_nums desc
+            limit 10
+            """)
+    List<BankQnNum> selectBankQnNums();
 }

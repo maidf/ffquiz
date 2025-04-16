@@ -22,4 +22,9 @@ public class StatsController {
         return Result.success(statsService.ListTop10RateStats());
     }
 
+    @GetMapping("bank_qn_nums")
+    public ResponseEntity<String> getBankQnNums() {
+        return Result.success(statsService.ListBankQnNums());
+    }
+
 }

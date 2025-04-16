@@ -133,3 +133,25 @@ GROUP BY
     q.content,
     qb.subject,
     q.diff;
+
+CREATE VIEW bank_qn_num_view AS
+SELECT
+    qb.id AS id,
+    qb.name AS name,
+    qb.subject AS sub,
+    COUNT(DISTINCT q.id) AS qn_nums, -- 题库题目总数
+    COUNT(ar.id) AS use_nums, -- 题目总使用次数（所有答题记录）
+    SUM(
+        CASE
+            WHEN ar.user_answer != q.answer THEN 1
+            ELSE 0
+        END
+    ) AS err_nums -- 题目总错误次数
+FROM
+    question_bank qb
+    LEFT JOIN question q ON qb.id = q.bank_id -- 关联题库和题目
+    LEFT JOIN ans_record ar ON q.id = ar.question_id -- 关联题目和答题记录
+GROUP BY -- 按题库分组统计
+    qb.id,
+    qb.name,
+    qb.subject;
