@@ -65,6 +65,24 @@ export const useQnStore = defineStore('qn', () => {
         }).catch(err => uni.showToast({ title: err }))
     }
 
+    const upd_qn = (q: qn) => {
+        const { get_token } = useTokenStore()
+        const token = get_token()
+
+        uni.request({
+            url: '/api/qn',
+            data: {
+                ...q,
+                options: q.options ? JSON.stringify(q.options) : null,
+                create_time: null
+            },
+            method: "PUT",
+            header: { 'Authorization': token }
+        }).then((res: any) => {
+            uni.showToast({ title: res.data.toString() })
+        }).catch(err => uni.showToast({ title: err }))
+    }
+
     const delete_qn = (id: number) => {
         const { get_token } = useTokenStore()
         const token = get_token()
@@ -78,7 +96,7 @@ export const useQnStore = defineStore('qn', () => {
         }).catch(err => uni.showToast({ title: err }))
     }
 
-    return { qn, qs, req_qs, req_daily_qn, add_qn, delete_qn }
+    return { qn, qs, req_qs, req_daily_qn, add_qn, delete_qn, upd_qn }
 })
 
 export enum qn_type {

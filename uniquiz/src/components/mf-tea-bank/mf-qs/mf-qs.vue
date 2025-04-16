@@ -25,7 +25,7 @@
             <uni-td>{{ v.ana }}</uni-td>
             <uni-td>{{ v.diff }}</uni-td>
             <uni-td align="center">
-                <uni-button size="mini">编辑</uni-button>
+                <uni-button @click="sel_upd_qn(v)" size="mini">编辑</uni-button>
                 <uni-button @click="delete_qn(v.id)" type="warn" size="mini">删除</uni-button>
             </uni-td>
         </uni-tr>
@@ -35,7 +35,7 @@
 
 <script lang="ts" setup>
 import { useBankStore } from '@/stores/bank'
-import { useQnStore } from '@/stores/qn'
+import { useQnStore, type qn } from '@/stores/qn'
 import { storeToRefs } from 'pinia'
 import { onMounted, ref } from 'vue'
 
@@ -43,6 +43,12 @@ onMounted(() => {
     req_qs(bank_id)
 })
 
+const sel_upd_qn = (qn: qn) => {
+    old_qn.value = qn
+    upd_state.value = true
+}
+const upd_state = defineModel<boolean>()
+const old_qn = defineModel<qn>()
 const { bank_id } = defineProps(['bank_id'])
 
 const bank_store = useBankStore()

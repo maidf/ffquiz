@@ -1,0 +1,7 @@
+version: "0.1"
+
+processes:
+  javaquiz:
+   command: cd javaquiz && mvn spring-boot:run
+  uniquiz:
+   command: cd uniquiz && pnpm dev:h5

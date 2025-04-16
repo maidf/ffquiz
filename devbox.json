@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.0/.schema/devbox.schema.json",
+  "packages": [
+    "nodejs@22",
+    "jdk@21",
+    "maven@latest",
+    "pnpm@latest"
+  ],
+  "shell": {
+    "init_hook": [],
+    "scripts": {
+      "boot": [
+        "cd javaquiz",
+        "mvn spring-boot:run"
+      ],
+      "h5": [
+        "cd uniquiz",
+        "pnpm dev:h5"
+      ]
+    }
+  },
+  "nixpkgs": {
+    "url": "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/nixpkgs-unstable/nixexprs.tar.xz"
+  }
+}

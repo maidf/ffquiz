@@ -5,13 +5,13 @@ import uni from "@dcloudio/vite-plugin-uni"
 export default defineConfig({
     plugins: [uni()],
     server: {
-        host: "localhost",
+        host: "127.0.0.1",
         port: 5173,
         proxy: {
             '/api': {
                 target: 'http://localhost:9901', // 后端地址
                 changeOrigin: true,
-                rewrite: (path) => path.replace(/^\/api/, ''),
+                rewrite: (path: any) => path.replace(/^\/api/, ''),
             }
         },
     },
