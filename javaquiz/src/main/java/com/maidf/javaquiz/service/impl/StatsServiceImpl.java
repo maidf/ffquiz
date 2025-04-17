@@ -32,7 +32,6 @@ public class StatsServiceImpl implements StatsService {
         return statsMapper.selectBankQnNums();
     }
 
-    @Cacheable(key = "'sys_stats'")
     @Override
     public SysStatNum getStatNums() {
         return statsMapper.selectSysStatNums();
