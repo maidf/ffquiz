@@ -2,10 +2,9 @@
     <view class="container">
         <!-- 标题部分 -->
         <view class="header">
-            <text class="title">题目重试率排行榜</text>
+            <text class="title">题目重刷率排行榜</text>
             <text class="subtitle">TOP 10 练习数据统计</text>
         </view>
-
         <!-- 数据卡片列表 -->
         <view v-if="retry_rate" class="card-list">
             <view v-for="item in retry_rate" :key="item.id" class="card">
@@ -25,18 +24,21 @@
                 <!-- 数据指标 -->
                 <view class="stats">
                     <view class="stat-item">
-                        <text class="stat-label">重试率</text>
-                        <view class="progress-container">
-                            <view class="progress-bar" :style="{ width: `${item.retry_rate}%` }" />
-                            <text class="stat-value">{{ item.retry_rate }}%</text>
+                        <text class="stat-label">重刷率</text>
+                        <view style="border-radius: 20rpx; overflow: hidden;">
+                            <progress :percent="item.retry_rate * 100" stroke-width="20" />
                         </view>
+                    </view>
+                    <view class="stat-item">
+                        <text class="stat-label">&nbsp;</text>
+                        <text class="stat-accuracy">{{ item.retry_rate * 100 }}%</text>
                     </view>
 
                     <view class="stat-item">
                         <text class="stat-label">平均准确率</text>
                         <view class="accuracy">
-                            <text class="accuracy-value" :style="{ color: get_accuracy_color(item.avg_acc) }">
-                                {{ item.avg_acc }}%
+                            <text class="accuracy-value" :style="{ color: get_accuracy_color(item.avg_acc * 100) }">
+                                {{ item.avg_acc * 100 }}%
                             </text>
                             <view class="trend-icon">
                                 📈
@@ -79,7 +81,7 @@ const get_diff_color = (diff: qn_diff) => {
 }
 
 // 格式化难度显示
-const format_diff = (diff:qn_diff) => {
+const format_diff = (diff: qn_diff) => {
     const diff_map = {
         [qn_diff.EASY]: '简单',
         [qn_diff.MEDIUM]: '中等',
@@ -174,20 +176,6 @@ const get_accuracy_color = (acc: number) => {
     font-size: 26rpx;
     color: #7f8c8d;
     margin-bottom: 10rpx;
-}
-
-.progress-container {
-    position: relative;
-    height: 40rpx;
-    background: #eee;
-    border-radius: 20rpx;
-    overflow: hidden;
-}
-
-.progress-bar {
-    height: 100%;
-    background: #3498db;
-    transition: width 0.3s ease;
 }
 
 .stat-value {

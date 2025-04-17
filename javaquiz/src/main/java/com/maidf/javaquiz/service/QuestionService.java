@@ -18,7 +18,7 @@ public interface QuestionService extends IService<Question> {
 
     QnRep getQnById(Long id);
 
-    void rmById(Long id);
+    void rmById(Long id) throws Exception;
 
     void initQuestionIdsToRedis(Long bankId);
 

@@ -67,18 +67,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
     @CacheEvict(cacheNames = "qn_cache", allEntries = true)
     @Override
-    public void rmById(Long id) {
-        Question question = questionMapper.selectById(id);
-        Long bankId = question.getBankId();
-
+    public void rmById(Long id) throws Exception {
         // 1. 检查是否被其他表引用
         if (isQuestionReferenced(id)) {
-            bankId = rmBankId(id, bankId);
-            return;
+            throw new Exception("题目已被使用，无法删除");
+        } else {
+            // 2. 删除题目
+            questionMapper.deleteById(id);
         }
 
-        // 2. 删除题目
-        questionMapper.deleteById(id);
     }
 
     // 检查题目是否被引用
@@ -105,16 +102,6 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         }
 
         return false; // 未被引用
-    }
-
-    private Long rmBankId(Long questionId, Long bankId) {
-        if (bankId != null) {
-            UpdateWrapper<Question> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq("id", questionId)
-                    .set("bank_id", null);
-            questionMapper.update(null, updateWrapper); // 强制更新
-        }
-        return bankId;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

@@ -121,7 +121,11 @@ public class QuestionController {
     @DeleteMapping("{qnId}")
     public ResponseEntity<String> deleteBank(@PathVariable Long qnId) {
         Long bankId = questionService.getById(qnId).getBankId();
-        questionService.rmById(qnId);
+        try {
+            questionService.rmById(qnId);
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
 
         // 使用CompletableFuture异步执行
         CompletableFuture.runAsync(() -> {

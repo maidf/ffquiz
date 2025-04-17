@@ -132,6 +132,13 @@
                 "navigationBarTitleText": "题目统计",
                 "enablePullDownRefresh": true
             }
+        },
+        {
+            "path": "pages/stats/sys-stats",
+            "style": {
+                "navigationBarTitleText": "网站统计",
+                "enablePullDownRefresh": true
+            }
         }
     ],
     "tabBar": {

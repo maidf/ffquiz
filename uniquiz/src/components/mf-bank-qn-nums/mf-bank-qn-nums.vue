@@ -1,6 +1,6 @@
 <!-- bank-chart-page.vue -->
 <template>
-    <view class="chart-page">
+    <view class="chart-page" v-if="bank_qn_nums">
         <!-- 题目数量分布 -->
         <view class="chart-box">
             <view class="chart-title">
@@ -45,6 +45,9 @@
                 <qiun-data-charts type="bar" :chartData="err_rate_data" />
             </view>
         </view>
+    </view>
+    <view v-else>
+        暂时没有数据
     </view>
 </template>
 

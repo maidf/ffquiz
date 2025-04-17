@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.maidf.javaquiz.entity.po.BankQnNum;
 import com.maidf.javaquiz.entity.po.RetryRateStat;
+import com.maidf.javaquiz.entity.po.SysStatNum;
 import com.maidf.javaquiz.mapper.StatsMapper;
 import com.maidf.javaquiz.service.StatsService;
 
@@ -29,6 +30,12 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<BankQnNum> ListBankQnNums() {
         return statsMapper.selectBankQnNums();
+    }
+
+    @Cacheable(key = "'sys_stats'")
+    @Override
+    public SysStatNum getStatNums() {
+        return statsMapper.selectSysStatNums();
     }
 
 }

@@ -27,4 +27,9 @@ public class StatsController {
         return Result.success(statsService.ListBankQnNums());
     }
 
+    @GetMapping("sys_stats")
+    public ResponseEntity<String> getStatNums() {
+        return Result.success(statsService.getStatNums());
+    }
+
 }
