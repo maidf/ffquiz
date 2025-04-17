@@ -155,3 +155,45 @@ GROUP BY -- 按题库分组统计
     qb.id,
     qb.name,
     qb.subject;
+
+CREATE VIEW sys_stats AS
+SELECT (
+        SELECT COUNT(*)
+        FROM `user`
+    ) as user,
+    (
+        SELECT COUNT(*)
+        FROM question_bank
+    ) as bank,
+    (
+        SELECT COUNT(*)
+        FROM question
+    ) as qn,
+    (
+        SELECT COUNT(*)
+        FROM paper
+    ) as paper,
+    (
+        SELECT COUNT(*)
+        FROM ans_record
+        WHERE
+            DATE(start_time) = CURDATE()
+    ) as today_use_num,
+    (
+        SELECT COUNT(DISTINCT user_id)
+        FROM ans_record
+        WHERE
+            DATE(start_time) = CURDATE()
+    ) as today_use_user,
+    (
+        SELECT COUNT(*)
+        FROM ans_record
+        WHERE
+            DATE(start_time) = CURDATE() - INTERVAL 1 DAY
+    ) as yesday_use_num,
+    (
+        SELECT COUNT(DISTINCT user_id)
+        FROM ans_record
+        WHERE
+            DATE(start_time) = CURDATE() - INTERVAL 1 DAY
+    ) as yesday_use_user
