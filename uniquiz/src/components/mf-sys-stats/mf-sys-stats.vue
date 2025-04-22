@@ -7,22 +7,26 @@
             <view>试卷数量: {{ sys_stats.paper }}</view>
             <view>
                 今天答题次数: {{ sys_stats.today_use }}
-                <text class="updown" v-if="(sys_stats.today_use - sys_stats.yesday_use) > 0">
+                <text class="updown"
+                    v-if="sys_stats.yesday_use != 0 && (sys_stats.today_use - sys_stats.yesday_use) > 0">
                     <uni-icons type="fire-filled" size="12" />
                     {{ (sys_stats.today_use / sys_stats.yesday_use - 1) * 100 }}%
                 </text>
-                <text class="updown" v-if="(sys_stats.today_use - sys_stats.yesday_use) < 0">
+                <text class="updown"
+                    v-if="sys_stats.yesday_use != 0 && (sys_stats.today_use - sys_stats.yesday_use) < 0">
                     <uni-icons type="pulldown" size="12" />
                     {{ (1 - sys_stats.today_use / sys_stats.yesday_use) * 100 }}%
                 </text>
             </view>
             <view>
                 今天答题用户数量: {{ sys_stats.today_use_user }}
-                <text class="updown" v-if="(sys_stats.today_use_user - sys_stats.yesday_use_user) > 0">
+                <text class="updown"
+                    v-if="sys_stats.yesday_use_user != 0 && (sys_stats.today_use_user - sys_stats.yesday_use_user) > 0">
                     <uni-icons type="fire-filled" size="12" />
                     {{ (sys_stats.today_use_user / sys_stats.yesday_use_user - 1) * 100 }}%
                 </text>
-                <text class="updown" v-if="(sys_stats.today_use_user - sys_stats.yesday_use_user) < 0">
+                <text class="updown"
+                    v-if="sys_stats.yesday_use_user != 0 && (sys_stats.today_use_user - sys_stats.yesday_use_user) < 0">
                     <uni-icons type="pulldown" size="12" />
                     {{ (1 - sys_stats.today_use_user / sys_stats.yesday_use_user) * 100 }}%
                 </text>

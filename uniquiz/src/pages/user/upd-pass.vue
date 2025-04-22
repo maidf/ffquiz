@@ -75,6 +75,8 @@ const send_code = (token: string) => {
     }).then(res => {
         if (res.statusCode == 200) {
             show.value = true
+        } else {
+            uni.showToast({ title: res.data.toString(), icon: 'none' })
         }
     }).catch(err => alert(err))
 }
