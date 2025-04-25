@@ -19,7 +19,6 @@ export const useUsrStore = defineStore('usr', () => {
             header: { 'Authorization': token }
         }).then(res => {
             if (res.statusCode == 200) {
-                uni.navigateTo({ url: "/pages/user/logoff" })
             } else {
                 uni.showToast({ title: res.data.toString(), icon: 'none' })
             }

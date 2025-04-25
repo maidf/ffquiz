@@ -21,6 +21,8 @@ onMounted(() => {
     get_token()
 })
 
+
+
 const get_token = () => {
     token.value = uni.getStorageSync(
         'Authorization'
@@ -42,6 +44,7 @@ const logoff = (token: string, captcha: string) => {
     }).then(res => {
         if (res.statusCode == 200) {
             uni.redirectTo({ url: "/pages/user/login" })
+            uni.clearStorage()
         }
         uni.showToast({ title: res.data.toString(), icon: 'none' })
     }).catch(err => alert(err))

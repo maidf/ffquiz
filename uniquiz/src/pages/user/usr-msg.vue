@@ -119,12 +119,10 @@ const to_upd_password = () => {
     uni.navigateTo({ url: "/pages/user/upd-pass" })
 }
 
-
-const { logoff } = useUsrStore()
-
 const delete_usr = () => {
-    uni.clearStorage()
-    logoff()
+    uni.navigateTo({ url: "/pages/user/logoff" })
+    const send = useUsrStore().logoff
+    send()
 }
 
 </script>
