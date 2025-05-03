@@ -13,13 +13,14 @@
 <script lang="ts" setup>
 import { type bank, useBankStore } from '@/stores/bank'
 import { storeToRefs } from 'pinia'
+import { watch } from 'vue'
 import { onMounted, ref } from 'vue'
 
 // 跳转到题目列表界面
 
 const to_bank_qs = (v: bank) => {
     uni.navigateTo({
-        url: "/pages/tea/tea-bank?bank=" + encodeURIComponent(JSON.stringify(v)) 
+        url: "/pages/tea/tea-bank?bank=" + encodeURIComponent(JSON.stringify(v))
     })
 }
 
@@ -33,7 +34,6 @@ onMounted(() => {
 const store = useBankStore()
 const { banks } = storeToRefs(store)
 const { req_banks } = store
-
 
 </script>
 

@@ -55,6 +55,9 @@ export const usePaperStore = defineStore('paper', () => {
             method: "POST",
             header: { 'Authorization': token }
         }).then((res: any) => {
+            if (res.statusCode == 200) {
+                req_papers()
+            }
             uni.showToast({ title: res.data.toString() })
         }).catch(err => {
             uni.showToast({ title: err })
@@ -86,6 +89,10 @@ export const usePaperStore = defineStore('paper', () => {
             method: "DELETE",
             header: { 'Authorization': token }
         }).then((res: any) => {
+            if (res.statusCode == 200) {
+                papers.value = papers.value?.filter(e => e.id != paper_id)
+                uni.navigateBack()
+            }
             uni.showToast({ title: res.data.toString() })
         }).catch(err => {
             uni.showToast({ title: err })

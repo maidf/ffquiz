@@ -13,6 +13,7 @@
 <script lang="ts" setup>
 import { usePaperStore, type paper } from '@/stores/paper'
 import { storeToRefs } from 'pinia'
+import { watch } from 'vue'
 import { onMounted } from 'vue'
 
 // 跳转到题目列表界面
@@ -34,6 +35,7 @@ const store = usePaperStore()
 
 const { papers } = storeToRefs(store)
 const { req_papers } = store
+
 
 </script>
 

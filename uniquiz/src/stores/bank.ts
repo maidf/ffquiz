@@ -74,6 +74,9 @@ export const useBankStore = defineStore('bank', () => {
             method: "POST",
             header: { 'Authorization': token }
         }).then((res: any) => {
+            if (res.statusCode == 200) {
+                req_banks()
+            }
             uni.showToast({ title: res.data.toString() })
         }).catch(err => uni.showToast({ title: err }))
     }
@@ -103,6 +106,7 @@ export const useBankStore = defineStore('bank', () => {
             header: { 'Authorization': token }
         }).then((res: any) => {
             if (res.statusCode == 200) {
+                banks.value = banks.value?.filter(e => e.id != id)
                 uni.navigateBack()
             }
             uni.showToast({ title: res.data.toString() })
