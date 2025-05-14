@@ -19,7 +19,7 @@ services:
       - MYSQL_PASSWORD=123
 
   redis:
-    image: redis:7
+    image: redis:8.0
     container_name: redis
     restart: on-failure
     ports:
