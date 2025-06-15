@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  default.conf: |
+    upstream backend-server {
+      server javaquiz-service:10032; 
+    }
+
+    server {
+      listen 80;
+      server_name localhost;
+
+      root /app/html;
+      index index.html;
+
+      location / {
+        root /app/html;
+        try_files $uri $uri/ /index.html;
+      }
+      
+      location /api {
+        rewrite ^/api/(.*) /$1 break;
+        proxy_pass http://backend-server;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header Host $host;
+      }
+    }

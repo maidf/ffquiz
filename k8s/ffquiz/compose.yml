@@ -1,0 +1,28 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: on-failure
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ../../db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - TZ=Asia/Shanghai
+      - MYSQL_ROOT_PASSWORD=123
+      - MYSQL_DATABASE=quiz_db
+      - MYSQL_USER=quiz
+      - MYSQL_PASSWORD=123
+
+  redis:
+    image: redis:8.0
+    container_name: redis
+    restart: on-failure
+    ports:
+      - 6379:6379
+    environment:
+      - TZ=Asia/Shanghai
+
+volumes:
+  mysql_data:

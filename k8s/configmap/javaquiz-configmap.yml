@@ -1,0 +1,70 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: java-config
+data:
+  application.yml: |
+    spring:
+      cache:
+        type: redis
+        redis:
+          time-to-live: 86400000
+      application:
+        name: javaquiz
+      datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://mysql-service:3306/quiz_db?useUnicode=true&characterEncoding=utf-8
+        username: quiz
+        password: 123
+        hikari:
+          minimum-idle: 1
+          maximum-pool-size: 20
+      data:
+        redis:
+          host: redis-service
+          port: 6379
+    server:
+      port: 10032
+    
+    jwt:
+      secret: "quiz-secret"
+      header: "Authorization"
+      exp: 10800000
+      prefix: "Bearer "
+    ans:
+      secret: "quiz-answer-secret"
+      exp: 10800000
+    encry:
+      salt: quiz-hash-salt
+      algorithm: SHA-256
+      sym-algorithm: AES
+      key: quiz-aes-key
+    email:
+      host: smtp.larksuite.com
+      from: maid@fufu.moe
+      username: maid@fufu.moe
+      password: Mrx28ibeuKpls18d+79ufQ==
+    
+    # api文档访问接口
+    springdoc:
+      swagger-ui:
+        path: /v3/api
+    
+    management:
+      endpoints:
+        web:
+          exposure:
+            include: "*"
+      endpoint:
+        prometheus:
+          access: READ_ONLY
+        health:
+          show-details: always
+      prometheus:
+        metrics:
+          export:
+            enabled: true
+      metrics:
+        tags:
+          application: javaquiz
+    
