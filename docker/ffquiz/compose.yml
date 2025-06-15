@@ -1,13 +1,51 @@
 
 
 services:
+  javaquiz:
+    container_name: javaquiz
+    build: ../../javaquiz
+    ports:
+      - 10032:10032
+    networks:
+      - ffquiz
+
+  uniquiz:
+    container_name: uniquiz
+    build: ../../uniquiz
+    ports:
+      - 10033:80
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - ffquiz
+
+  prometheus:
+    container_name: quizpro
+    image: prom/prometheus:latest
+    ports:
+      - "11032:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - ffquiz
+    depends_on:
+      - javaquiz
+      
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "11033:3000"
+    networks:
+      - ffquiz
+    depends_on:
+      - prometheus
 
   mysql:
     image: mysql:8.0
     container_name: mysql
     restart: on-failure
-    ports:
-      - 3306:3306
+    # ports:
+      # - 3306:3306
     volumes:
       - mysql_data:/var/lib/mysql
       - ../../db/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -17,15 +55,22 @@ services:
       - MYSQL_DATABASE=quiz_db
       - MYSQL_USER=quiz
       - MYSQL_PASSWORD=123
+    networks:
+      - ffquiz
 
   redis:
     image: redis:8.0
     container_name: redis
     restart: on-failure
-    ports:
-      - 6379:6379
+    # ports:
+      # - 6379:6379
     environment:
       - TZ=Asia/Shanghai
+    networks:
+      - ffquiz
 
 volumes:
   mysql_data:
+
+networks:
+  ffquiz:

@@ -73,5 +73,10 @@
     "name": "ans.exp",
     "type": "java.lang.String",
     "description": "A description for 'ans.exp'"
+  },
+  {
+    "name": "management.metrics.export.enabled",
+    "type": "java.lang.String",
+    "description": "A description for 'management.metrics.export.enabled'"
   }
 ]}
